@@ -24,16 +24,14 @@ from . import __version__
 args: argparse.Namespace
 
 
-def fail(message: str, returncode: int = 1) -> int:
-    print(message, file=sys.stderr)
-    return returncode
+def fail(message: str, rc: int = 1) -> int:
+    print(f"Error: {message}", file=sys.stderr)
+    return rc
 
 
-def linkto(target, source):
-    if args.dry_run:
-        print(f"ln -s {source} {target}")
-    else:
-        os.symlink(source, target)
+def say(message):
+    if args.verbose:
+        print(message)
 
 
 def remove(path):
@@ -43,29 +41,47 @@ def remove(path):
         os.remove(path)
 
 
-def stow() -> int:
-    if args.source:
-        sources = args.source
+def linkto(target, source) -> int:
+    target_exists = os.path.lexists(target)
+    if target_exists and not args.force:
+        return fail(f"Target {target} exists and --force was not specified", 2)
+    if args.dry_run:
+        if target_exists:
+            opt = "f"
+        else:
+            opt = ""
+        print(f"ln -{opt}s {source} {target}")
     else:
-        sources = ["."]
+        if target_exists:
+            remove(target)
+        os.symlink(source, target)
+    return 0
+
+
+def stow(target, sources, depth=0, parent_path=None) -> int:
+    if depth >= args.depth:
+        return fail(f"Maximum depth reached", 3)
+    say(f"# Target '{target}' (depth {depth})")
     for source in sources:
-        if not os.path.exists(args.target):
-            linkto(args.target, source)
-            continue
+        if parent_path:
+            source = os.path.join(parent_path, source)
+        if not os.path.lexists(target):
+            return linkto(target, source)
         sr: os.stat_result = os.stat(source, follow_symlinks=False)
-        tr: os.stat_result = os.stat(args.target, follow_symlinks=False)
+        tr: os.stat_result = os.stat(target, follow_symlinks=False)
         if sr.st_dev == tr.st_dev and sr.st_ino == tr.st_ino:
-            return fail(f"Source and target must not be identical: {source}")
-        elif os.path.islink(args.target):
-            if args.force:
-                remove(args.target)
-                linkto(args.target, source)
-                continue
-            else:
-                return fail(
-                    f"Target '{args.target}' exists and --force was not specified"
-                )
-        print(f"\nTarget {args.target} {tr}\nSource {source} {sr}")
+            return fail(f"Source {source} and target are identical")
+        elif os.path.islink(target):
+            rc = linkto(target, source)
+            if rc != 0:
+                return rc
+        elif os.path.isdir(source):
+            for child in os.listdir(source):
+                rc = stow(os.path.join(target, child), [child], depth + 1, source)
+                if rc != 0:
+                    return rc
+        else:
+            return fail(f"Unexpected pair: target {target} and source {source}")
     return 0
 
 
@@ -90,14 +106,24 @@ def main() -> int:
         help="print operations only",
     )
     parser.add_argument(
-        "-f", "--force", default=False, action="store_true", help="force action"
+        "-p",
+        "--depth",
+        default=10,
+        type=int,
+        help="maximum recursion depth (default: 10)",
     )
+    parser.add_argument("-f", "--force", default=False, action="store_true", help="force action")
+    parser.add_argument("-v", "--verbose", default=False, action="store_true", help="verbose messages")
     parser.add_argument("target", help="action target (links are created here)")
     parser.add_argument("source", nargs="+", help="action sources (links point here)")
     global args
     args = parser.parse_args()
     if args.action == "stow":
-        return stow()
+        if args.source:
+            rc = stow(args.target, args.source)
+        else:
+            rc = stow(args.target, ["."])
+        return rc
     else:
         print(f"Action not implemented: {args.action}", file=sys.stderr)
         return 1
