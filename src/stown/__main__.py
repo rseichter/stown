@@ -34,6 +34,12 @@ def say(message):
         print(message)
 
 
+def parsed_filename(fn):
+    if fn[0:4] == "dot-":
+        return f".{fn[4:]}"
+    return fn
+
+
 def remove(path):
     if args.dry_run:
         print(f"rm {path}")
@@ -82,9 +88,12 @@ def stow(target, sources, depth=0, parent_path=None) -> int:
                 return rc
         elif os.path.isdir(source):
             for child in os.listdir(source):
-                rc = stow(os.path.join(target, child), [child], depth + 1, source)
+                tchild = parsed_filename(child)
+                rc = stow(os.path.join(target, tchild), [child], depth + 1, source)
                 if rc != 0:
                     return rc
+        elif os.path.isfile(target) and os.path.isfile(source):
+            return fail(f"Both target {target} and source {source} are files")
         else:
             return fail(f"Unexpected pair: target {target} and source {source}")
     return 0
