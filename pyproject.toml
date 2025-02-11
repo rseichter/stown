@@ -20,7 +20,7 @@ requires = ["setuptools", "wheel"]
 
 [project]
 name = "stown"
-version = "0.0.1.dev2"
+version = "0.0.1.dev3"
 authors = [{name= "Ralph Seichter"}]
 description = "Stow file system objects by creating links"
 readme = "README.md"
