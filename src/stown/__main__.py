@@ -17,8 +17,11 @@ stown. If not, see <https://www.gnu.org/licenses/>.
 """
 
 import argparse
-import os, sys
+import os
+import sys
 from . import __version__
+
+args: argparse.Namespace
 
 
 def fail(message: str, returncode: int = 1) -> int:
@@ -27,24 +30,42 @@ def fail(message: str, returncode: int = 1) -> int:
 
 
 def linkto(target, source):
-    print(f"ln -s {source} {target}")
+    if args.dry_run:
+        print(f"ln -s {source} {target}")
+    else:
+        os.symlink(source, target)
 
 
-def stow(args: argparse.Namespace) -> int:
+def remove(path):
+    if args.dry_run:
+        print(f"rm {path}")
+    else:
+        os.remove(path)
+
+
+def stow() -> int:
     if args.source:
         sources = args.source
     else:
         sources = ["."]
     for source in sources:
-        sr: os.stat_result = os.stat(source, follow_symlinks=False)
-        try:
-            tr: os.stat_result = os.stat(args.target, follow_symlinks=False)
-        except FileNotFoundError:
+        if not os.path.exists(args.target):
             linkto(args.target, source)
             continue
-        print(f"\nTarget {args.target} {tr}\nSource {source} {sr}")
+        sr: os.stat_result = os.stat(source, follow_symlinks=False)
+        tr: os.stat_result = os.stat(args.target, follow_symlinks=False)
         if sr.st_dev == tr.st_dev and sr.st_ino == tr.st_ino:
             return fail(f"Source and target must not be identical: {source}")
+        elif os.path.islink(args.target):
+            if args.force:
+                remove(args.target)
+                linkto(args.target, source)
+                continue
+            else:
+                return fail(
+                    f"Target '{args.target}' exists and --force was not specified"
+                )
+        print(f"\nTarget {args.target} {tr}\nSource {source} {sr}")
     return 0
 
 
@@ -73,9 +94,10 @@ def main() -> int:
     )
     parser.add_argument("target", help="action target (links are created here)")
     parser.add_argument("source", nargs="+", help="action sources (links point here)")
+    global args
     args = parser.parse_args()
     if args.action == "stow":
-        return stow(args)
+        return stow()
     else:
         print(f"Action not implemented: {args.action}", file=sys.stderr)
         return 1
