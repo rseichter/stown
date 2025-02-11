@@ -58,18 +58,22 @@ def linkto(target, source) -> int:
     return 0
 
 
+def is_same_file(target, source) -> bool:
+    sr: os.stat_result = os.stat(source, follow_symlinks=False)
+    tr: os.stat_result = os.stat(target, follow_symlinks=False)
+    return sr.st_dev == tr.st_dev and sr.st_ino == tr.st_ino
+
+
 def stow(target, sources, depth=0, parent_path=None) -> int:
     if depth >= args.depth:
-        return fail(f"Maximum depth reached", 3)
-    say(f"# Target '{target}' (depth {depth})")
+        return fail(f"Maximum depth {depth} reached", 3)
+    say(f"# {target} (depth {depth})")
     for source in sources:
         if parent_path:
             source = os.path.join(parent_path, source)
         if not os.path.lexists(target):
             return linkto(target, source)
-        sr: os.stat_result = os.stat(source, follow_symlinks=False)
-        tr: os.stat_result = os.stat(target, follow_symlinks=False)
-        if sr.st_dev == tr.st_dev and sr.st_ino == tr.st_ino:
+        if is_same_file(target, source):
             return fail(f"Source {source} and target are identical")
         elif os.path.islink(target):
             rc = linkto(target, source)
