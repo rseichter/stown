@@ -8,6 +8,7 @@ Available 'make' targets are:
 build   Build distribution artifacts.
 clean   Cleanup workspace.
 help    Display this text.
+pypi    Upload distribution artifacts to PyPI.
 setver  Set version (v=$(v)).
 shc     Shell script care.
 
@@ -15,7 +16,7 @@ endef
 
 v ?= 0.0.$(shell date +%s)
 
-.PHONY:	build clean help setver shc
+.PHONY:	build clean fmt help pypi setver shc
 
 help:
 	$(info $(usage))
@@ -28,8 +29,15 @@ clean:
 setver:
 	sed -i '' -E 's/^(version|__version__) =.*/\1 = "$(v)"/' pyproject.toml src/stown/__init__.py
 
-build:
+fmt:
+	black src
+
+build:	fmt
 	python -m build
+
+pypi:
+	twine check dist/*
+	twine upload dist/*
 
 shc:
 	shcare *.sh
