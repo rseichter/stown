@@ -17,7 +17,7 @@ test    Run unit tests.
 endef
 
 pyenv	?= PYTHONPATH=.:src
-v		?= 0.2.dev1
+v		?= 0.3.dev1
 
 .PHONY:	build clean cov fmt help pypi setver shc test
 
