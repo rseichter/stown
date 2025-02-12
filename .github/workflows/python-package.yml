@@ -37,10 +37,9 @@ jobs:
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
       - name: Lint with flake8
         run: |
-          # Stop the build if there are Python syntax errors or undefined names
-          flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
-          # The GitHub editor is 127 chars wide
-          flake8 . --count --exit-zero --max-complexity=15 --max-line-length=127 --statistics
+          echo "# Stop the build if there are Python syntax errors or undefined names"
+          flake8 . --config=.flake8 --select=E9,F63,F7,F82
+          flake8 . --config=.flake8 --exit-zero
       - name: Unit tests
         run: |
           python -m unittest discover -s tests
