@@ -40,3 +40,9 @@ stown = "stown.__main__:main"
 # Documentation = "https://rseichter.github.io/stown/"
 Source = "https://github.com/rseichter/stown"
 Issues = "https://github.com/rseichter/stown/issues"
+
+[tool.coverage.html]
+title = "stown coverage report"
+
+[tool.coverage.run]
+branch = true

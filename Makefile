@@ -7,6 +7,7 @@ Available 'make' targets are:
 
 build   Build distribution artifacts.
 clean   Cleanup workspace.
+cov     Coverage analysis.
 help    Display this text.
 pypi    Upload distribution artifacts to PyPI.
 setver  Set version (v=$(v)).
@@ -15,9 +16,10 @@ test    Run unit tests.
 
 endef
 
-v ?= 0.2.dev1
+pyenv	?= PYTHONPATH=.:src
+v		?= 0.2.dev1
 
-.PHONY:	build clean fmt help pypi setver shc test
+.PHONY:	build clean cov fmt help pypi setver shc test
 
 help:
 	$(info $(usage))
@@ -36,8 +38,13 @@ fmt:
 build:	fmt
 	python -m build
 
+cov:
+	$(pyenv) coverage run -m unittest discover -s tests
+	coverage html
+	coverage report -m
+
 test:
-	PYTHONPATH=.:src python -m unittest discover -s tests
+	$(pyenv) python -m unittest discover -s tests
 
 pypi:
 	twine check dist/*

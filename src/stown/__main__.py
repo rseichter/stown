@@ -27,7 +27,7 @@ def fail(message: str, rc: int = 1) -> int:
     return rc
 
 
-def say(message):
+def say(message):  # pragma: no cover
     if args.verbose:
         print(message)
 
@@ -39,7 +39,7 @@ def parsed_filename(fn):
 
 
 def remove(path):
-    if args.dry_run:
+    if args.dry_run:  # pragma: no cover
         print(f"rm {path}")
     else:
         os.remove(path)
