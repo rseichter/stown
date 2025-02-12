@@ -106,6 +106,10 @@ class TestStown(unittest.TestCase):
             subprocess.run(["tree", "-aJ", "-o", "tmp.json", stown.args.target])
             self.assert_json_equal("tmp.json", "expected.json")
 
+    def test_unstow(self):
+        stown.args = self.parse_args(["-a", "unstow"])
+        self.assertEqual(stown.stown("x", "y"), 5)
+
 
 if __name__ == "__main__":
     unittest.main()

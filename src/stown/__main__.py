@@ -21,6 +21,8 @@ import os
 import sys
 from . import __version__
 
+args: argparse.Namespace = None
+
 
 def fail(message: str, rc: int = 1) -> int:
     print(f"Error: {message}", file=sys.stderr)
@@ -73,6 +75,8 @@ def is_same_file(target, source) -> bool:
 def stown(target, sources, depth=0, parent_path=None) -> int:
     if depth >= args.depth:
         return fail(f"Maximum depth {depth} reached", 3)
+    elif args.action != "stow":
+        return fail(f"Action {args.action} is not implemented", 5)
     say(f"# {target} (depth {depth})")
     for source in sources:
         if parent_path:
@@ -132,14 +136,15 @@ def arg_parser() -> argparse.ArgumentParser:
     return parser
 
 
-if __name__ == "__main__":
-    parser = arg_parser()
-    args = parser.parse_args()
-    if args.action == "stow":
-        if args.source:
-            rc = stown(args.target, args.source)
-        else:
-            rc = stown(args.target, ["."])
-        sys.exit(rc)
+def main():
+    ap = arg_parser()
+    args = ap.parse_args()
+    if args.source:
+        rc = stown(args.target, args.source)
     else:
-        raise (NotImplementedError)
+        rc = stown(args.target, ["."])
+    sys.exit(rc)
+
+
+if __name__ == "__main__":
+    main()
