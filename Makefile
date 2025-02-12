@@ -10,14 +10,14 @@ clean   Cleanup workspace.
 cov     Coverage analysis.
 help    Display this text.
 pypi    Upload distribution artifacts to PyPI.
-setver  Set version (v=$(v)).
+setver  Set version number.
 shc     Shell script care.
 test    Run unit tests.
 
 endef
 
-pyenv	?= PYTHONPATH=.:src
-v		?= 0.3.dev1
+pyenv	:= PYTHONPATH=.:src
+ver		?=
 
 .PHONY:	build clean cov fmt help pypi setver shc test
 
@@ -30,7 +30,8 @@ clean:
 	find . -type d -name __pycache__ -or -name '*.bak' -or -name '*.egg-info' | xargs -r rm -r
 
 setver:
-	sed -i '' -E 's/^(version) =.*/\1 = "$(v)"/i' pyproject.toml src/stown/stown.py
+	@if [[ -z "$(ver)" ]]; then echo Usage: make $@ ver="{semantic-version}"; exit 1; fi
+	sed -i '' -E 's/^(version) =.*/\1 = "$(ver)"/i' pyproject.toml src/stown/stown.py
 
 fmt:
 	black -l 120 src tests

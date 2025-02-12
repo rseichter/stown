@@ -21,7 +21,7 @@ import os
 import sys
 
 args: argparse.Namespace = None
-VERSION = "0.3"
+VERSION = "0.4.dev1"
 
 
 def fail(message: str, rc: int = 1) -> int:
