@@ -4,6 +4,7 @@
 #
 # Prepare work environment. Source this file in your shell.
 
+alias fla="make fla"
 alias fmt="make fmt"
 alias mc="make cov"
 alias mt="make test"
