@@ -49,16 +49,18 @@ def linkto(target, source) -> int:
     target_exists = os.path.lexists(target)
     if target_exists and not args.force:
         return fail(f"Target {target} exists and --force was not specified", 2)
+    start = os.path.dirname(target)
+    src = os.path.relpath(source, start=start)
     if args.dry_run:
         if target_exists:
             opt = "f"
         else:
             opt = ""
-        print(f"ln -{opt}s {source} {target}")
+        print(f"ln -{opt}s {src} {target}")
     else:
         if target_exists:
             remove(target)
-        os.symlink(os.path.relpath(source, start=target), target)
+        os.symlink(src, target)
     return 0
 
 
