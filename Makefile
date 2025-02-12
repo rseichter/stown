@@ -32,7 +32,7 @@ clean:
 
 setver:
 	@if [[ -z "$(ver)" ]]; then echo Usage: make $@ ver="{semantic-version}"; exit 1; fi
-	sed -i '' -E 's/^(version) =.*/\1 = "$(ver)"/i' pyproject.toml src/stown/stown.py
+	sed -i '' -E 's/^(version) =.*/\1 = "$(ver)"/i' pyproject.toml src/stown/__main__.py
 
 fla:
 	flake8 . --config=.flake8 -v
