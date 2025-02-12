@@ -20,14 +20,14 @@ requires = ["setuptools", "wheel"]
 
 [project]
 name = "stown"
-version = "0.1"
+version = "0.2.dev1"
 authors = [{name= "Ralph Seichter"}]
 description = "Stow file system objects by creating links"
 readme = "README.md"
 requires-python = ">=3.9"
 # See https://pypi.org/classifiers/
 classifiers = [
-  "Development Status :: 1 - Planning",
+  "Development Status :: 4 - Beta",
   "Operating System :: OS Independent",
   "Programming Language :: Python :: 3.9",
   "Topic :: Utilities",
