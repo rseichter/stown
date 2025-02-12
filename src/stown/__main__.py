@@ -27,7 +27,7 @@ def fail(message: str, rc: int = 1) -> int:
     return rc
 
 
-def say(message):  # pragma: no cover
+def say(message):
     if args.verbose:
         print(message)
 
@@ -39,7 +39,7 @@ def parsed_filename(fn):
 
 
 def remove(path):
-    if args.dry_run:  # pragma: no cover
+    if args.dry_run:
         print(f"rm {path}")
     else:
         os.remove(path)
@@ -78,7 +78,7 @@ def stown(target, sources, depth=0, parent_path=None) -> int:
         if not os.path.lexists(target):
             return linkto(target, source)
         elif is_same_file(target, source):
-            return fail(f"Source {source} and target are identical")
+            return fail(f"Source {source} and target are identical", 4)
         elif os.path.islink(target):
             rc = linkto(target, source)
             if rc != 0:
@@ -119,9 +119,9 @@ def arg_parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "-p",
         "--depth",
-        default=10,
+        default=5,
         type=int,
-        help="maximum recursion depth (default: 10)",
+        help="maximum recursion depth (default: 5)",
     )
     parser.add_argument("-f", "--force", default=False, action="store_true", help="force action")
     parser.add_argument("-v", "--verbose", default=False, action="store_true", help="verbose messages")

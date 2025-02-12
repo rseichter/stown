@@ -16,12 +16,17 @@ You should have received a copy of the GNU General Public License along with
 stown. If not, see <https://www.gnu.org/licenses/>.
 """
 
+from typing import List
+import argparse
 import json
 import os
 import shutil
 import stown.__main__ as stown
 import subprocess
 import unittest
+import uuid
+
+TMPDIR = "tmp"
 
 
 def getenv(key, default=None):
@@ -39,17 +44,24 @@ def load_json(path):
         return json.load(f)
 
 
+def random_tmp() -> str:
+    return os.path.join(TMPDIR, str(uuid.uuid4()))
+
+
 class TestStown(unittest.TestCase):
     def setUp(self):
         os.chdir(os.path.dirname(__file__))
         self.datadir = "data"
-        self.tmpdir = "tmp"
+        TMPDIR = "tmp"
+        stown.args = self.parse_args()
+        if os.path.exists(TMPDIR):
+            shutil.rmtree(TMPDIR)
+        os.mkdir(TMPDIR)
+        os.mkdir(os.path.join(TMPDIR, "healthy"))
+
+    def parse_args(self, flags: List[str] = ["-v"]) -> argparse.Namespace:
         ap = stown.arg_parser()
-        stown.args = ap.parse_args([self.tmpdir, self.datadir])
-        if os.path.exists(self.tmpdir):
-            shutil.rmtree(self.tmpdir)
-        os.mkdir(self.tmpdir)
-        os.mkdir(os.path.join(self.tmpdir, "healthy"))
+        return ap.parse_args(flags + [TMPDIR, self.datadir])
 
     def tearDown(self):
         pass
@@ -59,7 +71,36 @@ class TestStown(unittest.TestCase):
         x = load_json(expected)
         self.assertEqual(c, x)
 
-    def test_stow(self):
+    def test_fail(self):
+        self.assertEqual(stown.fail("This is an expected error, ignore.", -42), -42)
+
+    def test_linkto_existing(self):
+        self.assertEqual(stown.linkto(".", "/tmp"), 2)
+
+    def test_linkto_existing_force(self):
+        stown.args = self.parse_args(["-f"])
+        t = random_tmp()
+        with open(t, "wt") as f:
+            print("dummy", file=f)
+        self.assertEqual(stown.linkto(t, "expected.json"), 0)
+
+    def test_maxdepth(self):
+        stown.args = self.parse_args(["--depth", "0"])
+        self.assertEqual(stown.stown("x", "y"), 3)
+
+    def test_linkto_new(self):
+        self.assertEqual(stown.linkto(random_tmp(), "expected.json"), 0)
+
+    def test_parsed_fn1(self):
+        self.assertEqual(stown.parsed_filename("dot-foo"), ".foo")
+
+    def test_parsed_fn2(self):
+        self.assertEqual(stown.parsed_filename("bar"), "bar")
+
+    def test_same_file(self):
+        self.assertEqual(stown.stown(".", "."), 4)
+
+    def test_stown(self):
         self.assertEqual(stown.stown(stown.args.target, stown.args.source), 0)
         if not truthy(getenv("DISABLE_TREE")):
             subprocess.run(["tree", "-aJ", "-o", "tmp.json", stown.args.target])
