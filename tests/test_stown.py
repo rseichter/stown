@@ -23,6 +23,16 @@ import subprocess
 import unittest
 
 
+def getenv(key, default=None):
+    if key in os.environ:
+        return os.environ[key]
+    return default
+
+
+def truthy(x) -> bool:
+    return x or x == 1 or x == "true" or x == "yes"
+
+
 class TestStown(unittest.TestCase):
     def setUp(self):
         os.chdir(os.path.dirname(__file__))
@@ -40,18 +50,8 @@ class TestStown(unittest.TestCase):
 
     def test_stow(self):
         self.assertEqual(stown.stown(stown.args.target, stown.args.source), 0)
-        subprocess.run(["tree", "-aJ", "-o", "tree.json", stown.args.target])
-
-    # def test_isupper(self):
-    #     self.assertTrue('FOO'.isupper())
-    #     self.assertFalse('Foo'.isupper())
-
-    # def test_split(self):
-    #     s = 'hello world'
-    #     self.assertEqual(s.split(), ['hello', 'world'])
-    #     # check that s.split fails when the separator is not a string
-    #     with self.assertRaises(TypeError):
-    #         s.split(2)
+        if not truthy(getenv("DISABLE_TREE")):
+            subprocess.run(["tree", "-aJ", "-o", "tree.json", stown.args.target])
 
 
 if __name__ == "__main__":

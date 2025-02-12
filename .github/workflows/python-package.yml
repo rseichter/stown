@@ -4,6 +4,9 @@
 ---
 name: Python package
 
+env:
+  DISABLE_TREE: 1
+
 on:
   push:
     branches: ["master"]

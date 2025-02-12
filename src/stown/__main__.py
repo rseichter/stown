@@ -123,12 +123,8 @@ def arg_parser() -> argparse.ArgumentParser:
         type=int,
         help="maximum recursion depth (default: 10)",
     )
-    parser.add_argument(
-        "-f", "--force", default=False, action="store_true", help="force action"
-    )
-    parser.add_argument(
-        "-v", "--verbose", default=False, action="store_true", help="verbose messages"
-    )
+    parser.add_argument("-f", "--force", default=False, action="store_true", help="force action")
+    parser.add_argument("-v", "--verbose", default=False, action="store_true", help="verbose messages")
     parser.add_argument("target", help="action target (links are created here)")
     parser.add_argument("source", nargs="+", help="action sources (links point here)")
     return parser
