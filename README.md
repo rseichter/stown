@@ -1,7 +1,8 @@
 stown
 =====
 
-Copyright © 2025 Ralph Seichter. Licensed under [GPLv3+](./LICENSE).
+Copyright © 2025 Ralph Seichter. Licensed under
+[GPLv3+](https://github.com/rseichter/stown/blob/master/LICENSE).
 
 Stow file system objects by creating links. "stown" was inspired by [GNU
 Stow](https://www.gnu.org/software/stow/), which I found very useful but too
@@ -12,7 +13,8 @@ requires Python 3.9 or newer, without additional modules.
 Installing
 ----------
 
-To install from [PyPI](https://pypi.org/project/stown/) via shell command:
+To install the [PyPI package](https://pypi.org/project/stown/), you can use
+this shell command:
 
 ```bash
 pip install stown
@@ -26,8 +28,9 @@ a user's home directory. `--dry-run` causes the necessary steps to be printed
 only; no changes will be made.
 
 ```bash
-# You can use "stown --help" to show syntax
 stown --dry-run $HOME /path/to/dotfiles
+# "stown --help" shows syntax
+# stown --help
 ```
 
 Note that the prefix `dot-` is converted to a dot character in resulting links,

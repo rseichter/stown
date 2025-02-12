@@ -14,7 +14,7 @@ shc     Shell script care.
 
 endef
 
-v ?= 0.0.$(shell date +%s)
+v ?= 0.2.dev1
 
 .PHONY:	build clean fmt help pypi setver shc
 
