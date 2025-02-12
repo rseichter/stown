@@ -31,13 +31,13 @@ setver:
 	sed -i '' -E 's/^(version|__version__) =.*/\1 = "$(v)"/' pyproject.toml src/stown/__init__.py
 
 fmt:
-	black -l 120 src
+	black -l 120 src tests
 
 build:	fmt
 	python -m build
 
 test:
-	python -m unittest discover -s tests
+	PYTHONPATH=.:src python -m unittest discover -s tests
 
 pypi:
 	twine check dist/*
