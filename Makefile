@@ -11,12 +11,13 @@ help    Display this text.
 pypi    Upload distribution artifacts to PyPI.
 setver  Set version (v=$(v)).
 shc     Shell script care.
+test    Run unit tests.
 
 endef
 
 v ?= 0.2.dev1
 
-.PHONY:	build clean fmt help pypi setver shc
+.PHONY:	build clean fmt help pypi setver shc test
 
 help:
 	$(info $(usage))
@@ -34,6 +35,9 @@ fmt:
 
 build:	fmt
 	python -m build
+
+test:
+	python -m unittest discover -s tests
 
 pypi:
 	twine check dist/*

@@ -30,7 +30,6 @@ only; no changes will be made.
 ```bash
 stown --dry-run $HOME /path/to/dotfiles
 # "stown --help" shows syntax
-# stown --help
 ```
 
 Note that the prefix `dot-` is converted to a dot character in resulting links,

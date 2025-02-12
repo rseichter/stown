@@ -21,8 +21,6 @@ import os
 import sys
 from . import __version__
 
-args: argparse.Namespace
-
 
 def fail(message: str, rc: int = 1) -> int:
     print(f"Error: {message}", file=sys.stderr)
@@ -70,7 +68,7 @@ def is_same_file(target, source) -> bool:
     return sr.st_dev == tr.st_dev and sr.st_ino == tr.st_ino
 
 
-def stow(target, sources, depth=0, parent_path=None) -> int:
+def stown(target, sources, depth=0, parent_path=None) -> int:
     if depth >= args.depth:
         return fail(f"Maximum depth {depth} reached", 3)
     say(f"# {target} (depth {depth})")
@@ -88,7 +86,7 @@ def stow(target, sources, depth=0, parent_path=None) -> int:
         elif os.path.isdir(source):
             for child in os.listdir(source):
                 tchild = parsed_filename(child)
-                rc = stow(os.path.join(target, tchild), [child], depth + 1, source)
+                rc = stown(os.path.join(target, tchild), [child], depth + 1, source)
                 if rc != 0:
                     return rc
         elif os.path.isfile(target) and os.path.isfile(source):
@@ -98,7 +96,7 @@ def stow(target, sources, depth=0, parent_path=None) -> int:
     return 0
 
 
-def main() -> int:
+def arg_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         prog="stown",
         description="Stow file system objects by creating links",
@@ -125,22 +123,25 @@ def main() -> int:
         type=int,
         help="maximum recursion depth (default: 10)",
     )
-    parser.add_argument("-f", "--force", default=False, action="store_true", help="force action")
-    parser.add_argument("-v", "--verbose", default=False, action="store_true", help="verbose messages")
+    parser.add_argument(
+        "-f", "--force", default=False, action="store_true", help="force action"
+    )
+    parser.add_argument(
+        "-v", "--verbose", default=False, action="store_true", help="verbose messages"
+    )
     parser.add_argument("target", help="action target (links are created here)")
     parser.add_argument("source", nargs="+", help="action sources (links point here)")
-    global args
-    args = parser.parse_args()
-    if args.action == "stow":
-        if args.source:
-            rc = stow(args.target, args.source)
-        else:
-            rc = stow(args.target, ["."])
-        return rc
-    else:
-        print(f"Action not implemented: {args.action}", file=sys.stderr)
-        return 1
+    return parser
 
 
 if __name__ == "__main__":
-    sys.exit(main())
+    parser = arg_parser()
+    args = parser.parse_args()
+    if args.action == "stow":
+        if args.source:
+            rc = stown(args.target, args.source)
+        else:
+            rc = stown(args.target, ["."])
+        sys.exit(rc)
+    else:
+        raise (NotImplementedError)
