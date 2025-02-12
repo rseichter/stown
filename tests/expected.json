@@ -1,0 +1,11 @@
+[
+  {"type":"directory","name":"tmp","contents":[
+    {"type":"link","name":".sugar","target":"../../data/dot-sugar"},
+    {"type":"directory","name":"healthy","contents":[
+      {"type":"link","name":".banana","target":"../../../data/healthy/dot-banana"},
+      {"type":"link","name":"pear","target":"../../../data/healthy/pear"}
+    ]}
+  ]}
+,
+  {"type":"report","directories":2,"files":3}
+]
