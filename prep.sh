@@ -4,5 +4,15 @@
 #
 # Prepare work environment. Source this file in your shell.
 
-export PYTHONPATH=.:src
+alias fmt="make fmt"
+alias mt="make test"
 alias stown="python -m stown"
+
+export PYTHONPATH=.:src
+
+if [[ -d ./.venv ]]; then
+	# shellcheck disable=1091
+	. ./.venv
+else
+	. ~/.venv/bin/activate
+fi
