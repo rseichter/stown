@@ -16,7 +16,7 @@ You should have received a copy of the GNU General Public License along with
 stown. If not, see <https://www.gnu.org/licenses/>.
 """
 
-from stown import stown
+from stown import __main__ as stown
 from typing import List
 import argparse
 import json
@@ -52,7 +52,6 @@ class TestStown(unittest.TestCase):
     def setUp(self):
         os.chdir(os.path.dirname(__file__))
         self.datadir = "data"
-        TMPDIR = "tmp"
         stown.args = self.parse_args()
         if os.path.exists(TMPDIR):
             shutil.rmtree(TMPDIR)

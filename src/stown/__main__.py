@@ -20,7 +20,7 @@ import argparse
 import os
 import sys
 
-args: argparse.Namespace = None
+args: argparse.Namespace
 VERSION = "0.4.dev1"
 
 

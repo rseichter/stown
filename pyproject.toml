@@ -34,7 +34,7 @@ classifiers = [
 ]
 
 [project.scripts]
-stown = "stown.stown:main"
+stown = "stown.__main__:main"
 
 [project.urls]
 # Documentation = "https://rseichter.github.io/stown/"
