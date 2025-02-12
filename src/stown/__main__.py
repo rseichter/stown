@@ -20,7 +20,6 @@ import argparse
 import os
 import sys
 
-args = argparse.Namespace()
 VERSION = "0.4.dev1"
 
 
@@ -29,8 +28,8 @@ def fail(message: str, rc: int = 1) -> int:
     return rc
 
 
-def say(message):
-    if args.verbose:
+def say(message, verbose=True):
+    if verbose:
         print(message)
 
 
@@ -40,14 +39,14 @@ def parsed_filename(fn):
     return fn
 
 
-def remove(path):
-    if args.dry_run:
+def remove(path, dry_run=True):
+    if dry_run:
         print(f"rm {path}")
     else:
         os.remove(path)
 
 
-def linkto(target, source) -> int:
+def linkto(args: argparse.Namespace, target, source) -> int:
     target_exists = os.path.lexists(target)
     if target_exists and not args.force:
         return fail(f"Target {target} exists and --force was not specified", 2)
@@ -61,7 +60,7 @@ def linkto(target, source) -> int:
         print(f"ln -{opt}s {src} {target}")
     else:
         if target_exists:
-            remove(target)
+            remove(target, args.dry_run)
         os.symlink(src, target)
     return 0
 
@@ -72,27 +71,27 @@ def is_same_file(target, source) -> bool:
     return sr.st_dev == tr.st_dev and sr.st_ino == tr.st_ino
 
 
-def stown(target, sources, depth=0, parent_path=None) -> int:
+def stown(args: argparse.Namespace, target, sources, depth=0, parent_path=None) -> int:
     if depth >= args.depth:
         return fail(f"Maximum depth {depth} reached", 3)
     elif args.action != "stow":
         return fail(f"Action {args.action} is not implemented", 5)
-    say(f"# {target} (depth {depth})")
+    say(f"# {target} (depth {depth})", args.verbose)
     for source in sources:
         if parent_path:
             source = os.path.join(parent_path, source)
         if not os.path.lexists(target):
-            return linkto(target, source)
+            return linkto(args, target, source)
         elif is_same_file(target, source):
             return fail(f"Source {source} and target are identical", 4)
         elif os.path.islink(target):
-            rc = linkto(target, source)
+            rc = linkto(args, target, source)
             if rc != 0:
                 return rc
         elif os.path.isdir(source):
             for child in os.listdir(source):
                 tchild = parsed_filename(child)
-                rc = stown(os.path.join(target, tchild), [child], depth + 1, source)
+                rc = stown(args, os.path.join(target, tchild), [child], depth + 1, source)
                 if rc != 0:
                     return rc
         elif os.path.isfile(target) and os.path.isfile(source):
@@ -137,12 +136,11 @@ def arg_parser() -> argparse.ArgumentParser:
 
 
 def main():
-    ap = arg_parser()
-    ap.parse_args(namespace=args)
+    args = arg_parser().parse_args()
     if args.source:
-        rc = stown(args.target, args.source)
+        rc = stown(args, args.target, args.source)
     else:
-        rc = stown(args.target, ["."])
+        rc = stown(args, args.target, ["."])
     sys.exit(rc)
 
 

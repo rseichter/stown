@@ -52,15 +52,14 @@ class TestStown(unittest.TestCase):
     def setUp(self):
         os.chdir(os.path.dirname(__file__))
         self.datadir = "data"
-        stown.args = self.parse_args()
+        self.args = self.parse_args()
         if os.path.exists(TMPDIR):
             shutil.rmtree(TMPDIR)
         os.mkdir(TMPDIR)
         os.mkdir(os.path.join(TMPDIR, "healthy"))
 
-    def parse_args(self, flags: List[str] = ["-v"]) -> argparse.Namespace:
-        ap = stown.arg_parser()
-        return ap.parse_args(flags + [TMPDIR, self.datadir])
+    def parse_args(self, flags: List[str] = ["--verbose"]) -> argparse.Namespace:
+        return stown.arg_parser().parse_args(flags + [TMPDIR, self.datadir])
 
     def tearDown(self):
         pass
@@ -74,21 +73,21 @@ class TestStown(unittest.TestCase):
         self.assertEqual(stown.fail("dummy", -42), -42)
 
     def test_linkto_existing(self):
-        self.assertEqual(stown.linkto(".", "/tmp"), 2)
+        self.assertEqual(stown.linkto(self.args, ".", self.datadir), 2)
 
     def test_linkto_existing_force(self):
-        stown.args = self.parse_args(["-f"])
-        t = random_tmp()
-        with open(t, "wt") as f:
-            print("dummy", file=f)
-        self.assertEqual(stown.linkto(t, "expected.json"), 0)
+        rnd = random_tmp()
+        with open(rnd, "wt") as f:
+            print(rnd, file=f)
+        a = self.parse_args(["--force"])
+        self.assertEqual(stown.linkto(a, rnd, "expected.json"), 0)
 
     def test_maxdepth(self):
-        stown.args = self.parse_args(["--depth", "0"])
-        self.assertEqual(stown.stown("x", "y"), 3)
+        a = self.parse_args(["--depth", "0"])
+        self.assertEqual(stown.stown(a, "x", "y"), 3)
 
     def test_linkto_new(self):
-        self.assertEqual(stown.linkto(random_tmp(), "expected.json"), 0)
+        self.assertEqual(stown.linkto(self.args, random_tmp(), "expected.json"), 0)
 
     def test_parsed_fn1(self):
         self.assertEqual(stown.parsed_filename("dot-foo"), ".foo")
@@ -97,17 +96,17 @@ class TestStown(unittest.TestCase):
         self.assertEqual(stown.parsed_filename("bar"), "bar")
 
     def test_same_file(self):
-        self.assertEqual(stown.stown(".", "."), 4)
+        self.assertEqual(stown.stown(self.args, ".", "."), 4)
 
     def test_stown(self):
-        self.assertEqual(stown.stown(stown.args.target, stown.args.source), 0)
+        self.assertEqual(stown.stown(self.args, self.args.target, self.args.source), 0)
         if not truthy(getenv("DISABLE_TREE")):
-            subprocess.run(["tree", "-aJ", "-o", "tmp.json", stown.args.target])
+            subprocess.run(["tree", "-aJ", "-o", "tmp.json", self.args.target])
             self.assert_json_equal("tmp.json", "expected.json")
 
     def test_unstow(self):
-        stown.args = self.parse_args(["-a", "unstow"])
-        self.assertEqual(stown.stown("x", "y"), 5)
+        a = self.parse_args(["--action", "unstow"])
+        self.assertEqual(stown.stown(a, "x", "y"), 5)
 
 
 if __name__ == "__main__":
