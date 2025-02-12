@@ -70,7 +70,7 @@ def is_same_file(target, source) -> bool:
     return sr.st_dev == tr.st_dev and sr.st_ino == tr.st_ino
 
 
-def stow(target, sources, depth=0, parent_path=None) -> int:  # noqa: C901
+def stow(target, sources, depth=0, parent_path=None) -> int:
     if depth >= args.depth:
         return fail(f"Maximum depth {depth} reached", 3)
     say(f"# {target} (depth {depth})")
