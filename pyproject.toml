@@ -37,6 +37,6 @@ classifiers = [
 stown = "stown.__main__:main"
 
 [project.urls]
-Documentation = "https://rseichter.github.io/stown/"
+# Documentation = "https://rseichter.github.io/stown/"
 Source = "https://github.com/rseichter/stown"
 Issues = "https://github.com/rseichter/stown/issues"
