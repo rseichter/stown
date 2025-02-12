@@ -5,6 +5,7 @@
 # Prepare work environment. Source this file in your shell.
 
 alias fmt="make fmt"
+alias mc="make cov"
 alias mt="make test"
 alias stown="python -m stown"
 
