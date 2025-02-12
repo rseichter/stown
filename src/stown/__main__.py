@@ -20,7 +20,7 @@ import argparse
 import os
 import sys
 
-args: argparse.Namespace
+args = argparse.Namespace()
 VERSION = "0.4.dev1"
 
 
@@ -138,7 +138,7 @@ def arg_parser() -> argparse.ArgumentParser:
 
 def main():
     ap = arg_parser()
-    args = ap.parse_args()
+    ap.parse_args(namespace=args)
     if args.source:
         rc = stown(args.target, args.source)
     else:
