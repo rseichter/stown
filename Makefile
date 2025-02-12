@@ -30,7 +30,7 @@ clean:
 	find . -type d -name __pycache__ -or -name '*.bak' -or -name '*.egg-info' | xargs -r rm -r
 
 setver:
-	sed -i '' -E 's/^(version|__version__) =.*/\1 = "$(v)"/' pyproject.toml src/stown/__init__.py
+	sed -i '' -E 's/^(version) =.*/\1 = "$(v)"/i' pyproject.toml src/stown/stown.py
 
 fmt:
 	black -l 120 src tests

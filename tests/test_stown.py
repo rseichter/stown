@@ -16,12 +16,12 @@ You should have received a copy of the GNU General Public License along with
 stown. If not, see <https://www.gnu.org/licenses/>.
 """
 
+from stown import stown
 from typing import List
 import argparse
 import json
 import os
 import shutil
-import stown.__main__ as stown
 import subprocess
 import unittest
 import uuid
@@ -72,7 +72,7 @@ class TestStown(unittest.TestCase):
         self.assertEqual(c, x)
 
     def test_fail(self):
-        self.assertEqual(stown.fail("This is an expected error, ignore.", -42), -42)
+        self.assertEqual(stown.fail("dummy", -42), -42)
 
     def test_linkto_existing(self):
         self.assertEqual(stown.linkto(".", "/tmp"), 2)

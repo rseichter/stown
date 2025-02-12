@@ -19,9 +19,9 @@ stown. If not, see <https://www.gnu.org/licenses/>.
 import argparse
 import os
 import sys
-from . import __version__
 
 args: argparse.Namespace = None
+VERSION = "0.3"
 
 
 def fail(message: str, rc: int = 1) -> int:
@@ -106,7 +106,7 @@ def arg_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         prog="stown",
         description="Stow file system objects by creating links",
-        epilog=f"stown version {__version__}. Copyright © 2025 Ralph Seichter.",
+        epilog=f"stown version {VERSION} Copyright © 2025 Ralph Seichter.",
     )
     parser.add_argument(
         "-a",
