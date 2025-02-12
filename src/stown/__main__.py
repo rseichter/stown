@@ -58,7 +58,7 @@ def linkto(target, source) -> int:
     else:
         if target_exists:
             remove(target)
-        os.symlink(source, target)
+        os.symlink(os.path.relpath(source, start=target), target)
     return 0
 
 
