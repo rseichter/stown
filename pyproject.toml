@@ -20,7 +20,7 @@ requires = ["setuptools", "wheel"]
 
 [project]
 name = "stown"
-version = "0.5.dev1"
+version = "0.5"
 authors = [{name= "Ralph Seichter"}]
 description = "Stow file system objects by creating links"
 readme = "README.md"
@@ -37,7 +37,7 @@ classifiers = [
 stown = "stown.__main__:main"
 
 [project.urls]
-# Documentation = "https://rseichter.github.io/stown/"
+Documentation = "https://github.com/rseichter/stown/blob/master/README.md"
 Source = "https://github.com/rseichter/stown"
 Issues = "https://github.com/rseichter/stown/issues"
 

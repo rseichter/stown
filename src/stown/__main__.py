@@ -20,7 +20,7 @@ import argparse
 import os
 import sys
 
-VERSION = "0.5.dev1"
+VERSION = "0.5"
 
 
 def fail(message: str, rc: int = 1) -> int:
