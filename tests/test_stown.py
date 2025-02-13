@@ -23,6 +23,7 @@ import json
 import os
 import shutil
 import subprocess
+import tempfile
 import unittest
 import uuid
 
@@ -46,8 +47,8 @@ def load_json(path):
         return json.load(f)
 
 
-def random_tmp() -> str:
-    return os.path.join(TMPDIR, str(uuid.uuid4()))
+def random_tmp(tmpdir=TMPDIR, suffix=".tmp") -> str:
+    return os.path.join(tmpdir, f"stown.{uuid.uuid4()}{suffix}")
 
 
 class TestStown(unittest.TestCase):
@@ -106,8 +107,11 @@ class TestStown(unittest.TestCase):
     def test_stown(self):
         self.assertEqual(stown.stown(self.args, self.args.target, self.args.source), 0)
         if not is_truthy(getenv("DISABLE_TREE")):
-            subprocess.run(["tree", "-aJ", "-o", "tmp.json", self.args.target])
-            self.assert_json_equal("tmp.json", XJSON)
+            out = random_tmp(tempfile.gettempdir(), ".json")
+            subprocess.run(["tree", "-aJ", "-o", out, self.args.target])
+            print(f"Comparing {out} and {XJSON}")
+            self.assert_json_equal(out, XJSON)
+            os.remove(out)
 
     def test_unstow(self):
         a = self.parse_args(["--action", "unstow"])
