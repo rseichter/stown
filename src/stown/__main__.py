@@ -21,6 +21,7 @@ import os
 import sys
 
 VERSION = "0.6-dev.1"
+EPILOG = f"stown version {VERSION} Copyright © 2025 Ralph Seichter."
 
 
 def fail(message: str, rc: int = 1) -> int:
@@ -105,7 +106,7 @@ def arg_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         prog="stown",
         description="Stow file system objects by creating links",
-        epilog=f"stown version {VERSION} Copyright © 2025 Ralph Seichter.",
+        epilog=EPILOG,
     )
     parser.add_argument(
         "-a",

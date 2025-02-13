@@ -5,14 +5,13 @@
 name: Python package
 
 env:
-  DISABLE_TREE: 0
   PYTHONPATH: '.:src'
 
 on:
   pull_request:
     branches: ['master']
   push:
-    branches: ['master', 'ci-044']
+    branches: ['master', 'ci-*']
   workflow_dispatch:
 
 jobs:
@@ -35,8 +34,9 @@ jobs:
         run: |
           sudo apt-get install -y tree
           python -m pip install --upgrade pip
-          python -m pip install flake8
+          python -m pip install build flake8 wheel
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+          sed -E -i "s/(^EPILOG =.+})/\1 ($GITHUB_SHA)/" src/stown/*.py
       - name: Lint with flake8
         run: |
           # Stop the build if there are Python syntax errors or undefined names
@@ -45,3 +45,14 @@ jobs:
       - name: Unit tests
         run: |
           python -m unittest discover -s tests
+      - name: Build distributions
+        run: |
+          python -m build
+      - name: Upload distributions
+        # See https://github.com/actions/upload-artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist-${{ matrix.python-version }}.zip
+          path: dist/
+          compression-level: 0
+          if-no-files-found: error
