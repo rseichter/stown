@@ -5,22 +5,23 @@ define usage
 
 Available 'make' targets are:
 
-build   Build distribution artifacts.
-clean   Cleanup workspace.
-cov     Coverage analysis.
-fla     Run flake8 checks.
-help    Display this text.
-pypi    Upload distribution artifacts to PyPI.
-setver  Set version number.
-shc     Shell script care.
-test    Run unit tests.
+build     Build distribution artifacts.
+clean     Cleanup workspace.
+mrproper  Cleanup workspace, thoroughly.
+cov       Coverage analysis.
+fla       Run flake8 checks.
+help      Display this text.
+pypi      Upload distribution artifacts to PyPI.
+setver    Set version number.
+shc       Shell script care.
+test      Run unit tests.
 
 endef
 
 pyenv	:= PYTHONPATH=.:src
 ver		?=
 
-.PHONY:	build clean cov fla fmt help pypi setver shc test
+.PHONY:	build clean cov fla fmt help mrproper pypi setver shc test
 
 help:
 	$(info $(usage))
@@ -28,6 +29,8 @@ help:
 
 clean:
 	rm -fr dist
+
+mrproper:	clean
 	find . -type d -name __pycache__ -or -name '*.bak' -or -name '*.egg-info' | xargs -r rm -r
 
 setver:
@@ -40,7 +43,7 @@ fla:
 fmt:
 	black -l 120 src tests
 
-build:	fmt
+build:	fmt clean
 	python -m build
 
 cov:
