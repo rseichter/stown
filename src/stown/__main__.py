@@ -21,7 +21,7 @@ import argparse
 import os
 import sys
 
-VERSION = "0.7.0-dev3"
+VERSION = "0.7.0-dev4"
 EPILOG = f"stown version {VERSION} Copyright © 2025 Ralph Seichter."
 
 

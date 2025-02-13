@@ -1,4 +1,6 @@
 .coverage
 dist/
 htmlcov/
+lighttpd/
+nginx/
 tests/*tmp*
