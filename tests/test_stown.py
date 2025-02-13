@@ -26,7 +26,9 @@ import subprocess
 import unittest
 import uuid
 
+DATADIR = "data"
 TMPDIR = "tmp"
+XJSON = "expected.json"
 
 
 def getenv(key, default=None):
@@ -35,7 +37,7 @@ def getenv(key, default=None):
     return default
 
 
-def truthy(x) -> bool:
+def is_truthy(x) -> bool:
     return x or x == 1 or x == "true" or x == "yes"
 
 
@@ -51,7 +53,6 @@ def random_tmp() -> str:
 class TestStown(unittest.TestCase):
     def setUp(self):
         os.chdir(os.path.dirname(__file__))
-        self.datadir = "data"
         self.args = self.parse_args()
         if os.path.exists(TMPDIR):
             shutil.rmtree(TMPDIR)
@@ -59,7 +60,7 @@ class TestStown(unittest.TestCase):
         os.mkdir(os.path.join(TMPDIR, "healthy"))
 
     def parse_args(self, flags: List[str] = ["--verbose"]) -> argparse.Namespace:
-        return stown.arg_parser().parse_args(flags + [TMPDIR, self.datadir])
+        return stown.arg_parser().parse_args(flags + [TMPDIR, DATADIR])
 
     def tearDown(self):
         pass
@@ -69,25 +70,25 @@ class TestStown(unittest.TestCase):
         x = load_json(expected)
         self.assertEqual(c, x)
 
-    def test_fail(self):
+    def test_fail_custom_rc(self):
         self.assertEqual(stown.fail("dummy", -42), -42)
 
     def test_linkto_existing(self):
-        self.assertEqual(stown.linkto(self.args, ".", self.datadir), 2)
+        self.assertEqual(stown.linkto(self.args, ".", DATADIR), 2)
 
     def test_linkto_existing_force(self):
         rnd = random_tmp()
         with open(rnd, "wt") as f:
-            print(rnd, file=f)
+            print(file=f)
         a = self.parse_args(["--force"])
-        self.assertEqual(stown.linkto(a, rnd, "expected.json"), 0)
+        self.assertEqual(stown.linkto(a, rnd, XJSON), 0)
 
     def test_maxdepth(self):
         a = self.parse_args(["--depth", "0"])
         self.assertEqual(stown.stown(a, "x", "y"), 3)
 
     def test_linkto_new(self):
-        self.assertEqual(stown.linkto(self.args, random_tmp(), "expected.json"), 0)
+        self.assertEqual(stown.linkto(self.args, random_tmp(), XJSON), 0)
 
     def test_parsed_fn1(self):
         self.assertEqual(stown.parsed_filename("dot-foo"), ".foo")
@@ -100,9 +101,9 @@ class TestStown(unittest.TestCase):
 
     def test_stown(self):
         self.assertEqual(stown.stown(self.args, self.args.target, self.args.source), 0)
-        if not truthy(getenv("DISABLE_TREE")):
+        if not is_truthy(getenv("DISABLE_TREE")):
             subprocess.run(["tree", "-aJ", "-o", "tmp.json", self.args.target])
-            self.assert_json_equal("tmp.json", "expected.json")
+            self.assert_json_equal("tmp.json", XJSON)
 
     def test_unstow(self):
         a = self.parse_args(["--action", "unstow"])
