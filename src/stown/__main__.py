@@ -20,7 +20,7 @@ import argparse
 import os
 import sys
 
-VERSION = "0.6.dev2"
+VERSION = "0.6"
 EPILOG = f"stown version {VERSION} Copyright © 2025 Ralph Seichter."
 
 
