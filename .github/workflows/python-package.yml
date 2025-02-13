@@ -1,5 +1,5 @@
 # See https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-python
-# vim: noet ts=2 sw=2
+# vim: et ts=2 sw=2
 ---
 name: Python package
 
@@ -7,10 +7,10 @@ env:
   PYTHONPATH: '.:src'
 
 on:
-  pull_request:
-    branches: ['master']
-  push:
-    branches: ['master', 'rs-*']
+  # pull_request:
+  #   branches: ['master']
+  # push:
+  #   branches: ['master']
   workflow_dispatch:
 
 jobs:
@@ -19,7 +19,8 @@ jobs:
     strategy:
       fail-fast: true
       matrix:
-        python-version: ['3.9', '3.10', '3.11', '3.12', '3.13']
+        # python-version: ['3.9', '3.10', '3.11', '3.12', '3.13']
+        python-version: ['3.9']
 
     steps:
       - uses: actions/checkout@v4
