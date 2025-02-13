@@ -154,10 +154,7 @@ def arg_parser() -> argparse.ArgumentParser:
 
 def main():
     args = arg_parser().parse_args()
-    if args.source:
-        rc = stown(args, args.target, args.source)
-    else:
-        rc = stown(args, args.target, ["."])
+    rc = stown(args, args.target, args.source)
     sys.exit(rc)
 
 

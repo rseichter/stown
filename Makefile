@@ -45,7 +45,7 @@ fmt:
 	black -l 120 src tests
 
 fla:	fmt
-	flake8 . --config=.flake8 -v
+	flake8 . --config=.flake8
 
 build:	fmt clean
 	python -m build
