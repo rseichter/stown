@@ -101,6 +101,9 @@ class TestStown(unittest.TestCase):
     def test_parsed_fn2(self):
         self.assertEqual(stown.parsed_filename("bar"), "bar")
 
+    def test_pathto(self):
+        self.assertTrue(os.path.isabs(stown.pathto(XJSON, True)))
+
     def test_same_file(self):
         self.assertEqual(stown.stown(self.args, ".", "."), 4)
 

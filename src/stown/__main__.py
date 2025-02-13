@@ -16,11 +16,12 @@ You should have received a copy of the GNU General Public License along with
 stown. If not, see <https://www.gnu.org/licenses/>.
 """
 
+from os import path
 import argparse
 import os
 import sys
 
-VERSION = "0.7.0-dev1"
+VERSION = "0.7.0-dev3"
 EPILOG = f"stown version {VERSION} Copyright © 2025 Ralph Seichter."
 
 
@@ -40,19 +41,27 @@ def parsed_filename(fn):
     return fn
 
 
-def remove(path, dry_run=True):
+def remove(pathlike, dry_run=True):
     if dry_run:
-        print(f"rm {path}")
+        print(f"rm {pathlike}")
     else:
-        os.remove(path)
+        os.remove(pathlike)
+
+
+def pathto(pathlike, absolute: bool, relstart=None):
+    if absolute:
+        p = path.abspath(pathlike)
+    else:
+        p = path.relpath(pathlike, start=relstart)
+    return p
 
 
 def linkto(args: argparse.Namespace, target, source) -> int:
-    target_exists = os.path.lexists(target)
+    target_exists = path.lexists(target)
     if target_exists and not args.force:
         return fail(f"Target {target} exists and --force was not specified", 2)
-    start = os.path.dirname(target)
-    src = os.path.relpath(source, start=start)
+    start = path.dirname(target)
+    src = pathto(source, args.absolute, start)
     if args.dry_run:
         if target_exists:
             opt = "f"
@@ -80,22 +89,22 @@ def stown(args: argparse.Namespace, target, sources, depth=0, parent_path=None) 
     say(f"# {target} (depth {depth})", args.verbose)
     for source in sources:
         if parent_path:
-            source = os.path.join(parent_path, source)
-        if not os.path.lexists(target):
+            source = path.join(parent_path, source)
+        if not path.lexists(target):
             return linkto(args, target, source)
         elif is_same_file(target, source):
             return fail(f"Source {source} and target are identical", 4)
-        elif os.path.islink(target):
+        elif path.islink(target):
             rc = linkto(args, target, source)
             if rc != 0:
                 return rc
-        elif os.path.isdir(source):
+        elif path.isdir(source):
             for child in os.listdir(source):
                 tchild = parsed_filename(child)
-                rc = stown(args, os.path.join(target, tchild), [child], depth + 1, source)
+                rc = stown(args, path.join(target, tchild), [child], depth + 1, source)
                 if rc != 0:
                     return rc
-        elif os.path.isfile(target) and os.path.isfile(source):
+        elif path.isfile(target) and path.isfile(source):
             return fail(f"Both target {target} and source {source} are files")
         else:
             return fail(f"Unexpected pair: target {target} and source {source}")
@@ -103,37 +112,44 @@ def stown(args: argparse.Namespace, target, sources, depth=0, parent_path=None) 
 
 
 def arg_parser() -> argparse.ArgumentParser:
-    parser = argparse.ArgumentParser(
+    ap = argparse.ArgumentParser(
         prog="stown",
         description="Stow file system objects by creating links",
         epilog=EPILOG,
     )
-    parser.add_argument(
+    ap.add_argument(
         "-a",
         "--action",
         choices=["stow", "unstow"],
         default="stow",
         help="action to take (default: stow)",
     )
-    parser.add_argument(
+    ap.add_argument(
+        "-b",
+        "--absolute",
+        default=False,
+        action="store_true",
+        help="create links using absolute paths",
+    )
+    ap.add_argument(
         "-d",
         "--dry-run",
         default=False,
         action="store_true",
         help="print operations only",
     )
-    parser.add_argument(
+    ap.add_argument(
         "-p",
         "--depth",
         default=5,
         type=int,
         help="maximum recursion depth (default: 5)",
     )
-    parser.add_argument("-f", "--force", default=False, action="store_true", help="force action")
-    parser.add_argument("-v", "--verbose", default=False, action="store_true", help="verbose messages")
-    parser.add_argument("target", help="action target (links are created here)")
-    parser.add_argument("source", nargs="+", help="action sources (links point here)")
-    return parser
+    ap.add_argument("-f", "--force", default=False, action="store_true", help="force action")
+    ap.add_argument("-v", "--verbose", default=False, action="store_true", help="verbose messages")
+    ap.add_argument("target", help="action target (links are created here)")
+    ap.add_argument("source", nargs="+", help="action sources (links point here)")
+    return ap
 
 
 def main():
