@@ -1,6 +1,5 @@
-# This workflow will install Python dependencies, run tests and lint with a
-# variety of Python versions For more information see:
-# https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-python
+# See https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-python
+# vim: noet ts=2 sw=2
 ---
 name: Python package
 
@@ -16,7 +15,6 @@ on:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
     strategy:
       fail-fast: true
@@ -33,9 +31,8 @@ jobs:
       - name: Install dependencies
         run: |
           sudo apt-get install -y tree
-          python -m pip install --upgrade pip
-          python -m pip install build flake8 wheel
-          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+          python -m pip install -U pip
+          python -m pip install -r requirements.txt
           sed -E -i "s/(^EPILOG =.+})/\1 ($GITHUB_SHA)/" src/stown/*.py
       - name: Lint with flake8
         run: |
