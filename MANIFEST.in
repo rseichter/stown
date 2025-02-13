@@ -1,2 +1,2 @@
 graft tests
-global-exclude __pycache__ tmp*
+global-exclude tmp* *.pyc
