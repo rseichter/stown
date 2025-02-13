@@ -90,6 +90,10 @@ class TestStown(unittest.TestCase):
     def test_linkto_new(self):
         self.assertEqual(stown.linkto(self.args, random_tmp(), XJSON), 0)
 
+    def test_linkto_new_dry(self):
+        a = self.parse_args(["-d"])
+        self.assertEqual(stown.linkto(a, random_tmp(), XJSON), 0)
+
     def test_parsed_fn1(self):
         self.assertEqual(stown.parsed_filename("dot-foo"), ".foo")
 
