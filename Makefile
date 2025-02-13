@@ -47,12 +47,12 @@ build:	fmt clean
 	python -m build
 
 cov:
-	$(pyenv) coverage run -m unittest discover -s tests
+	$(pyenv) coverage run -m unittest discover -s tests -v
 	coverage html
 	coverage report -m
 
 test:
-	$(pyenv) python -m unittest discover -s tests
+	$(pyenv) python -m unittest discover -s tests -v
 
 pypi:
 	twine check dist/*
