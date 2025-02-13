@@ -105,9 +105,9 @@ def stown(args: argparse.Namespace, target, sources, depth=0, parent_path=None) 
                 if rc != 0:
                     return rc
         elif path.isfile(target) and path.isfile(source):
-            return fail(f"Both target {target} and source {source} are files")
+            return fail(f"Both target {target} and source {source} are files", 6)
         else:
-            return fail(f"Unexpected pair: target {target} and source {source}")
+            return fail(f"Unexpected pair: target {target} and source {source}", 7)
     return 0
 
 

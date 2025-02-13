@@ -88,6 +88,11 @@ class TestStown(unittest.TestCase):
         a = self.parse_args(["--depth", "0"])
         self.assertEqual(stown.stown(a, "x", "y"), 3)
 
+    def test_linkto_link(self):
+        a = os.path.join(DATADIR, "NaCl")
+        b = os.path.join(DATADIR, "salt")
+        self.assertEqual(stown.linkto(self.args, a, b), 2)
+
     def test_linkto_new(self):
         self.assertEqual(stown.linkto(self.args, random_tmp(), XJSON), 0)
 

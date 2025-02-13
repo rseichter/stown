@@ -1,6 +1,7 @@
 [
   {"type":"directory","name":"tmp","contents":[
     {"type":"link","name":".sugar","target":"../data/dot-sugar"},
+    {"type":"link","name":"NaCl","target":"../data/NaCl"},
     {"type":"directory","name":"healthy","contents":[
       {"type":"link","name":".banana","target":"../../data/healthy/dot-banana"},
       {"type":"link","name":"pear","target":"../../data/healthy/pear"}
@@ -8,5 +9,5 @@
     {"type":"link","name":"salt","target":"../data/salt"}
   ]}
 ,
-  {"type":"report","directories":2,"files":4}
+  {"type":"report","directories":2,"files":5}
 ]

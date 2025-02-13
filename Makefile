@@ -63,4 +63,4 @@ pypi:
 	twine upload dist/*
 
 shc:
-	shcare *.sh
+	find . -name '*.sh' | xargs -r shcare
