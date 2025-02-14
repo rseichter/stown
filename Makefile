@@ -33,6 +33,7 @@ clean:
 
 mrproper:	clean
 	find . -type d -name __pycache__ -or -name '*.bak' -or -name '*.egg-info' -or -name 'tmp.*' | xargs -r rm -rv
+	[[ ! -d tmp ]] || find tmp -type l -delete
 
 bumpver:
 	make setver ver="$(ver)-dev$(shell date '+%s')"
