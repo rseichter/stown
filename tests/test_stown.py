@@ -60,7 +60,7 @@ def random_tmp(tmpdir=TMPDIR, suffix=".tmp") -> str:
 class TestStown(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        stown.init_logging(path.join("tests", "test.log"), logging.DEBUG)
+        stown.init_logging(logging.FATAL)
 
     def setUp(self):
         os.chdir(path.dirname(__file__))
@@ -152,7 +152,6 @@ class TestStown(unittest.TestCase):
         if not is_truthy(getenv("DISABLE_TREE")):
             out = random_tmp(tempfile.gettempdir(), ".json")
             subprocess.run(["tree", "-aJ", "-o", out, self.args.target])
-            print(f"Comparing {out} and {XJSON}")
             self.assert_json_equal(out, XJSON)
             os.remove(out)
 

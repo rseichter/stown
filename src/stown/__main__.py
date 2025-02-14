@@ -29,9 +29,11 @@ EPILOG = f"{ID} version {VERSION} Copyright © 2025 Ralph Seichter"
 log = logging.getLogger(ID)
 
 
-def init_logging(filename, level=logging.DEBUG):
-    format = "%(asctime)s %(levelname)s %(message)s"
-    logging.basicConfig(stream=sys.stderr, format=format, level=level)
+def init_logging(level=logging.DEBUG):
+    format = "%(message)s"
+    if isinstance(level, str):
+        level = logging.getLevelName(level.upper())
+    logging.basicConfig(stream=sys.stdout, format=format, level=level)
 
 
 def fail(message: str, rc: int = 1) -> int:
@@ -46,9 +48,8 @@ def parsed_filename(fn: str) -> str:
 
 
 def remove(pathlike, dry_run=True) -> int:
-    if dry_run:
-        print(f"rm {pathlike}")
-    else:
+    log.debug(f"rm {pathlike}")
+    if not dry_run:
         os.remove(pathlike)
     return 0
 
@@ -67,15 +68,10 @@ def linkto(args: argparse.Namespace, target, source) -> int:
         return fail(f"Target {target} exists and --force was not specified", 2)
     start = path.dirname(target)
     src = pathto(source, args.absolute, start)
-    if args.dry_run:
-        if target_exists:
-            opt = "f"
-        else:
-            opt = ""
-        print(f"ln -{opt}s {src} {target}")
-    else:
+    if not args.dry_run:
         if target_exists:
             remove(target, args.dry_run)
+        log.info(f"{target} -> {src}")
         os.symlink(src, target)
     return 0
 
@@ -97,7 +93,7 @@ def stown(args: argparse.Namespace, target, sources, depth=0, parent_path=None) 
     for source in sources:
         if parent_path:
             source = path.join(parent_path, source)
-        log.info(f"target='{target}' source='{source}' depth={depth}")
+        log.debug(f"Target='{target}' Source='{source}' Depth={depth}")
         if is_same_file(target, source):
             return fail(f"Source {source} and target are identical", 4)
         elif path.isfile(target) and path.isfile(source):
@@ -146,12 +142,13 @@ def arg_parser() -> argparse.ArgumentParser:
         action="store_true",
         help="print operations only",
     )
-    d = f"{ID}.log"
+    d = "WARN"
     ap.add_argument(
         "-l",
-        "--log",
+        "--loglevel",
         default=d,
-        help=f"log file (default: {d})",
+        help=f"log level (default: {d})",
+        metavar="LEVEL",
     )
     d = 10
     ap.add_argument(
@@ -176,7 +173,7 @@ def arg_parser() -> argparse.ArgumentParser:
 
 def main():  # pragma: no cover
     args = arg_parser().parse_args()
-    init_logging(args.log)
+    init_logging(args.loglevel)
     rc = stown(args, args.target, args.source)
     sys.exit(rc)
 
