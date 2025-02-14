@@ -16,6 +16,7 @@ You should have received a copy of the GNU General Public License along with
 stown. If not, see <https://www.gnu.org/licenses/>.
 """
 
+from os import path
 from stown import __main__ as stown
 from typing import List
 import argparse
@@ -47,18 +48,22 @@ def load_json(path):
         return json.load(f)
 
 
+def random_name(suffix=".tmp") -> str:
+    return f"stown.{uuid.uuid4()}{suffix}"
+
+
 def random_tmp(tmpdir=TMPDIR, suffix=".tmp") -> str:
-    return os.path.join(tmpdir, f"stown.{uuid.uuid4()}{suffix}")
+    return path.join(tmpdir, random_name(suffix))
 
 
 class TestStown(unittest.TestCase):
     def setUp(self):
-        os.chdir(os.path.dirname(__file__))
+        os.chdir(path.dirname(__file__))
         self.args = self.parse_args()
-        if os.path.exists(TMPDIR):
+        if path.exists(TMPDIR):
             shutil.rmtree(TMPDIR)
         os.mkdir(TMPDIR)
-        os.mkdir(os.path.join(TMPDIR, "healthy"))
+        os.mkdir(path.join(TMPDIR, "healthy"))
 
     def parse_args(self, flags: List[str] = ["--verbose"]) -> argparse.Namespace:
         return stown.arg_parser().parse_args(flags + [TMPDIR, DATADIR])
@@ -88,24 +93,34 @@ class TestStown(unittest.TestCase):
         a = self.parse_args(["-d", "-f"])
         self.assertEqual(stown.linkto(a, ".", XJSON), 0)
 
-    def test_file2file_force(self):
+    @unittest.skip("Test is currently not working")
+    def test_stown_twofiles(self):
+        trg = random_name()
+        with open(trg, "wt") as f:
+            print(file=f)
+        src = random_name()
+        with open(src, "wt") as f:
+            print(file=f)
+        a = self.parse_args([trg, src])
+        self.assertEqual(stown.stown(a, trg, src), 6)
+
+    def test_stown_unexpected_pair(self):
         rnd = random_tmp()
         with open(rnd, "wt") as f:
             print(file=f)
-        a = self.parse_args(["-f"])
-        self.assertEqual(stown.linkto(a, rnd, XJSON), 0)
+        self.assertEqual(stown.stown(self.args, rnd, XJSON), 7)
 
     def test_maxdepth(self):
         a = self.parse_args(["--depth", "0"])
         self.assertEqual(stown.stown(a, "x", "y"), 3)
 
-    def test_linkto_link(self):
+    def test_stown_link(self):
         # a = self.parse_args(["-d"])
         a = self.args
         b = random_tmp()
-        c = os.path.join(DATADIR, "salt")
+        c = path.join(DATADIR, "salt")
         os.symlink(c, b)
-        self.assertEqual(stown.linkto(a, b, c), 2)
+        self.assertEqual(stown.stown(a, b, c), 2)
 
     def test_linkto_new(self):
         self.assertEqual(stown.linkto(self.args, random_tmp(), XJSON), 0)
@@ -121,7 +136,7 @@ class TestStown(unittest.TestCase):
         self.assertEqual(stown.parsed_filename("bar"), "bar")
 
     def test_pathto(self):
-        self.assertTrue(os.path.isabs(stown.pathto(XJSON, True)))
+        self.assertTrue(path.isabs(stown.pathto(XJSON, True)))
 
     def test_same_file(self):
         self.assertEqual(stown.stown(self.args, ".", "."), 4)

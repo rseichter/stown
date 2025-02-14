@@ -78,9 +78,12 @@ def linkto(args: argparse.Namespace, target, source) -> int:
 
 
 def is_same_file(target, source) -> bool:
-    sr: os.stat_result = os.stat(source, follow_symlinks=False)
-    tr: os.stat_result = os.stat(target, follow_symlinks=False)
-    return sr.st_dev == tr.st_dev and sr.st_ino == tr.st_ino
+    try:
+        s: os.stat_result = os.stat(source, follow_symlinks=False)
+        t: os.stat_result = os.stat(target, follow_symlinks=False)
+        return s.st_dev == t.st_dev and s.st_ino == t.st_ino
+    except FileNotFoundError:
+        return False
 
 
 def stown(args: argparse.Namespace, target, sources, depth=0, parent_path=None) -> int:
@@ -92,22 +95,23 @@ def stown(args: argparse.Namespace, target, sources, depth=0, parent_path=None) 
     for source in sources:
         if parent_path:
             source = path.join(parent_path, source)
-        if not path.lexists(target):
-            return linkto(args, target, source)
-        elif is_same_file(target, source):
+        print(f">>> T {target}  S {source}")
+        if is_same_file(target, source):
             return fail(f"Source {source} and target are identical", 4)
+        elif path.isfile(target) and path.isfile(source):
+            return fail(f"Both target {target} and source {source} are files", 6)
         elif path.islink(target):
             rc = linkto(args, target, source)
             if rc != 0:
                 return rc
+        elif not path.lexists(target):
+            return linkto(args, target, source)
         elif path.isdir(source):
             for child in os.listdir(source):
                 tchild = parsed_filename(child)
                 rc = stown(args, path.join(target, tchild), [child], depth + 1, source)
                 if rc != 0:  # pragma: no cover
                     return rc
-        elif path.isfile(target) and path.isfile(source):
-            return fail(f"Both target {target} and source {source} are files", 6)
         else:
             return fail(f"Unexpected pair: target {target} and source {source}", 7)
     return 0

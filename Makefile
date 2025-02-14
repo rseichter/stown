@@ -50,7 +50,7 @@ fla:	fmt
 build:	fmt clean
 	python -m build
 
-cov:
+cov:	fla
 	$(pyenv) coverage run -m unittest discover -s tests -v
 	coverage html
 	coverage report -m
