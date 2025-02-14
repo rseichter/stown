@@ -21,6 +21,7 @@ from stown import __main__ as stown
 from typing import List
 import argparse
 import json
+import logging
 import os
 import shutil
 import subprocess
@@ -57,6 +58,10 @@ def random_tmp(tmpdir=TMPDIR, suffix=".tmp") -> str:
 
 
 class TestStown(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        stown.init_logging(path.join("tests", "test.log"), logging.DEBUG)
+
     def setUp(self):
         os.chdir(path.dirname(__file__))
         self.args = self.parse_args()
@@ -67,9 +72,6 @@ class TestStown(unittest.TestCase):
 
     def parse_args(self, flags: List[str] = ["--verbose"]) -> argparse.Namespace:
         return stown.arg_parser().parse_args(flags + [TMPDIR, DATADIR])
-
-    def tearDown(self):
-        pass
 
     def assert_json_equal(self, checkme: str, expected: str):
         c = load_json(checkme)
@@ -143,9 +145,6 @@ class TestStown(unittest.TestCase):
 
     def test_remove(self):
         self.assertEqual(stown.remove(XJSON, dry_run=True), 0)
-
-    def test_say(self):
-        self.assertEqual(stown.say("", verbose=False), 0)
 
     def test_stown(self):
         self.assertEqual(stown.stown(self.args, self.args.target, self.args.source), 0)

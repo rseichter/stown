@@ -29,10 +29,10 @@ help:
 	@exit 0
 
 clean:
-	rm -fr dist
+	find . -name dist -or -name '*.log' | xargs -r rm -rv
 
 mrproper:	clean
-	find . -type d -name __pycache__ -or -name '*.bak' -or -name '*.egg-info' | xargs -r rm -r
+	find . -type d -name __pycache__ -or -name '*.bak' -or -name '*.egg-info' -or -name 'tmp.*' | xargs -r rm -rv
 
 bumpver:
 	make setver ver="$(ver)-dev$(shell date '+%s')"

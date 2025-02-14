@@ -16,24 +16,27 @@ You should have received a copy of the GNU General Public License along with
 stown. If not, see <https://www.gnu.org/licenses/>.
 """
 
+from datetime import datetime
 from os import path
 import argparse
+import logging
 import os
 import sys
 
 VERSION = "0.7.0-dev4"
 EPILOG = f"stown version {VERSION} Copyright © 2025 Ralph Seichter."
 
+log = logging.getLogger("stown")
+
+
+def init_logging(filename="stown.log", level=logging.DEBUG):
+    logging.basicConfig(filename=filename, level=level)
+    log.debug(f"Logging started at {datetime.now()}")
+
 
 def fail(message: str, rc: int = 1) -> int:
-    print(f"Error: {message}", file=sys.stderr)
+    log.error(message)
     return rc
-
-
-def say(message, verbose=True) -> int:
-    if verbose:
-        print(message)
-    return 0
 
 
 def parsed_filename(fn: str) -> str:
@@ -91,7 +94,7 @@ def stown(args: argparse.Namespace, target, sources, depth=0, parent_path=None) 
         return fail(f"Maximum depth {depth} reached", 3)
     elif args.action != "stow":
         return fail(f"Action {args.action} is not implemented", 5)
-    say(f"# {target} (depth {depth})", args.verbose)
+    log.info(f"target={target} depth={depth}")
     for source in sources:
         if parent_path:
             source = path.join(parent_path, source)
@@ -150,18 +153,15 @@ def arg_parser() -> argparse.ArgumentParser:
         type=int,
         help="maximum recursion depth (default: 5)",
     )
-    ap.add_argument(
-        "-f", "--force", default=False, action="store_true", help="force action"
-    )
-    ap.add_argument(
-        "-v", "--verbose", default=False, action="store_true", help="verbose messages"
-    )
+    ap.add_argument("-f", "--force", default=False, action="store_true", help="force action")
+    ap.add_argument("-v", "--verbose", default=False, action="store_true", help="verbose messages")
     ap.add_argument("target", help="action target (links are created here)")
     ap.add_argument("source", nargs="+", help="action sources (links point here)")
     return ap
 
 
 def main():  # pragma: no cover
+    init_logging()
     args = arg_parser().parse_args()
     rc = stown(args, args.target, args.source)
     sys.exit(rc)
