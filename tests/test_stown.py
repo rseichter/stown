@@ -34,7 +34,7 @@ TMPDIR = "tmp"
 XJSON = "expected.json"
 
 
-def getenv(key, default=None):
+def getenv(key, default=None):  # pragma: no cover
     if key in os.environ:
         return os.environ[key]
     return default
@@ -65,12 +65,12 @@ class TestStown(unittest.TestCase):
     def setUp(self):
         os.chdir(path.dirname(__file__))
         self.args = self.parse_args()
-        if path.exists(TMPDIR):
+        if path.exists(TMPDIR):  # pragma: no cover
             shutil.rmtree(TMPDIR)
         os.mkdir(TMPDIR)
         os.mkdir(path.join(TMPDIR, "healthy"))
 
-    def parse_args(self, flags: List[str] = ["--verbose"]) -> argparse.Namespace:
+    def parse_args(self, flags: List[str] = []) -> argparse.Namespace:
         return stown.arg_parser().parse_args(flags + [TMPDIR, DATADIR])
 
     def assert_json_equal(self, checkme: str, expected: str):
@@ -95,8 +95,8 @@ class TestStown(unittest.TestCase):
         a = self.parse_args(["-d", "-f"])
         self.assertEqual(stown.linkto(a, ".", XJSON), 0)
 
-    @unittest.skip("Test is currently not working")
-    def test_stown_twofiles(self):
+    @unittest.skip("Currently not working")
+    def test_stown_twofiles(self):  # pragma: no cover
         trg = random_name()
         with open(trg, "wt") as f:
             print(file=f)
@@ -131,10 +131,10 @@ class TestStown(unittest.TestCase):
         a = self.parse_args(["-d"])
         self.assertEqual(stown.linkto(a, random_tmp(), XJSON), 0)
 
-    def test_parsed_fn1(self):
+    def test_parsed_dot(self):
         self.assertEqual(stown.parsed_filename("dot-foo"), ".foo")
 
-    def test_parsed_fn2(self):
+    def test_parsed_nodot(self):
         self.assertEqual(stown.parsed_filename("bar"), "bar")
 
     def test_pathto(self):
@@ -147,7 +147,8 @@ class TestStown(unittest.TestCase):
         self.assertEqual(stown.remove(XJSON, dry_run=True), 0)
 
     def test_stown(self):
-        self.assertEqual(stown.stown(self.args, self.args.target, self.args.source), 0)
+        a = self.parse_args(["-v"])
+        self.assertEqual(stown.stown(a, self.args.target, self.args.source), 0)
         if not is_truthy(getenv("DISABLE_TREE")):
             out = random_tmp(tempfile.gettempdir(), ".json")
             subprocess.run(["tree", "-aJ", "-o", out, self.args.target])
@@ -160,5 +161,5 @@ class TestStown(unittest.TestCase):
         self.assertEqual(stown.stown(a, "x", "y"), 5)
 
 
-if __name__ == "__main__":
+if __name__ == "__main__":  # pragma: no cover
     unittest.main()

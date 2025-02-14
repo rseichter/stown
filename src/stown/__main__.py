@@ -23,13 +23,14 @@ import logging
 import os
 import sys
 
+ID = "stown"
 VERSION = "0.7.0-dev4"
-EPILOG = f"stown version {VERSION} Copyright © 2025 Ralph Seichter."
+EPILOG = f"{ID} version {VERSION} Copyright © 2025 Ralph Seichter"
 
-log = logging.getLogger("stown")
+log = logging.getLogger(ID)
 
 
-def init_logging(filename="stown.log", level=logging.DEBUG):
+def init_logging(filename, level=logging.DEBUG):
     logging.basicConfig(filename=filename, level=level)
     log.debug(f"Logging started at {datetime.now()}")
 
@@ -91,7 +92,7 @@ def is_same_file(target, source) -> bool:
 
 def stown(args: argparse.Namespace, target, sources, depth=0, parent_path=None) -> int:
     if depth >= args.depth:
-        return fail(f"Maximum depth {depth} reached", 3)
+        return fail(f"Depth limit ({depth}) reached", 3)
     elif args.action != "stow":
         return fail(f"Action {args.action} is not implemented", 5)
     log.info(f"target={target} depth={depth}")
@@ -121,7 +122,7 @@ def stown(args: argparse.Namespace, target, sources, depth=0, parent_path=None) 
 
 def arg_parser() -> argparse.ArgumentParser:
     ap = argparse.ArgumentParser(
-        prog="stown",
+        prog=ID,
         description="Stow file system objects by creating links",
         epilog=EPILOG,
     )
@@ -146,14 +147,28 @@ def arg_parser() -> argparse.ArgumentParser:
         action="store_true",
         help="print operations only",
     )
+    d = f"{ID}.log"
+    ap.add_argument(
+        "-l",
+        "--log",
+        default=d,
+        help=f"log file (default: {d})",
+    )
+    d = 10
     ap.add_argument(
         "-p",
         "--depth",
-        default=5,
+        default=d,
         type=int,
-        help="maximum recursion depth (default: 5)",
+        help=f"maximum recursion depth (default: {d})",
     )
-    ap.add_argument("-f", "--force", default=False, action="store_true", help="force action")
+    ap.add_argument(
+        "-f",
+        "--force",
+        default=False,
+        action="store_true",
+        help="force action (overwrites existing targets)",
+    )
     ap.add_argument("-v", "--verbose", default=False, action="store_true", help="verbose messages")
     ap.add_argument("target", help="action target (links are created here)")
     ap.add_argument("source", nargs="+", help="action sources (links point here)")
@@ -161,8 +176,8 @@ def arg_parser() -> argparse.ArgumentParser:
 
 
 def main():  # pragma: no cover
-    init_logging()
     args = arg_parser().parse_args()
+    init_logging(args.log)
     rc = stown(args, args.target, args.source)
     sys.exit(rc)
 
