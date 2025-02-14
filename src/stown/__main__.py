@@ -16,7 +16,6 @@ You should have received a copy of the GNU General Public License along with
 stown. If not, see <https://www.gnu.org/licenses/>.
 """
 
-from datetime import datetime
 from os import path
 import argparse
 import logging
@@ -31,8 +30,8 @@ log = logging.getLogger(ID)
 
 
 def init_logging(filename, level=logging.DEBUG):
-    logging.basicConfig(filename=filename, level=level)
-    log.debug(f"Logging started at {datetime.now()}")
+    format = "%(asctime)s %(levelname)s %(message)s"
+    logging.basicConfig(stream=sys.stderr, format=format, level=level)
 
 
 def fail(message: str, rc: int = 1) -> int:
@@ -95,10 +94,10 @@ def stown(args: argparse.Namespace, target, sources, depth=0, parent_path=None) 
         return fail(f"Depth limit ({depth}) reached", 3)
     elif args.action != "stow":
         return fail(f"Action {args.action} is not implemented", 5)
-    log.info(f"target={target} depth={depth}")
     for source in sources:
         if parent_path:
             source = path.join(parent_path, source)
+        log.info(f"target='{target}' source='{source}' depth={depth}")
         if is_same_file(target, source):
             return fail(f"Source {source} and target are identical", 4)
         elif path.isfile(target) and path.isfile(source):
