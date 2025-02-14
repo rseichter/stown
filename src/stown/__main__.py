@@ -95,7 +95,6 @@ def stown(args: argparse.Namespace, target, sources, depth=0, parent_path=None) 
     for source in sources:
         if parent_path:
             source = path.join(parent_path, source)
-        print(f">>> T {target}  S {source}")
         if is_same_file(target, source):
             return fail(f"Source {source} and target are identical", 4)
         elif path.isfile(target) and path.isfile(source):
@@ -151,8 +150,12 @@ def arg_parser() -> argparse.ArgumentParser:
         type=int,
         help="maximum recursion depth (default: 5)",
     )
-    ap.add_argument("-f", "--force", default=False, action="store_true", help="force action")
-    ap.add_argument("-v", "--verbose", default=False, action="store_true", help="verbose messages")
+    ap.add_argument(
+        "-f", "--force", default=False, action="store_true", help="force action"
+    )
+    ap.add_argument(
+        "-v", "--verbose", default=False, action="store_true", help="verbose messages"
+    )
     ap.add_argument("target", help="action target (links are created here)")
     ap.add_argument("source", nargs="+", help="action sources (links point here)")
     return ap
