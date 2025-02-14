@@ -84,14 +84,28 @@ class TestStown(unittest.TestCase):
         a = self.parse_args(["--force"])
         self.assertEqual(stown.linkto(a, rnd, XJSON), 0)
 
+    def test_linkto_existing_force_dry(self):
+        a = self.parse_args(["-d", "-f"])
+        self.assertEqual(stown.linkto(a, ".", XJSON), 0)
+
+    def test_file2file_force(self):
+        rnd = random_tmp()
+        with open(rnd, "wt") as f:
+            print(file=f)
+        a = self.parse_args(["-f"])
+        self.assertEqual(stown.linkto(a, rnd, XJSON), 0)
+
     def test_maxdepth(self):
         a = self.parse_args(["--depth", "0"])
         self.assertEqual(stown.stown(a, "x", "y"), 3)
 
     def test_linkto_link(self):
-        a = os.path.join(DATADIR, "NaCl")
-        b = os.path.join(DATADIR, "salt")
-        self.assertEqual(stown.linkto(self.args, a, b), 2)
+        # a = self.parse_args(["-d"])
+        a = self.args
+        b = random_tmp()
+        c = os.path.join(DATADIR, "salt")
+        os.symlink(c, b)
+        self.assertEqual(stown.linkto(a, b, c), 2)
 
     def test_linkto_new(self):
         self.assertEqual(stown.linkto(self.args, random_tmp(), XJSON), 0)
@@ -111,6 +125,12 @@ class TestStown(unittest.TestCase):
 
     def test_same_file(self):
         self.assertEqual(stown.stown(self.args, ".", "."), 4)
+
+    def test_remove(self):
+        self.assertEqual(stown.remove(XJSON, dry_run=True), 0)
+
+    def test_say(self):
+        self.assertEqual(stown.say("", verbose=False), 0)
 
     def test_stown(self):
         self.assertEqual(stown.stown(self.args, self.args.target, self.args.source), 0)

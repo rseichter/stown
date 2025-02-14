@@ -30,22 +30,24 @@ def fail(message: str, rc: int = 1) -> int:
     return rc
 
 
-def say(message, verbose=True):
+def say(message, verbose=True) -> int:
     if verbose:
         print(message)
+    return 0
 
 
-def parsed_filename(fn):
+def parsed_filename(fn: str) -> str:
     if fn[0:4] == "dot-":
         return f".{fn[4:]}"
     return fn
 
 
-def remove(pathlike, dry_run=True):
+def remove(pathlike, dry_run=True) -> int:
     if dry_run:
         print(f"rm {pathlike}")
     else:
         os.remove(pathlike)
+    return 0
 
 
 def pathto(pathlike, absolute: bool, relstart=None):
