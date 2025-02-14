@@ -102,7 +102,7 @@ def stown(args: argparse.Namespace, target, sources, depth=0, parent_path=None) 
             for child in os.listdir(source):
                 tchild = parsed_filename(child)
                 rc = stown(args, path.join(target, tchild), [child], depth + 1, source)
-                if rc != 0:
+                if rc != 0:  # pragma: no cover
                     return rc
         elif path.isfile(target) and path.isfile(source):
             return fail(f"Both target {target} and source {source} are files", 6)
@@ -152,11 +152,11 @@ def arg_parser() -> argparse.ArgumentParser:
     return ap
 
 
-def main():
+def main():  # pragma: no cover
     args = arg_parser().parse_args()
     rc = stown(args, args.target, args.source)
     sys.exit(rc)
 
 
-if __name__ == "__main__":
+if __name__ == "__main__":  # pragma: no cover
     main()
