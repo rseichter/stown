@@ -23,7 +23,7 @@ import os
 import sys
 
 ID = "stown"
-VERSION = "0.8.0-dev1"
+VERSION = "0.8.0-dev2"
 EPILOG = f"{ID} version {VERSION} Copyright © 2025 Ralph Seichter"
 
 log = logging.getLogger(ID)
@@ -70,9 +70,18 @@ def linkto(args: argparse.Namespace, target, source) -> int:
     src = pathto(source, args.absolute, start)
     if not args.dry_run:
         if target_exists:
-            remove(target, args.dry_run)
-        log.info(f"{target} -> {src}")
-        os.symlink(src, target)
+            target_removed = remove(target, args.dry_run) == 0
+        else:
+            target_removed = False
+        if args.action == "stow":
+            log.info(f"{target} -> {src}")
+            os.symlink(src, target)
+        elif args.action == "unstow":
+            if target_removed:
+                log.info(f"{target} removed")
+        else:
+            # Should only happen during unit tests
+            return fail("Unsupported action '{args.action}'", 8)
     return 0
 
 
@@ -88,16 +97,12 @@ def is_same_file(target, source) -> bool:
 def stown(args: argparse.Namespace, target, sources, depth=0, parent_path=None) -> int:
     if depth >= args.depth:
         return fail(f"Depth limit ({depth}) reached", 3)
-    elif args.action != "stow":
-        return fail(f"Action {args.action} is not implemented", 5)
     for source in sources:
         if parent_path:
             source = path.join(parent_path, source)
         log.debug(f"target: '{target}' source: '{source}' depth: {depth}")
         if is_same_file(target, source):
             return fail(f"Source {source} and target are identical", 4)
-        # elif path.isfile(target) and path.isfile(source):
-        #     return fail(f"Both target {target} and source {source} are files", 6)
         elif path.islink(target):
             rc = linkto(args, target, source)
             if rc != 0:  # pragma: no cover

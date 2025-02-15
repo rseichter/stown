@@ -83,6 +83,13 @@ class TestStown(unittest.TestCase):
     def test_linkto_existing(self):
         self.assertEqual(stown.linkto(self.args, ".", DATADIR), 2)
 
+    def test_linkto_unsupported_action(self):
+        a = self.parse_args(["-f"])
+        a.action = "smile"
+        t = random_tmp()
+        os.symlink(XJSON, t)
+        self.assertEqual(stown.linkto(a, t, XJSON), 8)
+
     def test_linkto_existing_force(self):
         rnd = random_tmp()
         with open(rnd, "wt") as f:
@@ -93,17 +100,6 @@ class TestStown(unittest.TestCase):
     def test_linkto_existing_force_dry(self):
         a = self.parse_args(["-d", "-f"])
         self.assertEqual(stown.linkto(a, ".", XJSON), 0)
-
-    @unittest.skip("unfinished implementation")
-    def test_stown_twofiles(self):  # pragma: no cover
-        trg = random_name()
-        with open(trg, "wt") as f:
-            print(file=f)
-        src = random_name()
-        with open(src, "wt") as f:
-            print(file=f)
-        a = self.parse_args([trg, src])
-        self.assertEqual(stown.stown(a, trg, src), 6)
 
     def test_stown_unexpected_pair(self):
         rnd = random_tmp()
@@ -155,8 +151,10 @@ class TestStown(unittest.TestCase):
             os.remove(out)
 
     def test_unstow(self):
-        a = self.parse_args(["--action", "unstow"])
-        self.assertEqual(stown.stown(a, "x", "y"), 5)
+        a = self.parse_args(["-a", "unstow", "-f"])
+        t = random_tmp()
+        os.symlink(XJSON, t)
+        self.assertEqual(stown.stown(a, t, XJSON), 0)
 
 
 if __name__ == "__main__":  # pragma: no cover
