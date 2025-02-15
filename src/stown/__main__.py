@@ -93,11 +93,11 @@ def stown(args: argparse.Namespace, target, sources, depth=0, parent_path=None) 
     for source in sources:
         if parent_path:
             source = path.join(parent_path, source)
-        log.debug(f"Target='{target}' Source='{source}' Depth={depth}")
+        log.debug(f"target: '{target}' source: '{source}' depth: {depth}")
         if is_same_file(target, source):
             return fail(f"Source {source} and target are identical", 4)
-        elif path.isfile(target) and path.isfile(source):
-            return fail(f"Both target {target} and source {source} are files", 6)
+        # elif path.isfile(target) and path.isfile(source):
+        #     return fail(f"Both target {target} and source {source} are files", 6)
         elif path.islink(target):
             rc = linkto(args, target, source)
             if rc != 0:  # pragma: no cover
@@ -142,7 +142,7 @@ def arg_parser() -> argparse.ArgumentParser:
         action="store_true",
         help="print operations only",
     )
-    d = "WARN"
+    d = "DEBUG"
     ap.add_argument(
         "-l",
         "--loglevel",
