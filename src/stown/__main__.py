@@ -23,7 +23,7 @@ import os
 import sys
 
 ID = "stown"
-VERSION = "0.7.0"
+VERSION = "0.8.0-dev1"
 EPILOG = f"{ID} version {VERSION} Copyright © 2025 Ralph Seichter"
 
 log = logging.getLogger(ID)
@@ -100,7 +100,7 @@ def stown(args: argparse.Namespace, target, sources, depth=0, parent_path=None) 
             return fail(f"Both target {target} and source {source} are files", 6)
         elif path.islink(target):
             rc = linkto(args, target, source)
-            if rc != 0:
+            if rc != 0:  # pragma: no cover
                 return rc
         elif not path.lexists(target):
             return linkto(args, target, source)
