@@ -33,12 +33,6 @@ TMPDIR = "tmp"
 XJSON = "expected.json"
 
 
-def getenv(key, default=None):  # pragma: no cover
-    if key in os.environ:
-        return os.environ[key]
-    return default
-
-
 def is_truthy(x) -> bool:
     return x or x == 1 or x == "true" or x == "yes"
 
@@ -79,6 +73,12 @@ class TestStown(unittest.TestCase):
 
     def test_fail_custom_rc(self):
         self.assertEqual(stown.fail("dummy", -42), -42)
+
+    def test_getenv_default(self):
+        self.assertEqual(stown.getenv(random_name(), XJSON), XJSON)
+
+    def test_getenv_known_key(self):
+        self.assertIsNotNone(stown.getenv("LANG"))
 
     def test_linkto_existing(self):
         self.assertEqual(stown.linkto(self.args, ".", DATADIR), 2)
@@ -144,7 +144,7 @@ class TestStown(unittest.TestCase):
     def test_stown(self):
         a = self.parse_args(["-v"])
         self.assertEqual(stown.stown(a, self.args.target, self.args.source), 0)
-        if not is_truthy(getenv("DISABLE_TREE")):
+        if not is_truthy(stown.getenv("DISABLE_TREE")):  # pragma: no cover
             out = random_tmp(tempfile.gettempdir(), ".json")
             subprocess.run(["tree", "-aJ", "-o", out, self.args.target])
             self.assert_json_equal(out, XJSON)

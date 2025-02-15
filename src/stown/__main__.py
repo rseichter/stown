@@ -29,7 +29,7 @@ EPILOG = f"{ID} version {VERSION} Copyright © 2025 Ralph Seichter"
 log = logging.getLogger(ID)
 
 
-def init_logging(level=logging.DEBUG):
+def init_logging(level=logging.DEBUG):  # pragma: no cover
     format = "%(message)s"
     if isinstance(level, str):
         level = logging.getLevelName(level.upper())
@@ -39,6 +39,12 @@ def init_logging(level=logging.DEBUG):
 def fail(message: str, rc: int = 1) -> int:
     log.error(message)
     return rc
+
+
+def getenv(key, default=None):
+    if key in os.environ:
+        return os.environ[key]
+    return default
 
 
 def parsed_filename(fn: str) -> str:
@@ -62,9 +68,15 @@ def pathto(pathlike, absolute: bool, relstart=None):
     return p
 
 
+def is_overwrite_allowed(args: argparse.Namespace, pathlike) -> bool:
+    is_allowed = args.force or args.action == "unstow"
+    log.debug(f"write permission for {pathlike}: {is_allowed}")
+    return is_allowed
+
+
 def linkto(args: argparse.Namespace, target, source) -> int:
     target_exists = path.lexists(target)
-    if target_exists and not args.force:
+    if target_exists and not is_overwrite_allowed(args, target):
         return fail(f"Target {target} exists and --force was not specified", 2)
     start = path.dirname(target)
     src = pathto(source, args.absolute, start)
@@ -147,7 +159,7 @@ def arg_parser() -> argparse.ArgumentParser:
         action="store_true",
         help="print operations only",
     )
-    d = "DEBUG"
+    d = getenv("STOWN_LOGLEVEL", "WARN")
     ap.add_argument(
         "-l",
         "--loglevel",
