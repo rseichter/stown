@@ -29,11 +29,10 @@ help:
 	@exit 0
 
 clean:
-	find . -name dist -or -name '*.log' | xargs -r rm -rv
+	find . -name dist -or -name '*.log' -print0 | xargs -0r rm -rv
 
 mrproper:	clean
-	find . -type d -name __pycache__ -or -name '*.bak' -or -name '*.egg-info' -or -name 'tmp.*' | xargs -r rm -rv
-	[[ ! -d tmp ]] || find tmp -type l -delete
+	find . -name '*.bak' -or -name '*.egg-info' -or -name '*.tmp' -or -name 'tmp*' -or -name __pycache__ -print0 | xargs -0r rm -rv
 
 bumpver:
 	make setver ver="$(ver)-dev$(shell date '+%s')"
@@ -48,7 +47,7 @@ fmt:
 fla:	fmt
 	flake8 . --config=.flake8
 
-build:	fmt clean
+build:	fmt mrproper
 	python -m build
 
 cov:	fla
