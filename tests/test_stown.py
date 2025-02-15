@@ -142,8 +142,7 @@ class TestStown(unittest.TestCase):
         self.assertEqual(stown.remove(XJSON, dry_run=True), 0)
 
     def test_stown(self):
-        a = self.parse_args(["-v"])
-        self.assertEqual(stown.stown(a, self.args.target, self.args.source), 0)
+        self.assertEqual(stown.stown(self.args, self.args.target, self.args.source), 0)
         if not is_truthy(stown.getenv("DISABLE_TREE")):  # pragma: no cover
             out = random_tmp(tempfile.gettempdir(), ".json")
             subprocess.run(["tree", "-aJ", "-o", out, self.args.target])

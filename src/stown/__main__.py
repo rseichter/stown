@@ -23,7 +23,7 @@ import os
 import sys
 
 ID = "stown"
-VERSION = "0.8.0"
+VERSION = "0.9.0-dev1"
 EPILOG = f"{ID} version {VERSION} Copyright © 2025 Ralph Seichter"
 
 log = logging.getLogger(ID)
@@ -182,7 +182,6 @@ def arg_parser() -> argparse.ArgumentParser:
         action="store_true",
         help="force action (overwrites existing targets)",
     )
-    ap.add_argument("-v", "--verbose", default=False, action="store_true", help="verbose messages")
     ap.add_argument("target", help="action target (links are created here)")
     ap.add_argument("source", nargs="+", help="action sources (links point here)")
     return ap

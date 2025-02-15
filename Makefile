@@ -30,7 +30,7 @@ help:
 
 find_ := find . -regextype posix-extended
 clean:
-	$(find_) '(' -name dist -o -regex '.*\.(bak|tmp)' ')' -print0 | xargs -0r rm -rv
+	$(find_) '(' -name dist -o -regex '.*\.(bak|log|tmp)' ')' -print0 | xargs -0r rm -rv
 
 mrproper:	clean
 	$(find_) '(' -name 'tmp*' -o -regex '.*/(egg-info|__pycache__)' ')' -print0 | xargs -0r rm -rv
