@@ -41,7 +41,9 @@ jobs:
           # Treat all other problems as warnings
           flake8 . --config=.flake8 --exit-zero
       - name: Run unit tests
-        run: python -m unittest discover -s tests -v
+        run: |
+          coverage run -m unittest discover -s tests -v
+          coverage report -m
       - name: Build distributions
         run: python -m build
       - name: Upload distributions

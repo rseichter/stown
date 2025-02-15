@@ -1,4 +1,6 @@
 # These are requirements for development only
+black
 build
+coverage
 flake8
 wheel
