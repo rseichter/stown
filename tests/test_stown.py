@@ -95,7 +95,7 @@ class TestStown(unittest.TestCase):
         a = self.parse_args(["-d", "-f"])
         self.assertEqual(stown.linkto(a, ".", XJSON), 0)
 
-    @unittest.skip("Currently not working")
+    @unittest.skip("unfinished implementation")
     def test_stown_twofiles(self):  # pragma: no cover
         trg = random_name()
         with open(trg, "wt") as f:
