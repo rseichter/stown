@@ -11,6 +11,7 @@ alias mt="make test"
 alias stown="python -m stown"
 
 export PYTHONPATH=.:src
+export STOWN_LOGLEVEL=DEBUG
 
 say() {
 	echo >&2 "$@"
