@@ -28,11 +28,12 @@ help:
 	$(info $(usage))
 	@exit 0
 
+find_ := find . -regextype posix-extended
 clean:
-	find . -name dist -or -name '*.log' -print0 | xargs -0r rm -rv
+	$(find_) '(' -name dist -o -regex '.*\.(bak|tmp)' ')' -print0 | xargs -0r rm -rv
 
 mrproper:	clean
-	find . -name '*.bak' -or -name '*.egg-info' -or -name '*.tmp' -or -name 'tmp*' -or -name __pycache__ -print0 | xargs -0r rm -rv
+	$(find_) '(' -name 'tmp*' -o -regex '.*/(egg-info|__pycache__)' ')' -print0 | xargs -0r rm -rv
 
 bumpver:
 	make setver ver="$(ver)-dev$(shell date '+%s')"
