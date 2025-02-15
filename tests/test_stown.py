@@ -21,7 +21,6 @@ from stown import __main__ as stown
 from typing import List
 import argparse
 import json
-import logging
 import os
 import shutil
 import subprocess
@@ -60,7 +59,7 @@ def random_tmp(tmpdir=TMPDIR, suffix=".tmp") -> str:
 class TestStown(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        stown.init_logging(logging.FATAL)
+        stown.init_logging("FATAL")
 
     def setUp(self):
         os.chdir(path.dirname(__file__))
