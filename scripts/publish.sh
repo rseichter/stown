@@ -7,11 +7,6 @@
 set -euo pipefail
 # shellcheck disable=2155
 declare -r BN=$(basename "$0")
-declare -r TMPDIR=${TMPDIR:-/tmp}
-
-mktemp() {
-	command mktemp -p "$TMPDIR" "${BN/.sh/.$(whoami)}".XXXXXXXX
-}
 
 dryrun=0
 trap "builtin unset dryrun" EXIT
@@ -36,16 +31,14 @@ USAGE
 }
 
 docs() {
-	local sync=(
+	local cmd=(
 		rsync
 		--delete
-		--include '*.html'
-		--include '*.pdf'
 		-prvz
-		-e ssh "$site" "$host:$hostdir/"
+		-e ssh docs/*.{html,pdf} www.seichter.de:/var/www/stown/
 	)
-	echo "${sync[@]}"
-	[[ dryrun -eq 1 ]] || "${sync[@]}"
+	echo "${cmd[@]}"
+	[[ dryrun -eq 1 ]] || "${cmd[@]}"
 }
 
 main() {
@@ -66,7 +59,6 @@ main() {
 			;;
 		esac
 	done
-
 	[[ $# -ge 1 ]] || usage
 	local verb=$1
 	shift
