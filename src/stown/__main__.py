@@ -60,41 +60,12 @@ def remove(pathlike, dry_run=True) -> int:
     return 0
 
 
-def pathto(pathlike, absolute: bool, relstart=None):
-    if absolute:
+def pathto(pathlike, want_abspath: bool, relpath_start=None):
+    if want_abspath:
         p = path.abspath(pathlike)
     else:
-        p = path.relpath(pathlike, start=relstart)
+        p = path.relpath(pathlike, start=relpath_start)
     return p
-
-
-def is_overwrite_allowed(args: argparse.Namespace, pathlike) -> bool:
-    is_allowed = args.force or args.action == "unstow"
-    log.debug(f"write permission for {pathlike}: {is_allowed}")
-    return is_allowed
-
-
-def linkto(args: argparse.Namespace, target, source) -> int:
-    target_exists = path.lexists(target)
-    if target_exists and not is_overwrite_allowed(args, target):
-        return fail(f"Target {target} exists and --force was not specified", 2)
-    start = path.dirname(target)
-    src = pathto(source, args.absolute, start)
-    if not args.dry_run:
-        if target_exists:
-            target_removed = remove(target, args.dry_run) == 0
-        else:
-            target_removed = False
-        if args.action == "stow":
-            log.info(f"{target} -> {src}")
-            os.symlink(src, target)
-        elif args.action == "unstow":
-            if target_removed:
-                log.info(f"{target} removed")
-        else:
-            # Should only happen during unit tests
-            return fail("Unsupported action '{args.action}'", 8)
-    return 0
 
 
 def is_same_file(target, source) -> bool:
@@ -104,6 +75,37 @@ def is_same_file(target, source) -> bool:
         return s.st_dev == t.st_dev and s.st_ino == t.st_ino
     except FileNotFoundError:
         return False
+
+
+def is_permitted(args: argparse.Namespace, target, source) -> bool:
+    permit = False
+    if not path.lexists(target):
+        permit = True
+    elif args.force or args.action == "unstow":
+        permit = not is_same_file(target, source)
+    log.debug(f"write permission for {target}: {permit}")
+    return permit
+
+
+def linkto(args: argparse.Namespace, target, source) -> int:
+    source = pathto(source, args.absolute, path.dirname(target))
+    if not is_permitted(args, target, source):
+        return fail(f"Target '{target}' seems worth protecting", 2)
+    if not args.dry_run:
+        if path.lexists(target):
+            target_removed = remove(target, args.dry_run) == 0
+        else:
+            target_removed = False
+        if args.action == "stow":
+            log.info(f"{target} -> {source}")
+            os.symlink(source, target)
+        elif args.action == "unstow":
+            if target_removed:
+                log.info(f"{target} removed")
+        else:
+            # Should only happen during unit tests
+            return fail("Unsupported action '{args.action}'", 8)
+    return 0
 
 
 def stown(args: argparse.Namespace, target, sources, depth=0, parent_path=None) -> int:
