@@ -2,7 +2,7 @@
 TODO: create address
 Ralph Seichter <noreply@seichter.de>
 :revdate: {docdate}
-:revnumber: 0.9.0-dev2
+:revnumber: 0.9.0-dev3
 :version-label!:
 :copyright: © 2025 Ralph Seichter
 :encoding: UTF-8
@@ -28,7 +28,8 @@ requires Python 3.9 or newer, without additional modules.
 If you are looking for a lightweight tool instead of a full-fledged symlink
 farm manager, stown might be for you.
 
-Copyright © 2025 Ralph Seichter. Licensed under <<_license,GPLv3+>>.
+Copyright © 2025 Ralph Seichter. Licensed under <<_license,GPLv3+>>. Source
+code is available https://github.com/rseichter/stown[here].
 
 == Installing
 

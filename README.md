@@ -53,5 +53,4 @@ because here be monsters!
 Documentation
 -------------
 
-The full documentation is [available
-here](https://github.com/rseichter/stown/blob/docs/index.html).
+The full documentation is [available here](https://www.seichter.de/stown/).
