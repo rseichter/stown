@@ -17,4 +17,4 @@ options:
   -D, --depth DEPTH     maximum recursion depth (default: 10)
   -f, --force           force action (overwrites existing targets)
 
-stown version 0.9.0-dev3 Copyright © 2025 Ralph Seichter
+stown version 0.9.0-dev4 Copyright © 2025 Ralph Seichter
