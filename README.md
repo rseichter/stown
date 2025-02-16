@@ -13,6 +13,8 @@ farm manager, stown might be for you.
 Copyright © 2025 Ralph Seichter. Licensed under
 [GPLv3+](https://github.com/rseichter/stown/blob/master/LICENSE).
 
+Full documentation is [available here](https://www.seichter.de/stown/).
+
 Installing
 ----------
 
@@ -49,8 +51,3 @@ half-finished jobs, so using `--dry-run` prior to any live operation is
 recommended. You can use the `--force` flag to permit overwriting existing file
 objects, but this is inherently risky. Remember to create backups beforehand,
 because here be monsters!
-
-Documentation
--------------
-
-The full documentation is [available here](https://www.seichter.de/stown/).

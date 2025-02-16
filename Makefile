@@ -46,7 +46,7 @@ setver:
 docs:
 	$(pyenv) python >usage.tmp -m stown -h
 	catto -r docs/usage.txt usage.tmp
-	make -C docs index.html
+	make -C docs
 
 fmt:
 	black -l 120 src tests

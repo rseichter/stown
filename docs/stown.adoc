@@ -1,6 +1,8 @@
-= stown
-TODO: create address
-Ralph Seichter <noreply@seichter.de>
+= stown documentation
+// TODO: create dedicated address
+// Ralph Seichter <to-be-announced@seichter.de>
+Ralph Seichter
+:doctype: article
 :revdate: {docdate}
 :revnumber: 0.9.0-dev3
 :version-label!:
@@ -8,13 +10,13 @@ Ralph Seichter <noreply@seichter.de>
 :encoding: UTF-8
 :hyphens: en
 :lang: en
-:keywords: TODO, foo, bar
+// :keywords: TODO, foo, bar
 :media: screen
 :pagenums!:
 :pdf-version: 1.7
 :sectanchors:
 :sectnums:
-:subject: Update and verify unofficial Clam Anti-Virus signatures
+:subject: Official documentation for the "stown" symlink manager
 :xrefstyle: short
 
 == About
@@ -29,7 +31,9 @@ If you are looking for a lightweight tool instead of a full-fledged symlink
 farm manager, stown might be for you.
 
 Copyright © 2025 Ralph Seichter. Licensed under <<_license,GPLv3+>>. Source
-code is available https://github.com/rseichter/stown[here].
+code is https://github.com/rseichter/stown[available here]. Documentation is
+provided in https://www.seichter.de/stown/[HTML] and
+https://www.seichter.de/stown/stown.pdf[PDF] format.
 
 == Installing
 
@@ -77,6 +81,13 @@ half-finished jobs, so using `--dry-run` prior to any live operation is
 recommended. You can use the `--force` flag to permit overwriting existing file
 objects, but this is inherently risky. Remember to create backups beforehand,
 because here be monsters!
+
+== Support
+
+For questions regarding stown and its use, please see the
+https://github.com/rseichter/stown/discussions[discussions] section. If you are
+experiencing technical problems, you can
+https://github.com/rseichter/stown/issues[file an issue] instead.
 
 == License
 
