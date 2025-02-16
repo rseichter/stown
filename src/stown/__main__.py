@@ -137,7 +137,7 @@ def stown(args: argparse.Namespace, target, sources, depth=0, parent_path=None) 
 def arg_parser() -> argparse.ArgumentParser:
     ap = argparse.ArgumentParser(
         prog=ID,
-        description="Stow file system objects by creating links",
+        description="Stow file system objects by managing symlinks",
         epilog=EPILOG,
     )
     d = "link"
