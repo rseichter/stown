@@ -1,0 +1,13 @@
+mike
+├── alpha
+│   ├── bar
+│   └── foo
+├── bravo
+│   ├── dot-editorconfig
+│   ├── foo
+│   └── quux
+└── zulu
+    ├── .editorconfig -> ../bravo/dot-editorconfig
+    ├── bar -> ../alpha/bar
+    ├── foo -> ../bravo/foo
+    └── quux -> ../bravo/quux

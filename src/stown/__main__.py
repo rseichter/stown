@@ -23,7 +23,7 @@ import os
 import sys
 
 ID = "stown"
-VERSION = "0.9.0"
+VERSION = "0.10.0-dev2"
 EPILOG = f"{ID} version {VERSION} Copyright © 2025 Ralph Seichter"
 
 log = logging.getLogger(ID)
@@ -47,8 +47,8 @@ def getenv(key, default=None):
     return default
 
 
-def parsed_filename(fn: str) -> str:
-    if fn[0:4] == "dot-":
+def parsed_filename(fn: str, ignore_dot_prefix=False) -> str:
+    if not ignore_dot_prefix and fn[0:4] == "dot-":
         return f".{fn[4:]}"
     return fn
 
@@ -125,7 +125,7 @@ def stown(args: argparse.Namespace, target, sources, depth=0, parent_path=None) 
             return linkto(args, target, source)
         elif path.isdir(source):
             for child in os.listdir(source):
-                tchild = parsed_filename(child)
+                tchild = parsed_filename(child, args.no_dot)
                 rc = stown(args, path.join(target, tchild), [child], depth + 1, source)
                 if rc != 0:  # pragma: no cover
                     return rc
@@ -162,6 +162,13 @@ def arg_parser() -> argparse.ArgumentParser:
         action="store_true",
         help="print operations only",
     )
+    ap.add_argument(
+        "-f",
+        "--force",
+        default=False,
+        action="store_true",
+        help="force action (overwrites existing targets)",
+    )
     d = getenv("STOWN_LOGLEVEL", "WARN")
     ap.add_argument(
         "-l",
@@ -170,6 +177,13 @@ def arg_parser() -> argparse.ArgumentParser:
         help=f"log level (default: {d})",
         metavar="LEVEL",
     )
+    ap.add_argument(
+        "-n",
+        "--no-dot",
+        default=False,
+        action="store_true",
+        help="disable dot-prefix treatment",
+    )
     d = 10
     ap.add_argument(
         "-D",
@@ -177,13 +191,6 @@ def arg_parser() -> argparse.ArgumentParser:
         default=d,
         type=int,
         help=f"maximum recursion depth (default: {d})",
-    )
-    ap.add_argument(
-        "-f",
-        "--force",
-        default=False,
-        action="store_true",
-        help="force action (overwrites existing targets)",
     )
     ap.add_argument("target", help="action target (links are created here)")
     ap.add_argument("source", nargs="+", help="action sources (links point here)")

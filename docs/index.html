@@ -441,7 +441,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <h1>stown documentation</h1>
 <div class="details">
 <span id="author" class="author">Ralph Seichter</span><br>
-<span id="revnumber"> 0.9.0,</span>
+<span id="revnumber"> 0.10.0-dev2,</span>
 <span id="revdate">2025-02-16</span>
 </div>
 <div id="toc" class="toc2">
@@ -514,17 +514,13 @@ printed only; no changes will be made.</p>
 <pre class="highlight"><code class="language-bash" data-lang="bash">stown --dry-run $HOME /path/to/dotfiles</code></pre>
 </div>
 </div>
-<div class="paragraph">
-<p>Note that the prefix <code>dot-</code> is converted to a dot character in resulting symlinks,
-for example a link <code>$HOME/.vimrc</code> pointing to <code>/path/to/dotfiles/dot-vimrc</code>.</p>
-</div>
 <div class="sect2">
 <h3 id="_command_line_options"><a class="anchor" href="#_command_line_options"></a>3.1. Command line options</h3>
 <div class="listingblock">
 <div class="content">
 <pre>$ stown --help
 
-usage: stown [-h] [-a {link,unlink}] [-b] [-d] [-l LEVEL] [-D DEPTH] [-f]
+usage: stown [-h] [-a {link,unlink}] [-b] [-d] [-f] [-l LEVEL] [-n] [-D DEPTH]
              target source [source ...]
 
 Stow file system objects by managing symlinks
@@ -539,11 +535,12 @@ options:
                         action to take (default: link)
   -b, --absolute        create links using absolute paths
   -d, --dry-run         print operations only
-  -l, --loglevel LEVEL  log level (default: DEBUG)
-  -D, --depth DEPTH     maximum recursion depth (default: 10)
   -f, --force           force action (overwrites existing targets)
+  -l, --loglevel LEVEL  log level (default: DEBUG)
+  -n, --no-dot          disable dot-prefix treatment
+  -D, --depth DEPTH     maximum recursion depth (default: 10)
 
-stown version 0.9.0 Copyright © 2025 Ralph Seichter</pre>
+stown version 0.10.0-dev2 Copyright © 2025 Ralph Seichter</pre>
 </div>
 </div>
 </div>
@@ -567,6 +564,59 @@ half-finished jobs, so using <code>--dry-run</code> prior to any live operation 
 recommended. You can use the <code>--force</code> flag to permit overwriting existing file
 objects, but this is inherently risky. Remember to create backups beforehand,
 because here be monsters!</p>
+</div>
+<div class="paragraph">
+<p>Sources are processed in the order specified by the user. In case of name
+collisions, later changes may not override earlier ones unless <code>--force</code>
+is specified.</p>
+</div>
+<div class="paragraph">
+<p>If directory <code>mike</code> originally contains the following:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>mike
+├── alpha
+│   ├── bar
+│   └── foo
+├── bravo
+│   ├── dot-editorconfig
+│   ├── foo
+│   └── quux
+└── zulu</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This is the resulting content after <code>stow --force zulu alpha bravo</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>mike
+├── alpha
+│   ├── bar
+│   └── foo
+├── bravo
+│   ├── dot-editorconfig
+│   ├── foo
+│   └── quux
+└── zulu
+    ├── .editorconfig -&gt; ../bravo/dot-editorconfig
+    ├── bar -&gt; ../alpha/bar
+    ├── foo -&gt; ../bravo/foo
+    └── quux -&gt; ../bravo/quux</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Symlinks are created using relative paths with stown&#8217;s default settings. Using
+the <code>--absolute</code> flag changes the path type. Links with relative paths can make
+changing the directory structure easier in certain circumstances. Renaming the
+parent folder <code>mike</code> to <code>alice</code> would not break the relative links shown above.</p>
+</div>
+<div class="paragraph">
+<p>The prefix <code>dot-</code> in source names is converted to a leading dot character in
+symlinks, as shown above with <code>zulu/.editorconfig</code> pointing to
+<code>bravo/dot-editorconfig</code>. This makes handling dotfiles easier, disabling their
+respective special effects and lifting their "hidden" status.</p>
 </div>
 </div>
 </div>
@@ -610,8 +660,8 @@ stown. If not, see <a href="https://www.gnu.org/licenses/" class="bare">https://
 </div>
 <div id="footer">
 <div id="footer-text">
- 0.9.0<br>
-Last updated 2025-02-16 17:54:45 +0100
+ 0.10.0-dev2<br>
+Last updated 2025-02-16 20:54:25 +0100
 </div>
 </div>
 </body>

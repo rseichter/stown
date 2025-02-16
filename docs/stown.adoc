@@ -2,7 +2,7 @@
 Ralph Seichter
 :doctype: article
 :revdate: {docdate}
-:revnumber: 0.9.0
+:revnumber: 0.10.0-dev2
 :version-label!:
 :copyright: © 2025 Ralph Seichter
 :encoding: UTF-8
@@ -54,9 +54,6 @@ printed only; no changes will be made.
 stown --dry-run $HOME /path/to/dotfiles
 ```
 
-Note that the prefix `dot-` is converted to a dot character in resulting symlinks,
-for example a link `$HOME/.vimrc` pointing to `/path/to/dotfiles/dot-vimrc`.
-
 === Command line options
 
 ----
@@ -79,6 +76,32 @@ half-finished jobs, so using `--dry-run` prior to any live operation is
 recommended. You can use the `--force` flag to permit overwriting existing file
 objects, but this is inherently risky. Remember to create backups beforehand,
 because here be monsters!
+
+Sources are processed in the order specified by the user. In case of name
+collisions, later changes may not override earlier ones unless `--force`
+is specified.
+
+If directory `mike` originally contains the following:
+
+----
+include::before.txt[]
+----
+
+This is the resulting content after `stow --force zulu alpha bravo`:
+
+----
+include::after.txt[]
+----
+
+Symlinks are created using relative paths with stown's default settings. Using
+the `--absolute` flag changes the path type. Links with relative paths can make
+changing the directory structure easier in certain circumstances. Renaming the
+parent folder `mike` to `alice` would not break the relative links shown above.
+
+The prefix `dot-` in source names is converted to a leading dot character in
+symlinks, as shown above with `zulu/.editorconfig` pointing to
+`bravo/dot-editorconfig`. This makes handling dotfiles easier, disabling their
+respective special effects and lifting their "hidden" status.
 
 == Support
 

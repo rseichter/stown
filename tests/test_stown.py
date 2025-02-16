@@ -42,12 +42,12 @@ def load_json(path):
         return json.load(f)
 
 
-def random_name(suffix=".tmp") -> str:
-    return f"stown.{uuid.uuid4()}{suffix}"
+def random_name(prefix="stown.", suffix=".tmp") -> str:
+    return f"{prefix}{uuid.uuid4()}{suffix}"
 
 
 def random_tmp(tmpdir=TMPDIR, suffix=".tmp") -> str:
-    return path.join(tmpdir, random_name(suffix))
+    return path.join(tmpdir, random_name(suffix=suffix))
 
 
 class TestStown(unittest.TestCase):
@@ -127,10 +127,16 @@ class TestStown(unittest.TestCase):
         self.assertEqual(stown.linkto(a, random_tmp(), XJSON), 0)
 
     def test_parsed_dot(self):
-        self.assertEqual(stown.parsed_filename("dot-foo"), ".foo")
+        n = random_name(prefix="")
+        self.assertEqual(stown.parsed_filename(f"dot-{n}"), f".{n}")
+
+    def test_parsed_dot_disabled(self):
+        n = random_name(prefix="dot-")
+        self.assertEqual(stown.parsed_filename(n, True), n)
 
     def test_parsed_nodot(self):
-        self.assertEqual(stown.parsed_filename("bar"), "bar")
+        n = random_name(prefix="nodot-")
+        self.assertEqual(stown.parsed_filename(n), n)
 
     def test_pathto(self):
         self.assertTrue(path.isabs(stown.pathto(XJSON, True)))
