@@ -5,6 +5,7 @@ define usage
 
 Available 'make' targets are:
 
+all       Build everything.
 build     Build distribution artifacts.
 bumpver   Bump version number.
 clean     Cleanup workspace.
@@ -24,7 +25,7 @@ endef
 pyenv	:= PYTHONPATH=.:src
 ver		?=
 
-.PHONY:	build bumpver clean cov docs fla fmt help mrproper pdocs pypi setver shc test
+.PHONY:	all build bumpver clean cov docs fla fmt help mrproper pdocs pypi setver shc test
 
 help:
 	$(info $(usage))
@@ -61,6 +62,8 @@ fla:	fmt
 
 build:	fmt mrproper
 	python -m build
+
+all:	build docs
 
 cov:	fla
 	$(pyenv) coverage >/dev/null run -m unittest discover -s tests -v
