@@ -22,7 +22,7 @@ endef
 pyenv	:= PYTHONPATH=.:src
 ver		?=
 
-.PHONY:	build bumpver clean cov fla fmt help mrproper pypi setver shc test
+.PHONY:	build bumpver clean cov docs fla fmt help mrproper pypi setver shc test
 
 help:
 	$(info $(usage))
@@ -40,7 +40,13 @@ bumpver:
 
 setver:
 	@if [[ -z "$(ver)" ]]; then echo Usage: make $@ ver="{semantic-version}"; exit 1; fi
-	sed -i '' -E 's/^(version) =.*/\1 = "$(ver)"/i' pyproject.toml src/stown/__main__.py
+	sed -i '' -E 's/^(version =).*/\1 "$(ver)"/i' pyproject.toml src/stown/__main__.py
+	sed -i '' -E 's/^(:revnumber:).*/\1 $(ver)/' docs/stown.adoc
+
+docs:
+	$(pyenv) python >usage.tmp -m stown -h
+	catto -r docs/usage.txt usage.tmp
+	make -C docs index.html
 
 fmt:
 	black -l 120 src tests

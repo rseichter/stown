@@ -1,0 +1,95 @@
+= stown
+TODO: create address
+Ralph Seichter <noreply@seichter.de>
+:revdate: {docdate}
+:revnumber: 0.9.0-dev2
+:version-label!:
+:copyright: © 2025 Ralph Seichter
+:encoding: UTF-8
+:hyphens: en
+:lang: en
+:keywords: TODO, foo, bar
+:media: screen
+:pagenums!:
+:pdf-version: 1.7
+:sectanchors:
+:sectnums:
+:subject: Update and verify unofficial Clam Anti-Virus signatures
+:xrefstyle: short
+
+== About
+
+Stow file system objects by managing symlinks. "stown" was inspired by
+https://www.gnu.org/software/stow/[GNU Stow], which I found very useful but too
+unwieldly for my personal use. GNU Stow relies on a number of Perl modules and
+can be a hassle to install on minimalistic systems. In contrast, stown only
+requires Python 3.9 or newer, without additional modules.
+
+If you are looking for a lightweight tool instead of a full-fledged symlink
+farm manager, stown might be for you.
+
+Copyright © 2025 Ralph Seichter. Licensed under <<_license,GPLv3+>>.
+
+== Installing
+
+To install the https://pypi.org/project/stown/[PyPI package], you can use
+this shell command:
+
+```bash
+pip install stown
+```
+
+== Usage
+
+*Always create backups before using stown!*
+
+The following example simulates linking the contents of a dotfile repository to
+a user's home directory. The `--dry-run` flag causes the necessary steps to be
+printed only; no changes will be made.
+
+```bash
+stown --dry-run $HOME /path/to/dotfiles
+```
+
+Note that the prefix `dot-` is converted to a dot character in resulting symlinks,
+for example a link `$HOME/.vimrc` pointing to `/path/to/dotfiles/dot-vimrc`.
+
+=== Command line options
+
+----
+$ stown --help
+
+include::usage.txt[]
+----
+
+=== Environment variables
+
+`STOWN_LOGLEVEL` can be used like the `--loglevel` option above. Pick one of
+the predefined Python levels CRITICAL, ERROR, WARNING, INFO or DEBUG.
+
+== Collisions
+
+With default settings, stown will abort operations to protect existing target
+file objects (symlinks, files and directories). This can however lead to
+half-finished jobs, so using `--dry-run` prior to any live operation is
+recommended. You can use the `--force` flag to permit overwriting existing file
+objects, but this is inherently risky. Remember to create backups beforehand,
+because here be monsters!
+
+== License
+
+Copyright {copyright}
+
+This file is part of "stown".
+
+stown is free software: you can redistribute it and/or modify it under the
+terms of the GNU General Public License as published by the Free Software
+Foundation, either version 3 of the License, or (at your option) any later
+version.
+
+stown is distributed in the hope that it will be useful, but WITHOUT ANY
+WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+PARTICULAR PURPOSE. See the GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License along with
+stown. If not, see <https://www.gnu.org/licenses/>.

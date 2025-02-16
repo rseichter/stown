@@ -23,7 +23,7 @@ import os
 import sys
 
 ID = "stown"
-VERSION = "0.9.0-dev1"
+VERSION = "0.9.0-dev2"
 EPILOG = f"{ID} version {VERSION} Copyright © 2025 Ralph Seichter"
 
 log = logging.getLogger(ID)
@@ -81,7 +81,7 @@ def is_permitted(args: argparse.Namespace, target, source) -> bool:
     permit = False
     if not path.lexists(target):
         permit = True
-    elif args.force or args.action == "unstow":
+    elif args.force or args.action == "unlink":
         permit = not is_same_file(target, source)
     log.debug(f"write permission for {target}: {permit}")
     return permit
@@ -96,10 +96,10 @@ def linkto(args: argparse.Namespace, target, source) -> int:
             target_removed = remove(target, args.dry_run) == 0
         else:
             target_removed = False
-        if args.action == "stow":
+        if args.action == "link":
             log.info(f"{target} -> {source}")
             os.symlink(source, target)
-        elif args.action == "unstow":
+        elif args.action == "unlink":
             if target_removed:
                 log.info(f"{target} removed")
         else:
@@ -140,12 +140,13 @@ def arg_parser() -> argparse.ArgumentParser:
         description="Stow file system objects by creating links",
         epilog=EPILOG,
     )
+    d = "link"
     ap.add_argument(
         "-a",
         "--action",
-        choices=["stow", "unstow"],
-        default="stow",
-        help="action to take (default: stow)",
+        choices=["link", "unlink"],
+        default=d,
+        help=f"action to take (default: {d})",
     )
     ap.add_argument(
         "-b",
@@ -171,7 +172,7 @@ def arg_parser() -> argparse.ArgumentParser:
     )
     d = 10
     ap.add_argument(
-        "-p",
+        "-D",
         "--depth",
         default=d,
         type=int,

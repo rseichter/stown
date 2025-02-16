@@ -149,8 +149,8 @@ class TestStown(unittest.TestCase):
             self.assert_json_equal(out, XJSON)
             os.remove(out)
 
-    def test_unstow(self):
-        a = self.parse_args(["-a", "unstow", "-f"])
+    def test_unlink(self):
+        a = self.parse_args(["-a", "unlink", "-f"])
         t = random_tmp()
         os.symlink(XJSON, t)
         self.assertEqual(stown.stown(a, t, XJSON), 0)
