@@ -25,7 +25,7 @@ endef
 pyenv	:= PYTHONPATH=.:src
 ver		?=
 
-.PHONY:	all build bumpver clean cov docs fla fmt help mrproper pdocs pypi setver shc test
+.PHONY:	all build bumpver clean cov dbranch docs fla fmt help mrproper pdocs pypi setver shc test
 
 help:
 	$(info $(usage))
@@ -79,3 +79,7 @@ pypi:
 
 shc:
 	shcare scripts/*
+
+dbranch:
+	@if [[ -z "$(b)" ]]; then echo Usage: make $@ b="{git-branch}"; exit 1; fi
+	git remote | while read -r r; do git push -d "$$r" "$$b"; done
