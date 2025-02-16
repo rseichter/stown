@@ -41,3 +41,5 @@ else
 	return 1
 fi
 unset va
+
+cd "$(dirname "$0")"/.. || return
