@@ -9,9 +9,11 @@ build     Build distribution artifacts.
 bumpver   Bump version number.
 clean     Cleanup workspace.
 cov       Coverage analysis.
+docs      Generate documentation.
 fla       Run flake8 checks.
 help      Display this text.
 mrproper  Cleanup workspace, thoroughly.
+pdocs     Publish documentation.
 pypi      Upload distribution artifacts to PyPI.
 setver    Set version number.
 shc       Shell script care.
@@ -22,7 +24,7 @@ endef
 pyenv	:= PYTHONPATH=.:src
 ver		?=
 
-.PHONY:	build bumpver clean cov docs fla fmt help mrproper pypi setver shc test
+.PHONY:	build bumpver clean cov docs fla fmt help mrproper pdocs pypi setver shc test
 
 help:
 	$(info $(usage))
@@ -47,6 +49,9 @@ docs:
 	$(pyenv) python >usage.tmp -m stown -h
 	catto -r docs/usage.txt usage.tmp
 	make -C docs
+
+pdocs:	docs
+	scripts/publish.sh docs
 
 fmt:
 	black -l 120 src tests

@@ -8,6 +8,7 @@ alias fla="make fla"
 alias fmt="make fmt"
 alias mc="make cov"
 alias md="make docs"
+alias mp="make pdocs"
 alias mt="make test"
 alias stown="python -m stown"
 

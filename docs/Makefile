@@ -14,7 +14,6 @@ $(html): $(sources)
 	$(adoc) -a toc=right $(adoc_opts) $<
 
 $(pdf): $(sources)
-	#$(adoc)-pdf -a toc=auto -d article $(adoc_opts) $<
 	$(adoc)-pdf -a toc=auto $(adoc_opts) $<
 
 clean:
