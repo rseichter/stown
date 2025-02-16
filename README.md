@@ -40,8 +40,8 @@ stown --dry-run $HOME /path/to/dotfiles
 Note that the prefix `dot-` is converted to a dot character in resulting symlinks,
 for example a link `$HOME/.vimrc` pointing to `/path/to/dotfiles/dot-vimrc`.
 
-Collisions
-----------
+Strategy
+--------
 
 With default settings, stown will abort operations to protect existing target
 file objects (symlinks, files and directories). This can however lead to
@@ -49,3 +49,9 @@ half-finished jobs, so using `--dry-run` prior to any live operation is
 recommended. You can use the `--force` flag to permit overwriting existing file
 objects, but this is inherently risky. Remember to create backups beforehand,
 because here be monsters!
+
+Documentation
+-------------
+
+The full documentation is [available
+here](https://github.com/rseichter/stown/blob/docs/index.html).

@@ -62,12 +62,13 @@ $ stown --help
 include::usage.txt[]
 ----
 
-=== Environment variables
+=== Environment
 
-`STOWN_LOGLEVEL` can be used like the `--loglevel` option above. Pick one of
-the predefined Python levels CRITICAL, ERROR, WARNING, INFO or DEBUG.
+The environment variable `STOWN_LOGLEVEL` can be used like the `--loglevel`
+option above. Pick one of the predefined Python logging levels CRITICAL, ERROR,
+WARNING, INFO or DEBUG.
 
-== Collisions
+== Strategy
 
 With default settings, stown will abort operations to protect existing target
 file objects (symlinks, files and directories). This can however lead to

@@ -1,7 +1,7 @@
 usage: stown [-h] [-a {link,unlink}] [-b] [-d] [-l LEVEL] [-D DEPTH] [-f]
              target source [source ...]
 
-Stow file system objects by creating links
+Stow file system objects by managing symlinks
 
 positional arguments:
   target                action target (links are created here)
