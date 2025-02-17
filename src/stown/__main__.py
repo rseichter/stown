@@ -24,7 +24,7 @@ import sys
 
 COMMIT_SHA = None  # May be changed by CI
 ID = "stown"
-VERSION = "0.10.3"
+VERSION = "0.10.4"
 
 log = logging.getLogger(ID)
 
