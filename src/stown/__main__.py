@@ -23,7 +23,7 @@ import os
 import sys
 
 ID = "stown"
-VERSION = "0.10.0-dev2"
+VERSION = "0.10.1"
 EPILOG = f"{ID} version {VERSION} Copyright © 2025 Ralph Seichter"
 
 log = logging.getLogger(ID)
@@ -114,7 +114,7 @@ def stown(args: argparse.Namespace, target, sources, depth=0, parent_path=None) 
     for source in sources:
         if parent_path:
             source = path.join(parent_path, source)
-        log.debug(f"target: '{target}' source: '{source}' depth: {depth}")
+        log.info(f"{target} -> {source} (depth {depth})")
         if is_same_file(target, source):
             return fail(f"Source {source} and target are identical", 4)
         elif path.islink(target):
