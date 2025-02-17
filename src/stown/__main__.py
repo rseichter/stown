@@ -22,9 +22,9 @@ import logging
 import os
 import sys
 
+COMMIT_SHA = None  # May be changed by CI
 ID = "stown"
-VERSION = "0.10.1"
-EPILOG = f"{ID} version {VERSION} Copyright © 2025 Ralph Seichter"
+VERSION = "0.10.2"
 
 log = logging.getLogger(ID)
 
@@ -32,6 +32,7 @@ log = logging.getLogger(ID)
 def init_logging(level=logging.DEBUG):  # pragma: no cover
     format = "%(message)s"
     if isinstance(level, str):
+        # Get numeric representation of the log level string
         level = logging.getLevelName(level.upper())
     logging.basicConfig(stream=sys.stdout, format=format, level=level)
 
@@ -134,11 +135,19 @@ def stown(args: argparse.Namespace, target, sources, depth=0, parent_path=None) 
     return 0
 
 
+def epilog(sha=COMMIT_SHA) -> str:
+    if sha:  # pragma: no cover
+        s = f" ({sha})"
+    else:
+        s = ""
+    return f"{ID} version {VERSION}{s} Copyright © 2025 Ralph Seichter"
+
+
 def arg_parser() -> argparse.ArgumentParser:
     ap = argparse.ArgumentParser(
         prog=ID,
         description="Stow file system objects by managing symlinks",
-        epilog=EPILOG,
+        epilog=epilog(),
     )
     d = "link"
     ap.add_argument(
