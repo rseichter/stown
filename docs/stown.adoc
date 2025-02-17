@@ -2,7 +2,7 @@
 Ralph Seichter
 :doctype: article
 :revdate: {docdate}
-:revnumber: 0.10.2
+:revnumber: 0.10.3
 :version-label!:
 :copyright: © 2025 Ralph Seichter
 :encoding: UTF-8
