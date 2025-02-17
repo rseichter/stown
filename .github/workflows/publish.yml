@@ -4,6 +4,9 @@
 ---
 name: Publish to PyPI
 
+env:
+  PYTHONPATH: '.:src'
+
 on:
   release:
     types: [published]
