@@ -23,19 +23,22 @@ import os
 import sys
 from typing import List
 
-COMMIT_SHA = "b959e4f" # Updated by the build process
+COMMIT_SHA = "b959e4f"  # Updated by the build process
 ID = "stown"
-VERSION = "0.10.10-dev1"
+VERSION = "0.11.0-dev1"
 
 log = logging.getLogger(ID)
 
 
-def init_logging(level=logging.DEBUG):  # pragma: no cover
+def init_logging(level=logging.DEBUG, filename="-"):
     format = "%(message)s"
-    if isinstance(level, str):
+    if isinstance(level, str):  # pragma: no cover
         # Get numeric representation of the log level string
         level = logging.getLevelName(level.upper())
-    logging.basicConfig(stream=sys.stdout, format=format, level=level)
+    if filename == "-":  # pragma: no cover
+        logging.basicConfig(stream=sys.stdout, format=format, level=level)
+    else:
+        logging.basicConfig(filename=filename, format=format, level=level)
 
 
 def fail(message: str, rc: int = 1) -> int:
@@ -173,14 +176,14 @@ def arg_parser() -> argparse.ArgumentParser:
         "--dry-run",
         default=False,
         action="store_true",
-        help="print operations only",
+        help="log operations but do not modify",
     )
     ap.add_argument(
         "-f",
         "--force",
         default=False,
         action="store_true",
-        help="force action (overwrites existing targets)",
+        help="force action (overwrite existing targets)",
     )
     ap.add_argument(
         "-l",
@@ -204,6 +207,14 @@ def arg_parser() -> argparse.ArgumentParser:
         type=int,
         help=f"maximum recursion depth (default: {d})",
     )
+    d = 10
+    ap.add_argument(
+        "-L",
+        "--logpath",
+        default=getenv("STOWN_LOGPATH", "-"),
+        help="log data destination",
+        metavar="PATH",
+    )
     ap.add_argument("target", help="action target (links are created here)")
     ap.add_argument("source", nargs="+", help="action sources (links point here)")
     return ap
@@ -211,7 +222,7 @@ def arg_parser() -> argparse.ArgumentParser:
 
 def main():  # pragma: no cover
     args = arg_parser().parse_args()
-    init_logging(args.loglevel)
+    init_logging(args.loglevel, args.logpath)
     rc = stown(args, args.target, args.source)
     sys.exit(rc)
 

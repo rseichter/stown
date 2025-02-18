@@ -442,7 +442,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="details">
 <span id="author" class="author">Ralph Seichter</span><br>
 <span id="email" class="email"><a href="mailto:stown@seichter.de">stown@seichter.de</a></span><br>
-<span id="revnumber"> 0.10.10-dev1,</span>
+<span id="revnumber"> 0.11.0-dev1,</span>
 <span id="revdate">2025-02-18</span>
 </div>
 <div id="toc" class="toc2">
@@ -453,7 +453,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_usage">3. Usage</a>
 <ul class="sectlevel2">
 <li><a href="#_command_line_options">3.1. Command line options</a></li>
-<li><a href="#_environment">3.2. Environment</a></li>
+<li><a href="#_environment_variables">3.2. Environment variables</a></li>
 </ul>
 </li>
 <li><a href="#_strategy">4. Strategy</a></li>
@@ -522,6 +522,7 @@ printed only; no changes will be made.</p>
 <pre>$ stown --help
 
 usage: stown [-h] [-a {link,unlink}] [-b] [-d] [-f] [-l LEVEL] [-n] [-D DEPTH]
+             [-L PATH]
              target source [source ...]
 
 Stow file system objects by managing symlinks
@@ -535,22 +536,32 @@ options:
   -a, --action {link,unlink}
                         action to take (default: link)
   -b, --absolute        create links using absolute paths
-  -d, --dry-run         print operations only
-  -f, --force           force action (overwrites existing targets)
+  -d, --dry-run         log operations but do not modify
+  -f, --force           force action (overwrite existing targets)
   -l, --loglevel LEVEL  log level (default: WARNING)
   -n, --no-dot          disable dot-prefix treatment
   -D, --depth DEPTH     maximum recursion depth (default: 10)
+  -L, --logpath PATH    log data destination
 
-stown version 0.10.10-dev1 (b959e4f) Copyright © 2025 Ralph Seichter</pre>
+stown version 0.11.0-dev1 (b959e4f) Copyright © 2025 Ralph Seichter</pre>
 </div>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_environment"><a class="anchor" href="#_environment"></a>3.2. Environment</h3>
-<div class="paragraph">
-<p>The environment variable <code>STOWN_LOGLEVEL</code> can be used like the <code>--loglevel</code>
-option. Pick one of the predefined Python logging levels CRITICAL, ERROR,
-WARNING, INFO or DEBUG.</p>
+<h3 id="_environment_variables"><a class="anchor" href="#_environment_variables"></a>3.2. Environment variables</h3>
+<div class="ulist">
+<ul>
+<li>
+<p><code>STOWN_LOGLEVEL</code> can be used like the <code>--loglevel</code> option. Supported values
+are the predefined Python logging levels CRITICAL, ERROR, WARNING, INFO or
+DEBUG. Values are case insensitive.</p>
+</li>
+<li>
+<p><code>STOWN_LOGPATH</code> corresponds to the <code>--logpath</code> option. As per convention, a
+standalone dash <code>-</code> is interpreted as an alias for the standard output
+stream, which is also the default.</p>
+</li>
+</ul>
 </div>
 </div>
 </div>
@@ -664,8 +675,8 @@ stown. If not, see <a href="https://www.gnu.org/licenses/" class="bare">https://
 </div>
 <div id="footer">
 <div id="footer-text">
- 0.10.10-dev1<br>
-Last updated 2025-02-18 22:10:25 +0100
+ 0.11.0-dev1<br>
+Last updated 2025-02-18 23:18:40 +0100
 </div>
 </div>
 </body>

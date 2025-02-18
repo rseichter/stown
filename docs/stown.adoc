@@ -2,7 +2,7 @@
 Ralph Seichter <stown@seichter.de>
 :doctype: article
 :revdate: {docdate}
-:revnumber: 0.10.10-dev1
+:revnumber: 0.11.0-dev1
 :version-label!:
 :copyright: © 2025 Ralph Seichter
 :encoding: UTF-8
@@ -62,11 +62,16 @@ $ stown --help
 include::usage.txt[]
 ----
 
-=== Environment
+=== Environment variables
 
-The environment variable `STOWN_LOGLEVEL` can be used like the `--loglevel`
-option. Pick one of the predefined Python logging levels CRITICAL, ERROR,
-WARNING, INFO or DEBUG.
+* `STOWN_LOGLEVEL` can be used like the `--loglevel` option. Supported values
+  are the predefined Python logging levels CRITICAL, ERROR, WARNING, INFO or
+  DEBUG. Values are case insensitive.
+
+* `STOWN_LOGPATH` corresponds to the `--logpath` option. As per convention, a
+  standalone dash `-` is interpreted as an alias for the standard output
+  stream, which is also the default.
+
 
 == Strategy
 

@@ -53,7 +53,7 @@ def random_tmp(tmpdir=TMPDIR, suffix=".tmp") -> str:
 class TestStown(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        stown.init_logging("INFO")
+        stown.init_logging("INFO", "tests/test.log")
         # stown.init_logging("FATAL")
 
     def setUp(self):

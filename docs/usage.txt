@@ -1,4 +1,5 @@
 usage: stown [-h] [-a {link,unlink}] [-b] [-d] [-f] [-l LEVEL] [-n] [-D DEPTH]
+             [-L PATH]
              target source [source ...]
 
 Stow file system objects by managing symlinks
@@ -12,10 +13,11 @@ options:
   -a, --action {link,unlink}
                         action to take (default: link)
   -b, --absolute        create links using absolute paths
-  -d, --dry-run         print operations only
-  -f, --force           force action (overwrites existing targets)
+  -d, --dry-run         log operations but do not modify
+  -f, --force           force action (overwrite existing targets)
   -l, --loglevel LEVEL  log level (default: WARNING)
   -n, --no-dot          disable dot-prefix treatment
   -D, --depth DEPTH     maximum recursion depth (default: 10)
+  -L, --logpath PATH    log data destination
 
-stown version 0.10.10-dev1 (b959e4f) Copyright © 2025 Ralph Seichter
+stown version 0.11.0-dev1 (b959e4f) Copyright © 2025 Ralph Seichter
