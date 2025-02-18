@@ -23,7 +23,7 @@ import os
 import sys
 from typing import List
 
-COMMIT_SHA = None  # May be changed by CI
+COMMIT_SHA = "2da0c06" # Updated by the build process
 ID = "stown"
 VERSION = "0.10.7"
 
