@@ -6,6 +6,7 @@ name: Publish release to PyPI
 
 env:
   PYTHONPATH: '.:src'
+  PYPI_PUBLISH: $PYPI_PUBLISH_ENABLED
 
 on:
   release:
@@ -50,7 +51,7 @@ jobs:
           path: dist/
 
   pypi-publish:
-    if: $PYPI_PUBLISH_ENABLED
+    if: $PYPI_PUBLISH
     runs-on: ubuntu-latest
     needs:
       - release-build
