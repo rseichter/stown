@@ -25,7 +25,7 @@ from typing import List
 
 COMMIT_SHA = "2da0c06" # Updated by the build process
 ID = "stown"
-VERSION = "0.10.7"
+VERSION = "0.10.8"
 
 log = logging.getLogger(ID)
 
