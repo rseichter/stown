@@ -53,7 +53,8 @@ def random_tmp(tmpdir=TMPDIR, suffix=".tmp") -> str:
 class TestStown(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        stown.init_logging("FATAL")
+        stown.init_logging("INFO")
+        # stown.init_logging("FATAL")
 
     def setUp(self):
         os.chdir(path.dirname(__file__))
@@ -97,27 +98,24 @@ class TestStown(unittest.TestCase):
         a = self.parse_args(["--force"])
         self.assertEqual(stown.linkto(a, rnd, XJSON), 0)
 
+    def test_unlink_nonexistent(self):
+        a = self.parse_args(["--action", "unlink"])
+        self.assertEqual(stown.linkto(a, random_name(), XJSON), 0)
+
     def test_linkto_existing_force_dry(self):
         a = self.parse_args(["-d", "-f"])
         self.assertEqual(stown.linkto(a, ".", XJSON), 0)
 
-    def test_stown_unexpected_pair(self):
-        rnd = random_tmp()
-        with open(rnd, "wt") as f:
-            print(file=f)
-        self.assertEqual(stown.stown(self.args, rnd, XJSON), 7)
-
     def test_maxdepth(self):
         a = self.parse_args(["--depth", "0"])
-        self.assertEqual(stown.stown(a, "x", "y"), 3)
+        self.assertEqual(stown.stown(a, "x", ["y"]), 3)
 
     def test_stown_link(self):
-        # a = self.parse_args(["-d"])
         a = self.args
         b = random_tmp()
         c = path.join(DATADIR, "salt")
         os.symlink(c, b)
-        self.assertEqual(stown.stown(a, b, c), 2)
+        self.assertEqual(stown.stown(a, b, [c]), 2)
 
     def test_linkto_new(self):
         self.assertEqual(stown.linkto(self.args, random_tmp(), XJSON), 0)
@@ -142,7 +140,7 @@ class TestStown(unittest.TestCase):
         self.assertTrue(path.isabs(stown.pathto(XJSON, True)))
 
     def test_same_file(self):
-        self.assertEqual(stown.stown(self.args, ".", "."), 4)
+        self.assertEqual(stown.stown(self.args, ".", ["."]), 4)
 
     def test_remove(self):
         self.assertEqual(stown.remove(XJSON, dry_run=True), 0)
@@ -150,16 +148,21 @@ class TestStown(unittest.TestCase):
     def test_stown(self):
         self.assertEqual(stown.stown(self.args, self.args.target, self.args.source), 0)
         if not is_truthy(stown.getenv("DISABLE_TREE")):  # pragma: no cover
-            out = random_tmp(tempfile.gettempdir(), ".json")
-            subprocess.run(["tree", "-aJ", "-o", out, self.args.target])
-            self.assert_json_equal(out, XJSON)
-            os.remove(out)
+            tmp = random_tmp(tempfile.gettempdir(), ".json")
+            subprocess.run(["tree", "-aJ", "-o", tmp, self.args.target])
+            self.maxDiff = None
+            lj = "latest.json"
+            shutil.move(tmp, lj)
+            self.assert_json_equal(lj, XJSON)
+
+    def test_missing_source(self):
+        self.assertEqual(stown.stown(self.args, self.args.target, [random_name()]), 0)
 
     def test_unlink(self):
         a = self.parse_args(["-a", "unlink", "-f"])
         t = random_tmp()
         os.symlink(XJSON, t)
-        self.assertEqual(stown.stown(a, t, XJSON), 0)
+        self.assertEqual(stown.stown(a, t, [XJSON]), 0)
 
 
 if __name__ == "__main__":  # pragma: no cover

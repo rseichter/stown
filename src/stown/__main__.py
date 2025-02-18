@@ -21,6 +21,7 @@ import argparse
 import logging
 import os
 import sys
+from typing import List
 
 COMMIT_SHA = None  # May be changed by CI
 ID = "stown"
@@ -105,16 +106,19 @@ def linkto(args: argparse.Namespace, target, source) -> int:
                 log.info(f"{target} removed")
         else:
             # Should only happen during unit tests
-            return fail("Unsupported action '{args.action}'", 8)
+            return fail(f"Unsupported action: {args.action}", 8)
     return 0
 
 
-def stown(args: argparse.Namespace, target, sources, depth=0, parent_path=None) -> int:
+def stown(args: argparse.Namespace, target: str, sources: List[str], depth=0, parent_path=None) -> int:
     if depth >= args.depth:
         return fail(f"Depth limit ({depth}) reached", 3)
     for source in sources:
         if parent_path:
             source = path.join(parent_path, source)
+        if not path.exists(source):
+            log.warning(f"Source {source} not found")
+            continue
         log.info(f"{target} -> {source} (depth {depth})")
         if is_same_file(target, source):
             return fail(f"Source {source} and target are identical", 4)
@@ -130,7 +134,7 @@ def stown(args: argparse.Namespace, target, sources, depth=0, parent_path=None) 
                 rc = stown(args, path.join(target, tchild), [child], depth + 1, source)
                 if rc != 0:  # pragma: no cover
                     return rc
-        else:
+        else:  # pragma: no cover
             return fail(f"Unexpected pair: target {target} and source {source}", 7)
     return 0
 
@@ -178,7 +182,7 @@ def arg_parser() -> argparse.ArgumentParser:
         action="store_true",
         help="force action (overwrites existing targets)",
     )
-    d = getenv("STOWN_LOGLEVEL", "WARN")
+    d = getenv("STOWN_LOGLEVEL", "WARNING")
     ap.add_argument(
         "-l",
         "--loglevel",

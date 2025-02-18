@@ -66,7 +66,7 @@ build:	fmt mrproper
 all:	build docs
 
 cov:	fla
-	$(pyenv) coverage >/dev/null run -m unittest discover -s tests -v
+	$(pyenv) coverage >tests/test.log run -m unittest discover -s tests -v
 	coverage html
 	coverage report -m
 
