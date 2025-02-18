@@ -182,12 +182,11 @@ def arg_parser() -> argparse.ArgumentParser:
         action="store_true",
         help="force action (overwrites existing targets)",
     )
-    d = getenv("STOWN_LOGLEVEL", "WARNING")
     ap.add_argument(
         "-l",
         "--loglevel",
-        default=d,
-        help=f"log level (default: {d})",
+        default=getenv("STOWN_LOGLEVEL", "WARNING"),
+        help="log level (default: WARNING)",
         metavar="LEVEL",
     )
     ap.add_argument(
