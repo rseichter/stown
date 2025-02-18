@@ -25,7 +25,7 @@ endef
 pyenv	:= PYTHONPATH=.:src
 ver		?=
 
-.PHONY:	all build bumpver clean cov dbranch docs fla fmt help mrproper pdocs pypi setver shc test
+.PHONY:	all build bumpver clean cov dbranch docs fla fmt help mrproper pdocs pypi setver shc stamp tagclean test
 
 help:
 	$(info $(usage))
@@ -87,3 +87,8 @@ shc:
 dbranch:
 	@if [[ -z "$(b)" ]]; then echo Usage: make $@ b="{git-branch}"; exit 1; fi
 	git remote | while read -r r; do git push -d "$$r" "$$b"; done
+
+tagclean:
+	@if [[ -z "$(repo)" ]]; then echo Usage: make $@ repo="{git-remote-repository}"; exit 1; fi
+	git ls-remote $(repo) --tags '0.*' | awk -F /tags/ '{print $$2}' | \
+		xargs -r git push -d $(repo)
