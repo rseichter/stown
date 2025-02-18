@@ -26,29 +26,18 @@ this shell command:
 pip install stown
 ```
 
-Usage
------
+Example use case
+----------------
 
-*Always create backups before using stown!*
-
-The following example simulates linking the contents of a dotfile repository to
-a user's home directory. The `--dry-run` flag causes the necessary steps to be
-printed only; no changes will be made.
+If you store your dotfiles in a special repository, like many of us do, the
+following simple statement can help you quickly set up a new user account with your
+favourite settings:
 
 ```bash
-stown --dry-run $HOME /path/to/dotfiles
-# "stown --help" shows syntax
+stown $HOME /path/to/dotfiles
 ```
 
-Note that the prefix `dot-` is converted to a dot character in resulting symlinks,
-for example a link `$HOME/.vimrc` pointing to `/path/to/dotfiles/dot-vimrc`.
-
-Strategy
---------
-
-With default settings, stown will abort operations to protect existing target
-file objects (symlinks, files and directories). This can however lead to
-half-finished jobs, so using `--dry-run` prior to any live operation is
-recommended. You can use the `--force` flag to permit overwriting existing file
-objects, but this is inherently risky. Remember to create backups beforehand,
-because here be monsters!
+That is of course just a brief teaser an not much to go by. The documentation website
+provides detailed information about [how stown is
+used](https://www.seichter.de/stown/#_usage) and [how it
+operates](https://www.seichter.de/stown/#_strategy)
