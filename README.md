@@ -40,4 +40,4 @@ stown $HOME /path/to/dotfiles
 That is of course just a brief teaser an not much to go by. The documentation website
 provides detailed information about [how stown is
 used](https://www.seichter.de/stown/#_usage) and [how it
-operates](https://www.seichter.de/stown/#_strategy)
+operates](https://www.seichter.de/stown/#_strategy).

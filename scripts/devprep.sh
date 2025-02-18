@@ -13,7 +13,7 @@ alias mt="make test"
 alias stown="python -m stown"
 
 export PYTHONPATH=.:src
-export STOWN_LOGLEVEL=DEBUG
+export STOWN_LOGLEVEL=INFO
 
 say() {
 	echo >&2 "$@"
@@ -31,15 +31,5 @@ venv_activate() {
 	done
 	return 1
 }
-
-# va=$(venv_activate)
-# if [[ -n $va ]]; then
-# 	say Sourcing "$va"
-# 	. "$va" && say Done
-# else
-# 	say No venv found!
-# 	return 1
-# fi
-# unset va
 
 cd "$(dirname "$0")"/.. || return
