@@ -87,6 +87,7 @@ shc:
 dbranch:
 	@if [[ -z "$(b)" ]]; then echo Usage: make $@ b="{git-branch}"; exit 1; fi
 	git remote | while read -r r; do git push -d "$$r" "$$b"; done
+	git branch -d "$$b"
 
 tagclean:
 	@if [[ -z "$(repo)" ]]; then echo Usage: make $@ repo="{git-remote-repository}"; exit 1; fi
