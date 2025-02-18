@@ -441,8 +441,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <h1>stown documentation</h1>
 <div class="details">
 <span id="author" class="author">Ralph Seichter</span><br>
-<span id="revnumber"> 0.10.5,</span>
-<span id="revdate">2025-02-17</span>
+<span id="revnumber"> 0.10.6,</span>
+<span id="revdate">2025-02-18</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -540,7 +540,7 @@ options:
   -n, --no-dot          disable dot-prefix treatment
   -D, --depth DEPTH     maximum recursion depth (default: 10)
 
-stown version 0.10.5 Copyright © 2025 Ralph Seichter</pre>
+stown version 0.10.6 Copyright © 2025 Ralph Seichter</pre>
 </div>
 </div>
 </div>
@@ -548,7 +548,7 @@ stown version 0.10.5 Copyright © 2025 Ralph Seichter</pre>
 <h3 id="_environment"><a class="anchor" href="#_environment"></a>3.2. Environment</h3>
 <div class="paragraph">
 <p>The environment variable <code>STOWN_LOGLEVEL</code> can be used like the <code>--loglevel</code>
-option above. Pick one of the predefined Python logging levels CRITICAL, ERROR,
+option. Pick one of the predefined Python logging levels CRITICAL, ERROR,
 WARNING, INFO or DEBUG.</p>
 </div>
 </div>
@@ -613,10 +613,11 @@ changing the directory structure easier in certain circumstances. Renaming the
 parent folder <code>mike</code> to <code>alice</code> would not break the relative links shown above.</p>
 </div>
 <div class="paragraph">
-<p>The prefix <code>dot-</code> in source names is converted to a leading dot character in
-symlinks, as shown above with <code>zulu/.editorconfig</code> pointing to
-<code>bravo/dot-editorconfig</code>. This makes handling dotfiles easier, disabling their
-respective special effects and lifting their "hidden" status.</p>
+<p>Unless disabled via the <code>--no-dot</code> option, the prefix <code>dot-</code> in source names is
+converted to a leading dot character in symlinks, as shown with
+<code>zulu/.editorconfig</code> pointing to <code>bravo/dot-editorconfig</code>. This makes handling
+dotfiles easier, disabling their respective special effects and lifting their
+"hidden" status.</p>
 </div>
 </div>
 </div>
@@ -660,8 +661,8 @@ stown. If not, see <a href="https://www.gnu.org/licenses/" class="bare">https://
 </div>
 <div id="footer">
 <div id="footer-text">
- 0.10.5<br>
-Last updated 2025-02-17 21:32:41 +0100
+ 0.10.6<br>
+Last updated 2025-02-18 03:07:09 +0100
 </div>
 </div>
 </body>

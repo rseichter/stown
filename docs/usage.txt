@@ -18,4 +18,4 @@ options:
   -n, --no-dot          disable dot-prefix treatment
   -D, --depth DEPTH     maximum recursion depth (default: 10)
 
-stown version 0.10.5 Copyright © 2025 Ralph Seichter
+stown version 0.10.6 Copyright © 2025 Ralph Seichter

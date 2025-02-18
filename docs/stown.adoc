@@ -2,7 +2,7 @@
 Ralph Seichter
 :doctype: article
 :revdate: {docdate}
-:revnumber: 0.10.5
+:revnumber: 0.10.6
 :version-label!:
 :copyright: © 2025 Ralph Seichter
 :encoding: UTF-8
@@ -65,7 +65,7 @@ include::usage.txt[]
 === Environment
 
 The environment variable `STOWN_LOGLEVEL` can be used like the `--loglevel`
-option above. Pick one of the predefined Python logging levels CRITICAL, ERROR,
+option. Pick one of the predefined Python logging levels CRITICAL, ERROR,
 WARNING, INFO or DEBUG.
 
 == Strategy
@@ -98,10 +98,11 @@ the `--absolute` flag changes the path type. Links with relative paths can make
 changing the directory structure easier in certain circumstances. Renaming the
 parent folder `mike` to `alice` would not break the relative links shown above.
 
-The prefix `dot-` in source names is converted to a leading dot character in
-symlinks, as shown above with `zulu/.editorconfig` pointing to
-`bravo/dot-editorconfig`. This makes handling dotfiles easier, disabling their
-respective special effects and lifting their "hidden" status.
+Unless disabled via the `--no-dot` option, the prefix `dot-` in source names is
+converted to a leading dot character in symlinks, as shown with
+`zulu/.editorconfig` pointing to `bravo/dot-editorconfig`. This makes handling
+dotfiles easier, disabling their respective special effects and lifting their
+"hidden" status.
 
 == Support
 
