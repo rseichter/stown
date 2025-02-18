@@ -119,7 +119,7 @@ def stown(args: argparse.Namespace, target: str, sources: List[str], depth=0, pa
         if not path.exists(source):
             log.warning(f"Source {source} not found")
             continue
-        log.info(f"{target} -> {source} (depth {depth})")
+        log.info(f"{'  '*depth}{target} -> {source}")
         if is_same_file(target, source):
             return fail(f"Source {source} and target are identical", 4)
         elif path.islink(target):
