@@ -23,9 +23,9 @@ import os
 import sys
 from typing import List
 
-COMMIT_SHA = "2da0c06"  # Updated by the build process
+COMMIT_SHA = "b959e4f" # Updated by the build process
 ID = "stown"
-VERSION = "0.10.9"
+VERSION = "0.10.10-dev1"
 
 log = logging.getLogger(ID)
 
