@@ -1,5 +1,5 @@
 = stown documentation
-Ralph Seichter
+Ralph Seichter <stown@seichter.de>
 :doctype: article
 :revdate: {docdate}
 :revnumber: 0.10.7
@@ -106,10 +106,12 @@ dotfiles easier, disabling their respective special effects and lifting their
 
 == Support
 
-For questions regarding stown and its use, please see the
+For questions regarding stown and its use, please use the
 https://github.com/rseichter/stown/discussions[discussions] section. If you are
 experiencing technical problems, you can
-https://github.com/rseichter/stown/issues[file an issue] instead.
+https://github.com/rseichter/stown/issues[file an issue] instead. Both methods
+allow other users to participate. Lastly, there is the dedicated email address
+_stown at seichter.de_.
 
 == License
 

@@ -21,7 +21,7 @@ requires = ["setuptools", "wheel"]
 [project]
 name = "stown"
 version = "0.10.7"
-authors = [{name= "Ralph Seichter"}]
+authors = [{name = "Ralph Seichter"}, {email = "stown@seichter.de"}]
 description = "Stow file system objects by creating links"
 readme = "README.md"
 requires-python = ">=3.9"
