@@ -23,7 +23,7 @@ import os
 import sys
 from typing import List
 
-COMMIT_SHA = "2da0c06" # Updated by the build process
+COMMIT_SHA = "2da0c06"  # Updated by the build process
 ID = "stown"
 VERSION = "0.10.9-dev1"
 
@@ -139,7 +139,7 @@ def stown(args: argparse.Namespace, target: str, sources: List[str], depth=0, pa
     return 0
 
 
-def full_version(sha=COMMIT_SHA) -> str:
+def full_version(sha=COMMIT_SHA) -> str:  # pragma: no cover
     if sha:  # pragma: no cover
         suffix = f" ({sha})"
     else:
