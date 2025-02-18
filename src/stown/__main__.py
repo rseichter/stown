@@ -139,19 +139,19 @@ def stown(args: argparse.Namespace, target: str, sources: List[str], depth=0, pa
     return 0
 
 
-def epilog(sha=COMMIT_SHA) -> str:
+def full_version(sha=COMMIT_SHA) -> str:
     if sha:  # pragma: no cover
-        s = f" ({sha})"
+        suffix = f" ({sha})"
     else:
-        s = ""
-    return f"{ID} version {VERSION}{s} Copyright © 2025 Ralph Seichter"
+        suffix = ""
+    return f"{ID} version {VERSION}{suffix}"
 
 
 def arg_parser() -> argparse.ArgumentParser:
     ap = argparse.ArgumentParser(
         prog=ID,
         description="Stow file system objects by managing symlinks",
-        epilog=epilog(),
+        epilog=f"{full_version()} Copyright © 2025 Ralph Seichter",
     )
     d = "link"
     ap.add_argument(

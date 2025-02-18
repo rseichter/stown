@@ -43,7 +43,7 @@ bumpver:
 
 setver:
 	@if [[ -z "$(ver)" ]]; then echo Usage: make $@ ver="{semantic-version}"; exit 1; fi
-	sed -i '' -E 's/^(version =).*/\1 "$(ver)"/i' pyproject.toml src/stown/__main__.py
+	sed -i '' -E 's/^(version =).*/\1 "$(ver)"/i' pyproject.toml src/stown/*.py
 	sed -i '' -E 's/^(:revnumber:).*/\1 $(ver)/' docs/stown.adoc
 
 docs:
@@ -60,7 +60,11 @@ fmt:
 fla:	fmt
 	flake8 . --config=.flake8
 
-build:	fmt mrproper
+sha ?= "$(shell git rev-parse --short HEAD)" \# Updated by the build process
+stamp:
+	sed -E -i '' 's/^(COMMIT_SHA =).+/\1 $(sha)/g' src/stown/*.py
+
+build:	fmt mrproper stamp
 	python -m build
 
 all:	build docs
