@@ -153,7 +153,7 @@ def full_version(sha=COMMIT_SHA) -> str:  # pragma: no cover
 def arg_parser() -> argparse.ArgumentParser:
     ap = argparse.ArgumentParser(
         prog=ID,
-        description="Stow file system objects by managing symlinks",
+        description="Manage file system object mapping via symlinks",
         epilog=f"{full_version()} Copyright © 2025 Ralph Seichter",
     )
     d = "link"
