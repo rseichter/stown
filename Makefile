@@ -64,7 +64,7 @@ sha ?= "$(shell git rev-parse --short HEAD)" \# Updated by the build process
 stamp:
 	sed -E -i '' 's/^(COMMIT_SHA =).+/\1 $(sha)/g' src/stown/*.py
 
-build:	fmt mrproper stamp
+build:	stamp fmt mrproper
 	python -m build
 
 all:	build docs

@@ -23,9 +23,9 @@ import os
 import sys
 from typing import List
 
-COMMIT_SHA = "b959e4f"  # Updated by the build process
+COMMIT_SHA = "47b3371"  # Updated by the build process
 ID = "stown"
-VERSION = "0.11.0-dev1"
+VERSION = "0.11.1rc2"
 
 log = logging.getLogger(ID)
 
@@ -144,7 +144,7 @@ def stown(args: argparse.Namespace, target: str, sources: List[str], depth=0, pa
 
 def full_version(sha=COMMIT_SHA) -> str:  # pragma: no cover
     if sha:  # pragma: no cover
-        suffix = f" ({sha})"
+        suffix = f"+{sha}"
     else:
         suffix = ""
     return f"{ID} version {VERSION}{suffix}"
