@@ -20,4 +20,4 @@ options:
   -D, --depth DEPTH     maximum recursion depth (default: 10)
   -L, --logpath PATH    log data destination
 
-stown version 0.12.0-dev1+6802463 Copyright © 2025 Ralph Seichter
+stown version 0.12.0+12fae5f Copyright © 2025 Ralph Seichter

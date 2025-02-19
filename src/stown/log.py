@@ -20,9 +20,9 @@ import logging
 import sys
 
 # Updated by the build process
-COMMIT_SHA = "6802463"
+COMMIT_SHA = "12fae5f"
 ID = "stown"
-VERSION = "0.12.0-dev1"
+VERSION = "0.12.0"
 
 log = logging.getLogger(ID)
 
