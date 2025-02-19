@@ -16,15 +16,14 @@ You should have received a copy of the GNU General Public License along with
 stown. If not, see <https://www.gnu.org/licenses/>.
 """
 
+from .core import getenv
 from .core import stown
+from .log import COMMIT_SHA
+from .log import ID
+from .log import VERSION
 from .log import init_logging
 from argparse import ArgumentParser
-from os import getenv
 from sys import exit
-
-COMMIT_SHA = "47b3371"  # Updated by the build process
-ID = "stown"
-VERSION = "0.11.1"
 
 
 def full_version(sha=COMMIT_SHA) -> str:  # pragma: no cover

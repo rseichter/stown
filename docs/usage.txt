@@ -2,7 +2,7 @@ usage: stown [-h] [-a {link,unlink}] [-b] [-d] [-f] [-l LEVEL] [-n] [-D DEPTH]
              [-L PATH]
              target source [source ...]
 
-Stow file system objects by managing symlinks
+Manage file system object mapping via symlinks
 
 positional arguments:
   target                action target (links are created here)
@@ -20,4 +20,4 @@ options:
   -D, --depth DEPTH     maximum recursion depth (default: 10)
   -L, --logpath PATH    log data destination
 
-stown version 0.11.1rc2+47b3371 Copyright © 2025 Ralph Seichter
+stown version 0.12.0-dev1+6802463 Copyright © 2025 Ralph Seichter

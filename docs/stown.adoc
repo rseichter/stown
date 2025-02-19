@@ -2,7 +2,7 @@
 Ralph Seichter <stown@seichter.de>
 :doctype: article
 :revdate: {docdate}
-:revnumber: 0.11.1
+:revnumber: 0.12.0-dev1
 :version-label!:
 :copyright: © 2025 Ralph Seichter
 :encoding: UTF-8
@@ -56,8 +56,6 @@ stown --dry-run $HOME /path/to/dotfiles
 === Command line options
 
 ----
-$ stown --help
-
 include::usage.txt[]
 ----
 
@@ -115,7 +113,9 @@ https://github.com/rseichter/stown/discussions[discussions] section. If you are
 experiencing technical problems, you can
 https://github.com/rseichter/stown/issues[file an issue] instead. Both methods
 allow other users to participate. Lastly, there is the dedicated email address
-_stown at seichter.de_.
+_stown at seichter.de_. Note that this address is not backed by a ticket system
+or mailing list, just little old me. My support offer is strictly voluntary, so
+please be nice and respectful.
 
 == License
 

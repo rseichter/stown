@@ -19,9 +19,10 @@ stown. If not, see <https://www.gnu.org/licenses/>.
 import logging
 import sys
 
-COMMIT_SHA = "47b3371"  # Updated by the build process
+# Updated by the build process
+COMMIT_SHA = "6802463"
 ID = "stown"
-VERSION = "0.11.1"
+VERSION = "0.12.0-dev1"
 
 log = logging.getLogger(ID)
 
