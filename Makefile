@@ -60,9 +60,9 @@ fmt:
 fla:	fmt
 	flake8 . --config=.flake8
 
-sha ?= "$(shell git rev-parse --short HEAD)" \# Updated by the build process
+rev ?= $(shell git rev-parse --short HEAD)
 stamp:
-	sed -E -i '' 's/^(COMMIT_SHA =).+/\1 $(sha)/g' src/stown/*.py
+	sed -E -i '' 's/^(COMMIT_SHA =).+/\1 "$(rev)"/' src/stown/*.py
 
 build:	stamp fmt mrproper
 	python -m build
