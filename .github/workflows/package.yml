@@ -35,9 +35,9 @@ jobs:
           python -m pip install -r requirements.txt
       - name: Stamp with commit SHA
         run: |
-          sha="\"$(git rev-parse --short $GITHUB_SHA)\""
-          echo $sha
-          sed -E -i "s/^(COMMIT_SHA =).+/\1 $sha/" src/stown/*.py
+          rev=$(git rev-parse --short $GITHUB_SHA)
+          echo $rev
+          sed -E -i "s/^(COMMIT_SHA =).+/\1 \"$rev\"/" src/stown/*.py
       - name: Lint with flake8
         run: |
           # Stop the build if there are Python syntax errors or undefined names

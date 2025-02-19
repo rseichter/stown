@@ -1,5 +1,5 @@
 ---
-name: Publish to PyPI (V2)
+name: Publish release to PyPI (manually triggered)
 
 env:
   COMMIT: HEAD
@@ -27,9 +27,9 @@ jobs:
 
       - name: Stamp with commit SHA
         run: |
-          sha="\"$(git rev-parse --short $COMMIT)\""
-          echo $sha
-          sed -E -i "s/^(COMMIT_SHA =).+/\1 $sha/" src/stown/*.py
+          rev=$(git rev-parse --short $GITHUB_SHA)
+          echo $rev
+          sed -E -i "s/^(COMMIT_SHA =).+/\1 \"$rev\"/" src/stown/*.py
 
       - name: Lint source code
         run: flake8 . --config=.flake8
