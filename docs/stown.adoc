@@ -1,4 +1,4 @@
-= stown documentation
+= stown symlink manager
 Ralph Seichter <stown@seichter.de>
 :doctype: article
 :revdate: {docdate}
@@ -8,30 +8,33 @@ Ralph Seichter <stown@seichter.de>
 :encoding: UTF-8
 :hyphens: en
 :lang: en
-// :keywords: TODO, foo, bar
+:keywords: symlink, lightweight, dotfiles
 :media: screen
 :pagenums!:
 :pdf-version: 1.7
+:reproducible:
 :sectanchors:
 :sectnums:
-:subject: Official documentation for the "stown" symlink manager
+:subject: Documentation for the "stown" symlink manager
 :xrefstyle: short
 
+[#about]
 == About
 
-"stown" manages file system object mapping via symlinks. It was inspired by
-https://www.gnu.org/software/stow/[GNU Stow], which I found very useful but too
-unwieldly for my personal use. GNU Stow relies on a number of Perl modules and
-can be a hassle to install on minimalistic systems. In contrast, stown only
-requires Python 3.9 or newer, without additional modules.
+"stown" manages file system object mapping via symlinks. It was inspired by GNU
+Stow, which I found very useful but too unwieldly for my personal use. GNU Stow
+relies on a number of Perl modules and can be a hassle to install on
+minimalistic systems. In contrast, stown requires only Python 3.9 or newer,
+without any additional dependencies.
 
 If you are looking for a lightweight tool instead of a full-fledged symlink
 farm manager, stown might be for you.
 
 Documentation is provided in https://www.seichter.de/stown/[HTML] and
-https://www.seichter.de/stown/stown.pdf[PDF] format. Source code is
-https://github.com/rseichter/stown[available here].
+https://www.seichter.de/stown/stown.pdf[PDF] format. Source code is hosted
+https://github.com/rseichter/stown[here].
 
+[#install]
 == Installing
 
 To install the https://pypi.org/project/stown/[PyPI package], you can use
@@ -41,9 +44,15 @@ this shell command:
 pip install stown
 ```
 
-== Usage
+[#cli]
+== Command line options
+[%unbreakable]
+----
+include::usage.txt[]
+----
 
-*Always create backups before using stown!*
+[#example]
+== Example usage
 
 The following example simulates linking the contents of a dotfile repository to
 a user's home directory. The `--dry-run` flag causes the necessary steps to be
@@ -53,13 +62,55 @@ printed only; no changes will be made.
 stown --dry-run $HOME /path/to/dotfiles
 ```
 
-=== Command line options
+[#strategy]
+== Strategy
 
+Terminology: In stown parlance, _source_ means any existing file object
+(regular file, directory or symlink). _Targets_ are paths in the file system
+where stown is meant to create symlinks pointing to sources.
+
+When used with default options, stown will routinely abort operations in an
+attempt to protect existing targets. This can however lead to half-finished
+jobs. Using `--dry-run` prior to any live operation is recommended to lower
+that risk. Note that stown limits its recursive approach to managing links to a
+maximum depth of 10, which is typically sufficient. The `--depth` option can be
+used to change the limit.
+
+WARNING: Always create backups before using stown, because here be monsters!
+
+Using the `--force` flag gives stown explicit permission to overwrite existing
+file objects. Sources are processed in the order specified by the user. In case
+of name collisions, later changes may not override earlier ones unless
+`--force` is specified.
+
+As an example, let us imagine a directory `mike` originally containg the
+following:
+
+[%unbreakable]
 ----
-include::usage.txt[]
+include::before.txt[]
 ----
 
-=== Environment variables
+This is the resulting content after `stow --force zulu alpha bravo`:
+
+[%unbreakable]
+----
+include::after.txt[]
+----
+
+Symlinks are created using relative paths with stown's default settings. Using
+the `--absolute` flag changes the path type. Links with relative paths can make
+changing the directory structure easier. For example, renaming the parent
+folder `mike` to `november` would not break the relative links shown above.
+
+Unless disabled via the `--no-dot` option, the prefix `dot-` in source names is
+converted to a leading dot character in symlinks, as shown with
+`zulu/.editorconfig` pointing to `bravo/dot-editorconfig`. This makes handling
+dotfiles easier, disabling their respective special effects and lifting their
+"hidden" status.
+
+[#env]
+== Environment variables
 
 * `STOWN_LOGLEVEL` can be used like the `--loglevel` option. Supported values
   are the predefined Python logging levels CRITICAL, ERROR, WARNING, INFO or
@@ -69,54 +120,20 @@ include::usage.txt[]
   standalone dash `-` is interpreted as an alias for the standard output
   stream, which is also the default.
 
-
-== Strategy
-
-With default settings, stown will abort operations to protect existing target
-file objects (symlinks, files and directories). This can however lead to
-half-finished jobs, so using `--dry-run` prior to any live operation is
-recommended. You can use the `--force` flag to permit overwriting existing file
-objects, but this is inherently risky. Remember to create backups beforehand,
-because here be monsters!
-
-Sources are processed in the order specified by the user. In case of name
-collisions, later changes may not override earlier ones unless `--force`
-is specified.
-
-If directory `mike` originally contains the following:
-
-----
-include::before.txt[]
-----
-
-This is the resulting content after `stow --force zulu alpha bravo`:
-
-----
-include::after.txt[]
-----
-
-Symlinks are created using relative paths with stown's default settings. Using
-the `--absolute` flag changes the path type. Links with relative paths can make
-changing the directory structure easier in certain circumstances. Renaming the
-parent folder `mike` to `alice` would not break the relative links shown above.
-
-Unless disabled via the `--no-dot` option, the prefix `dot-` in source names is
-converted to a leading dot character in symlinks, as shown with
-`zulu/.editorconfig` pointing to `bravo/dot-editorconfig`. This makes handling
-dotfiles easier, disabling their respective special effects and lifting their
-"hidden" status.
-
+[#support]
 == Support
 
 For questions regarding stown and its use, please use the
 https://github.com/rseichter/stown/discussions[discussions] section. If you are
 experiencing technical problems, you can
 https://github.com/rseichter/stown/issues[file an issue] instead. Both methods
-allow other users to participate. Lastly, there is the dedicated email address
-_stown at seichter.de_. Note that this address is not backed by a ticket system
-or mailing list, just little old me. My support offer is strictly voluntary, so
-please be nice and respectful.
+allow other users to participate. If privacy is a concern, you can use
+mailto:{email}[email] to contact me.
 
+Note that my support offer is strictly voluntary.
+
+
+[#legal]
 == License
 
 Copyright {copyright}

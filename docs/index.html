@@ -5,9 +5,10 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="generator" content="Asciidoctor 2.0.23">
+<meta name="keywords" content="symlink, lightweight, dotfiles">
 <meta name="author" content="Ralph Seichter">
 <meta name="copyright" content="© 2025 Ralph Seichter">
-<title>stown documentation</title>
+<title>stown symlink manager</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
 <style>
 /*! Asciidoctor default stylesheet | MIT License | https://asciidoctor.org */
@@ -438,40 +439,37 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </head>
 <body class="article toc2 toc-right">
 <div id="header">
-<h1>stown documentation</h1>
+<h1>stown symlink manager</h1>
 <div class="details">
 <span id="author" class="author">Ralph Seichter</span><br>
 <span id="email" class="email"><a href="mailto:stown@seichter.de">stown@seichter.de</a></span><br>
 <span id="revnumber"> 0.12.0,</span>
-<span id="revdate">2025-02-19</span>
+<span id="revdate">2025-02-20</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
 <ul class="sectlevel1">
-<li><a href="#_about">1. About</a></li>
-<li><a href="#_installing">2. Installing</a></li>
-<li><a href="#_usage">3. Usage</a>
-<ul class="sectlevel2">
-<li><a href="#_command_line_options">3.1. Command line options</a></li>
-<li><a href="#_environment_variables">3.2. Environment variables</a></li>
-</ul>
-</li>
-<li><a href="#_strategy">4. Strategy</a></li>
-<li><a href="#_support">5. Support</a></li>
-<li><a href="#_license">6. License</a></li>
+<li><a href="#about">1. About</a></li>
+<li><a href="#install">2. Installing</a></li>
+<li><a href="#cli">3. Command line options</a></li>
+<li><a href="#example">4. Example usage</a></li>
+<li><a href="#strategy">5. Strategy</a></li>
+<li><a href="#env">6. Environment variables</a></li>
+<li><a href="#support">7. Support</a></li>
+<li><a href="#legal">8. License</a></li>
 </ul>
 </div>
 </div>
 <div id="content">
 <div class="sect1">
-<h2 id="_about"><a class="anchor" href="#_about"></a>1. About</h2>
+<h2 id="about"><a class="anchor" href="#about"></a>1. About</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>"stown" manages file system object mapping via symlinks. It was inspired by
-<a href="https://www.gnu.org/software/stow/">GNU Stow</a>, which I found very useful but too
-unwieldly for my personal use. GNU Stow relies on a number of Perl modules and
-can be a hassle to install on minimalistic systems. In contrast, stown only
-requires Python 3.9 or newer, without additional modules.</p>
+<p>"stown" manages file system object mapping via symlinks. It was inspired by GNU
+Stow, which I found very useful but too unwieldly for my personal use. GNU Stow
+relies on a number of Perl modules and can be a hassle to install on
+minimalistic systems. In contrast, stown requires only Python 3.9 or newer,
+without any additional dependencies.</p>
 </div>
 <div class="paragraph">
 <p>If you are looking for a lightweight tool instead of a full-fledged symlink
@@ -479,13 +477,13 @@ farm manager, stown might be for you.</p>
 </div>
 <div class="paragraph">
 <p>Documentation is provided in <a href="https://www.seichter.de/stown/">HTML</a> and
-<a href="https://www.seichter.de/stown/stown.pdf">PDF</a> format. Source code is
-<a href="https://github.com/rseichter/stown">available here</a>.</p>
+<a href="https://www.seichter.de/stown/stown.pdf">PDF</a> format. Source code is hosted
+<a href="https://github.com/rseichter/stown">here</a>.</p>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_installing"><a class="anchor" href="#_installing"></a>2. Installing</h2>
+<h2 id="install"><a class="anchor" href="#install"></a>2. Installing</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>To install the <a href="https://pypi.org/project/stown/">PyPI package</a>, you can use
@@ -499,23 +497,8 @@ this shell command:</p>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_usage"><a class="anchor" href="#_usage"></a>3. Usage</h2>
+<h2 id="cli"><a class="anchor" href="#cli"></a>3. Command line options</h2>
 <div class="sectionbody">
-<div class="paragraph">
-<p><strong>Always create backups before using stown!</strong></p>
-</div>
-<div class="paragraph">
-<p>The following example simulates linking the contents of a dotfile repository to
-a user&#8217;s home directory. The <code>--dry-run</code> flag causes the necessary steps to be
-printed only; no changes will be made.</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlight"><code class="language-bash" data-lang="bash">stown --dry-run $HOME /path/to/dotfiles</code></pre>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_command_line_options"><a class="anchor" href="#_command_line_options"></a>3.1. Command line options</h3>
 <div class="listingblock">
 <div class="content">
 <pre>usage: stown [-h] [-a {link,unlink}] [-b] [-d] [-f] [-l LEVEL] [-n] [-D DEPTH]
@@ -544,43 +527,59 @@ stown version 0.12.0+12fae5f Copyright © 2025 Ralph Seichter</pre>
 </div>
 </div>
 </div>
-<div class="sect2">
-<h3 id="_environment_variables"><a class="anchor" href="#_environment_variables"></a>3.2. Environment variables</h3>
-<div class="ulist">
-<ul>
-<li>
-<p><code>STOWN_LOGLEVEL</code> can be used like the <code>--loglevel</code> option. Supported values
-are the predefined Python logging levels CRITICAL, ERROR, WARNING, INFO or
-DEBUG. Values are case insensitive.</p>
-</li>
-<li>
-<p><code>STOWN_LOGPATH</code> corresponds to the <code>--logpath</code> option. As per convention, a
-standalone dash <code>-</code> is interpreted as an alias for the standard output
-stream, which is also the default.</p>
-</li>
-</ul>
+</div>
+<div class="sect1">
+<h2 id="example"><a class="anchor" href="#example"></a>4. Example usage</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The following example simulates linking the contents of a dotfile repository to
+a user&#8217;s home directory. The <code>--dry-run</code> flag causes the necessary steps to be
+printed only; no changes will be made.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">stown --dry-run $HOME /path/to/dotfiles</code></pre>
 </div>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_strategy"><a class="anchor" href="#_strategy"></a>4. Strategy</h2>
+<h2 id="strategy"><a class="anchor" href="#strategy"></a>5. Strategy</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>With default settings, stown will abort operations to protect existing target
-file objects (symlinks, files and directories). This can however lead to
-half-finished jobs, so using <code>--dry-run</code> prior to any live operation is
-recommended. You can use the <code>--force</code> flag to permit overwriting existing file
-objects, but this is inherently risky. Remember to create backups beforehand,
-because here be monsters!</p>
+<p>Terminology: In stown parlance, <em>source</em> means any existing file object
+(regular file, directory or symlink). <em>Targets</em> are paths in the file system
+where stown is meant to create symlinks pointing to sources.</p>
 </div>
 <div class="paragraph">
-<p>Sources are processed in the order specified by the user. In case of name
-collisions, later changes may not override earlier ones unless <code>--force</code>
-is specified.</p>
+<p>When used with default options, stown will routinely abort operations in an
+attempt to protect existing targets. This can however lead to half-finished
+jobs. Using <code>--dry-run</code> prior to any live operation is recommended to lower
+that risk. Note that stown limits its recursive approach to managing links to a
+maximum depth of 10, which is typically sufficient. The <code>--depth</code> option can be
+used to change the limit.</p>
+</div>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Warning</div>
+</td>
+<td class="content">
+Always create backups before using stown, because here be monsters!
+</td>
+</tr>
+</table>
 </div>
 <div class="paragraph">
-<p>If directory <code>mike</code> originally contains the following:</p>
+<p>Using the <code>--force</code> flag gives stown explicit permission to overwrite existing
+file objects. Sources are processed in the order specified by the user. In case
+of name collisions, later changes may not override earlier ones unless
+<code>--force</code> is specified.</p>
+</div>
+<div class="paragraph">
+<p>As an example, let us imagine a directory <code>mike</code> originally containg the
+following:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -618,8 +617,8 @@ is specified.</p>
 <div class="paragraph">
 <p>Symlinks are created using relative paths with stown&#8217;s default settings. Using
 the <code>--absolute</code> flag changes the path type. Links with relative paths can make
-changing the directory structure easier in certain circumstances. Renaming the
-parent folder <code>mike</code> to <code>alice</code> would not break the relative links shown above.</p>
+changing the directory structure easier. For example, renaming the parent
+folder <code>mike</code> to <code>november</code> would not break the relative links shown above.</p>
 </div>
 <div class="paragraph">
 <p>Unless disabled via the <code>--no-dot</code> option, the prefix <code>dot-</code> in source names is
@@ -631,22 +630,42 @@ dotfiles easier, disabling their respective special effects and lifting their
 </div>
 </div>
 <div class="sect1">
-<h2 id="_support"><a class="anchor" href="#_support"></a>5. Support</h2>
+<h2 id="env"><a class="anchor" href="#env"></a>6. Environment variables</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p><code>STOWN_LOGLEVEL</code> can be used like the <code>--loglevel</code> option. Supported values
+are the predefined Python logging levels CRITICAL, ERROR, WARNING, INFO or
+DEBUG. Values are case insensitive.</p>
+</li>
+<li>
+<p><code>STOWN_LOGPATH</code> corresponds to the <code>--logpath</code> option. As per convention, a
+standalone dash <code>-</code> is interpreted as an alias for the standard output
+stream, which is also the default.</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="support"><a class="anchor" href="#support"></a>7. Support</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>For questions regarding stown and its use, please use the
 <a href="https://github.com/rseichter/stown/discussions">discussions</a> section. If you are
 experiencing technical problems, you can
 <a href="https://github.com/rseichter/stown/issues">file an issue</a> instead. Both methods
-allow other users to participate. Lastly, there is the dedicated email address
-<em>stown at seichter.de</em>. Note that this address is not backed by a ticket system
-or mailing list, just little old me. My support offer is strictly voluntary, so
-please be nice and respectful.</p>
+allow other users to participate. If privacy is a concern, you can use
+<a href="mailto:stown@seichter.de">email</a> to contact me.</p>
+</div>
+<div class="paragraph">
+<p>Note that my support offer is strictly voluntary.</p>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_license"><a class="anchor" href="#_license"></a>6. License</h2>
+<h2 id="legal"><a class="anchor" href="#legal"></a>8. License</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>Copyright © 2025 Ralph Seichter</p>
@@ -675,7 +694,6 @@ stown. If not, see <a href="https://www.gnu.org/licenses/" class="bare">https://
 <div id="footer">
 <div id="footer-text">
  0.12.0<br>
-Last updated 2025-02-19 22:03:55 +0100
 </div>
 </div>
 </body>
