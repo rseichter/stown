@@ -2,7 +2,7 @@
 name: Publish release to PyPI
 
 env:
-  PYTHONPATH: '.:src'
+  PYTHONPATH: ${{ vars.PYTHONPATH }}
 
 on:
   release:
