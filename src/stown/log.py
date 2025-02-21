@@ -16,23 +16,27 @@ You should have received a copy of the GNU General Public License along with
 stown. If not, see <https://www.gnu.org/licenses/>.
 """
 
-import logging
-import sys
+from logging import DEBUG
+from logging import basicConfig
+from logging import getLevelName
+from logging import getLogger
+from sys import stdout
 
-# Updated by the build process
 COMMIT_SHA = "12fae5f"
 ID = "stown"
 VERSION = "0.12.0"
 
-log = logging.getLogger(ID)
+log = getLogger(ID)
 
 
-def init_logging(level=logging.DEBUG, filename="-"):
-    format = "%(message)s"
+def init_logging(level=DEBUG, filename="-"):
+    format = "%(asctime)s %(message)s"
+    datefmt = "%H:%M:%S"
     if isinstance(level, str):  # pragma: no cover
         # Get numeric representation of the log level string
-        level = logging.getLevelName(level.upper())
+        level = getLevelName(level.upper())
     if filename == "-":  # pragma: no cover
-        logging.basicConfig(stream=sys.stdout, format=format, level=level)
+        basicConfig(stream=stdout, format=format, datefmt=datefmt, level=level)
     else:
-        logging.basicConfig(filename=filename, format=format, level=level)
+        basicConfig(filename=filename, format=format, datefmt=datefmt, level=level)
+    log.info("-" * 40)
