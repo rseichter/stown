@@ -5,28 +5,27 @@ define usage
 
 Available 'make' targets are:
 
-all       Build everything.
-build     Build distribution artifacts.
-bumpver   Bump version number.
-clean     Cleanup workspace.
-cov       Coverage analysis.
-docs      Generate documentation.
-fla       Run flake8 checks.
-fmt       Format source code.
-help      Display this text.
-mrproper  Cleanup workspace, thoroughly.
-pdocs     Publish documentation.
-pypi      Upload distribution artifacts to PyPI.
-setver    Set version number.
-shc       Shell script care.
-test      Run unit tests.
+all …………………… Build everything.
+build ……………… Build distribution artifacts.
+clean ……………… Cleanup workspace.
+cov …………………… Coverage analysis.
+docs ………………… Generate documentation.
+fla …………………… Run flake8 checks.
+fmt …………………… Format source code.
+help ………………… Display this text.
+mrproper ……… Thoroughly cleanup workspace.
+pdocs ……………… Publish documentation.
+pypi ………………… Upload artifacts to PyPI.
+setver …………… Set version number.
+shc …………………… Shell script care.
+test ………………… Run unit tests.
 
 endef
 
 pyenv	:= PYTHONPATH=.:src
 ver		?=
 
-.PHONY:	all build bumpver clean cov dbranch docs fla fmt help mrproper pdocs pypi setver shc stamp tagclean test
+.PHONY:	all build clean cov dbranch docs fla fmt help mrproper pdocs pypi setver shc stamp tagclean test
 
 help:
 	$(info $(usage))
@@ -38,9 +37,6 @@ clean:
 
 mrproper:	clean
 	$(find_) '(' -name 'tmp*' -o -regex '.*/(egg-info|__pycache__)' ')' -print0 | xargs -0r rm -rv
-
-bumpver:
-	make setver ver="$(ver)-dev$(shell date '+%s')"
 
 setver:
 	@if [[ -z "$(ver)" ]]; then echo Usage: make $@ ver="{semantic-version}"; exit 1; fi

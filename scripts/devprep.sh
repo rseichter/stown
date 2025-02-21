@@ -4,7 +4,9 @@
 #
 # Prepare development session. Source this file in your shell.
 
-alias fla="make fla"
+export PYTHONPATH=.:src
+export STOWN_LOGLEVEL=INFO
+
 alias fmt="make fmt"
 alias mc="make cov"
 alias md="make docs"
@@ -12,24 +14,4 @@ alias mp="make pdocs"
 alias mt="make test"
 alias stown="python -m stown"
 
-export PYTHONPATH=.:src
-export STOWN_LOGLEVEL=INFO
-
-say() {
-	echo >&2 "$@"
-}
-
-venv_activate() {
-	local act dir
-	for dir in .venv ~/.venv; do
-		act="$dir"/bin/activate
-		say Checking "$act"
-		if [[ -r $act ]]; then
-			echo "$act"
-			return 0
-		fi
-	done
-	return 1
-}
-
-cd "$(dirname "$0")"/.. || return
+cd "$(dirname "$0")"/.. || true
