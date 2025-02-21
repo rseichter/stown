@@ -23,9 +23,9 @@ from logging import getLogger
 from os import getcwd
 from sys import stdout
 
-COMMIT_SHA = "29326d8"
+COMMIT_SHA = "98a48d8"
 ID = "stown"
-VERSION = "0.13.0-dev1"
+VERSION = "0.13.0"
 
 log = getLogger(ID)
 
@@ -41,4 +41,4 @@ def init_logging(level=DEBUG, filename="-"):
     else:
         basicConfig(filename=filename, format=format, datefmt=datefmt, level=level)
     log.info("-" * 40)
-    log.info(f"CWD {getcwd()}")
+    log.info(f"CWD is {getcwd()}")
