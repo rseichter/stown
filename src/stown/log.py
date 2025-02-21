@@ -20,6 +20,7 @@ from logging import DEBUG
 from logging import basicConfig
 from logging import getLevelName
 from logging import getLogger
+from os import getcwd
 from sys import stdout
 
 COMMIT_SHA = "29326d8"
@@ -40,3 +41,4 @@ def init_logging(level=DEBUG, filename="-"):
     else:
         basicConfig(filename=filename, format=format, datefmt=datefmt, level=level)
     log.info("-" * 40)
+    log.info(f"CWD {getcwd()}")
