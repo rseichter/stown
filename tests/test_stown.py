@@ -18,8 +18,10 @@ stown. If not, see <https://www.gnu.org/licenses/>.
 
 from os import path
 from stown.__main__ import arg_parser
+from stown.core import Permit
 from stown.core import fail
 from stown.core import getenv
+from stown.core import is_permitted
 from stown.core import linkto
 from stown.core import parsed_filename
 from stown.core import pathto
@@ -61,7 +63,7 @@ def random_tmp(tmpdir=TMPDIR, suffix=".tmp") -> str:
 class TestStown(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        init_logging("INFO", "tests/test.log")
+        init_logging("DEBUG", "tests/test.log")
         # init_logging("FATAL")
 
     def setUp(self):
@@ -88,6 +90,19 @@ class TestStown(unittest.TestCase):
 
     def test_getenv_known_key(self):
         self.assertIsNotNone(getenv("LANG"))
+
+    def test_permit_denied(self):
+        self.assertEqual(is_permitted(self.args, ".", DATADIR), Permit.DENIED)
+
+    def test_permit_forced(self):
+        rnd = random_tmp()
+        with open(rnd, "wt") as f:
+            print(file=f)
+        a = self.parse_args(["--force"])
+        self.assertEqual(is_permitted(a, rnd, XJSON), Permit.FORCED)
+
+    def test_permit_granted(self):
+        self.assertEqual(is_permitted(self.args, random_name(), XJSON), Permit.GRANTED)
 
     def test_linkto_existing(self):
         self.assertEqual(linkto(self.args, ".", DATADIR), 2)

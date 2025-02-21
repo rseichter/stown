@@ -18,6 +18,8 @@ stown. If not, see <https://www.gnu.org/licenses/>.
 
 from .log import log
 from argparse import Namespace
+from enum import Enum
+from enum import auto
 from os import environ
 from os import listdir
 from os import path
@@ -26,6 +28,12 @@ from os import stat
 from os import stat_result
 from os import symlink
 from typing import List
+
+
+class Permit(Enum):
+    DENIED = auto()
+    FORCED = auto()
+    GRANTED = auto()
 
 
 def fail(message: str, rc: int = 1) -> int:
@@ -69,19 +77,19 @@ def is_same_file(target, source) -> bool:
         return False
 
 
-def is_permitted(args: Namespace, target, source) -> bool:
-    permit = False
+def is_permitted(args: Namespace, target, source) -> Permit:
+    p = Permit.DENIED
     if not path.lexists(target):
-        permit = True
-    elif args.force or args.action == "unlink":
-        permit = not is_same_file(target, source)
-    log.debug(f"write permission for {target}: {permit}")
-    return permit
+        p = Permit.GRANTED
+    elif (args.force or args.action == "unlink") and not is_same_file(target, source):
+        p = Permit.FORCED
+    log.debug(f"write permission for {target}: {p}")
+    return p
 
 
 def linkto(args: Namespace, target, source) -> int:
     source = pathto(source, args.absolute, path.dirname(target))
-    if not is_permitted(args, target, source):
+    if is_permitted(args, target, source) == Permit.DENIED:
         return fail(f"Target '{target}' seems worth protecting", 2)
     if not args.dry_run:
         if path.lexists(target):
