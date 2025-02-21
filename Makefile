@@ -57,7 +57,7 @@ pdocs:	docs
 
 fmt:
 	isort src tests
-	black -l 120 src tests
+	pre-commit run -a
 
 fla:	fmt
 	flake8 . --config=.flake8
