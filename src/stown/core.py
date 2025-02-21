@@ -16,7 +16,6 @@ You should have received a copy of the GNU General Public License along with
 stown. If not, see <https://www.gnu.org/licenses/>.
 """
 
-from .log import log
 from argparse import Namespace
 from enum import Enum
 from enum import auto
@@ -28,6 +27,8 @@ from os import stat
 from os import stat_result
 from os import symlink
 from typing import List
+
+from .log import log
 
 
 class Permit(Enum):

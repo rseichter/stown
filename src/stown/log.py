@@ -22,9 +22,9 @@ from logging import getLevelName
 from logging import getLogger
 from sys import stdout
 
-COMMIT_SHA = "12fae5f"
+COMMIT_SHA = "3dc827b"
 ID = "stown"
-VERSION = "0.12.0"
+VERSION = "0.13.0-dev1"
 
 log = getLogger(ID)
 

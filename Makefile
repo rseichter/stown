@@ -12,6 +12,7 @@ clean     Cleanup workspace.
 cov       Coverage analysis.
 docs      Generate documentation.
 fla       Run flake8 checks.
+fmt       Format source code.
 help      Display this text.
 mrproper  Cleanup workspace, thoroughly.
 pdocs     Publish documentation.
@@ -55,6 +56,7 @@ pdocs:	docs
 	scripts/publish.sh docs
 
 fmt:
+	isort src tests
 	black -l 120 src tests
 
 fla:	fmt

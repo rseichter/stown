@@ -3,4 +3,5 @@ black
 build
 coverage
 flake8
+isort
 wheel

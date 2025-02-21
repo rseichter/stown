@@ -16,7 +16,17 @@ You should have received a copy of the GNU General Public License along with
 stown. If not, see <https://www.gnu.org/licenses/>.
 """
 
+import argparse
+import json
+import os
+import shutil
+import subprocess
+import tempfile
+import unittest
+import uuid
 from os import path
+from typing import List
+
 from stown.__main__ import arg_parser
 from stown.core import Permit
 from stown.core import fail
@@ -28,15 +38,6 @@ from stown.core import pathto
 from stown.core import remove
 from stown.core import stown
 from stown.log import init_logging
-from typing import List
-import argparse
-import json
-import os
-import shutil
-import subprocess
-import tempfile
-import unittest
-import uuid
 
 DATADIR = "data"
 TMPDIR = "tmp"

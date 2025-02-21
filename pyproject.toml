@@ -20,7 +20,7 @@ requires = ["setuptools", "wheel"]
 
 [project]
 name = "stown"
-version = "0.12.0"
+version = "0.13.0-dev1"
 authors = [{name = "Ralph Seichter"}, {email = "stown@seichter.de"}]
 description = "Manage file system object mapping via symlinks."
 readme = "README.md"
@@ -46,3 +46,7 @@ title = "stown coverage report"
 
 [tool.coverage.run]
 branch = true
+
+[tool.isort]
+force_single_line = true
+profile = "black"
