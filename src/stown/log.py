@@ -23,22 +23,19 @@ from logging import getLogger
 from os import getcwd
 from sys import stdout
 
-COMMIT_SHA = "b70db6b"
+COMMIT_SHA = "4e0c5bc"
 ID = "stown"
 VERSION = "0.13.1"
 
 log = getLogger(ID)
 
 
-def init_logging(level=DEBUG, filename="-"):
+def init_logging(level: str = "WARNING", filename: str = "-"):
     format = "%(asctime)s %(message)s"
     datefmt = "%H:%M:%S"
-    if isinstance(level, str):  # pragma: no cover
-        # Get numeric representation of the log level string
-        level = getLevelName(level.upper())
     if filename == "-":  # pragma: no cover
         basicConfig(stream=stdout, format=format, datefmt=datefmt, level=level)
     else:
         basicConfig(filename=filename, format=format, datefmt=datefmt, level=level)
-    log.info("-" * 40)
+    log.info("-" * 50)
     log.info(f"CWD is {getcwd()}")

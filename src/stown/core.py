@@ -18,7 +18,6 @@ stown. If not, see <https://www.gnu.org/licenses/>.
 
 from argparse import Namespace
 from enum import Enum
-from enum import auto
 from os import environ
 from os import listdir
 from os import path
@@ -31,13 +30,35 @@ from typing import List
 from .log import log
 
 
+class Status(Enum):
+    OK = 0
+    ERROR = 1  # unspecified error
+    ACTION_UNKNOWN = 2
+    CRUSH_DEPTH = 3
+    FORBIDDEN = 4
+    IDENTICAL = 5
+    UNEXPECTED_PAIR = 6
+
+    def is_ok(self) -> bool:
+        return self.value == Status.OK.value
+
+
 class Permit(Enum):
-    DENIED = auto()
-    FORCED = auto()
-    GRANTED = auto()
+    DENIED = 0
+    FORCED = 1
+    GRANTED = 2
+
+    def is_denied(self) -> bool:
+        return self.value == Permit.DENIED.value
+
+    def is_forced(self) -> bool:
+        return self.value == Permit.FORCED.value
+
+    def is_granted(self) -> bool:
+        return self.value == Permit.GRANTED.value
 
 
-def fail(message: str, rc: int = 1) -> int:
+def fail(message: str, rc: Status = Status.ERROR) -> Status:
     log.error(message)
     return rc
 
@@ -54,11 +75,14 @@ def parsed_filename(fn: str, ignore_dot_prefix=False) -> str:
     return fn
 
 
-def remove(pathlike, dry_run=True) -> int:
-    log.debug(f"rm {pathlike}")
-    if not dry_run:
-        os_remove(pathlike)
-    return 0
+def remove(path_, dry_run=True) -> bool:
+    if dry_run:
+        suffix = " (dry)"
+    else:
+        os_remove(path_)
+        suffix = ""
+    log.debug(f"removed {path_}{suffix}")
+    return not dry_run
 
 
 def pathto(pathlike, want_abspath: bool, relpath_start=None):
@@ -78,40 +102,38 @@ def is_same_file(target, source) -> bool:
         return False
 
 
-def is_permitted(args: Namespace, target, source) -> Permit:
-    p = Permit.DENIED
-    if not path.lexists(target):
-        p = Permit.GRANTED
-    elif (args.force or args.action == "unlink") and not is_same_file(target, source):
-        p = Permit.FORCED
-    log.debug(f"write permission for {target}: {p}")
-    return p
+def obtain_permit(args: Namespace, target, source) -> Permit:
+    if is_same_file(target, source):
+        per = Permit.DENIED
+    elif not path.lexists(target):
+        per = Permit.GRANTED
+    elif args.force or args.action == "unlink":
+        per = Permit.FORCED
+    else:
+        per = Permit.DENIED
+    log.debug(f"write permit for {target}: {per}")
+    return per
 
 
-def linkto(args: Namespace, target, source) -> int:
+def linkto(args: Namespace, target, source) -> Status:
     source = pathto(source, args.absolute, path.dirname(target))
-    if is_permitted(args, target, source) == Permit.DENIED:
-        return fail(f"Target '{target}' seems worth protecting", 2)
+    if obtain_permit(args, target, source).is_denied():
+        return fail(f"Target {target} denied", Status.FORBIDDEN)
     if not args.dry_run:
         if path.lexists(target):
-            target_removed = remove(target, args.dry_run) == 0
-        else:
-            target_removed = False
+            remove(target, args.dry_run)
         if args.action == "link":
             log.info(f"{target} -> {source}")
             symlink(source, target)
-        elif args.action == "unlink":
-            if target_removed:
-                log.info(f"{target} removed")
-        else:
+        elif args.action != "unlink":
             # Should only happen during unit tests
-            return fail(f"Unsupported action: {args.action}", 8)
-    return 0
+            return fail(f"Unsupported action: {args.action}", Status.ACTION_UNKNOWN)
+    return Status.OK
 
 
-def stown(args: Namespace, target: str, sources: List[str], depth=0, parent_path=None) -> int:
+def stown(args: Namespace, target: str, sources: List[str], depth=0, parent_path=None) -> Status:
     if depth >= args.depth:
-        return fail(f"Depth limit ({depth}) reached", 3)
+        return fail(f"Depth limit ({depth}) reached", Status.CRUSH_DEPTH)
     for source in sources:
         if parent_path:
             source = path.join(parent_path, source)
@@ -120,10 +142,10 @@ def stown(args: Namespace, target: str, sources: List[str], depth=0, parent_path
             continue
         log.info(f"{'  '*depth}{target} -> {source}")
         if is_same_file(target, source):
-            return fail(f"Source {source} and target are identical", 4)
+            return fail(f"Source {source} and target are identical", Status.IDENTICAL)
         elif path.islink(target):
             rc = linkto(args, target, source)
-            if rc != 0:  # pragma: no cover
+            if not rc.is_ok():
                 return rc
         elif not path.lexists(target):
             return linkto(args, target, source)
@@ -131,8 +153,11 @@ def stown(args: Namespace, target: str, sources: List[str], depth=0, parent_path
             for child in listdir(source):
                 tchild = parsed_filename(child, args.no_dot)
                 rc = stown(args, path.join(target, tchild), [child], depth + 1, source)
-                if rc != 0:  # pragma: no cover
+                if not rc.is_ok():  # pragma: no cover
                     return rc
-        else:  # pragma: no cover
-            return fail(f"Unexpected pair: target {target} and source {source}", 7)
-    return 0
+        else:
+            return fail(
+                f"Target {target} and source {source} have incompatible types",
+                Status.UNEXPECTED_PAIR,
+            )
+    return Status.OK

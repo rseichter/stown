@@ -53,7 +53,8 @@ pdocs:	docs
 
 fmt:
 	isort src tests
-	pre-commit run -a
+	# pre-commit run -a
+	black -l 120 src tests
 
 fla:	fmt
 	flake8 . --config=.flake8
@@ -67,13 +68,13 @@ build:	stamp fmt mrproper
 
 all:	build docs
 
-cov:	fla
+cov:	fmt
 	$(pyenv) coverage run -m unittest discover -s tests -v
 	coverage html
 	coverage report -m
 
 test:
-	$(pyenv) python >/dev/null -m unittest discover -s tests
+	$(pyenv) python >/dev/null -m unittest discover -s tests -v -f
 
 pypi:
 	twine check dist/*

@@ -109,7 +109,7 @@ def main():  # pragma: no cover
     args = arg_parser().parse_args()
     init_logging(args.loglevel, args.logpath)
     rc = stown(args, args.target, args.source)
-    exit(rc)
+    exit(rc.value)
 
 
 if __name__ == "__main__":  # pragma: no cover
