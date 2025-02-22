@@ -2,7 +2,7 @@
 #
 # See https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-python
 ---
-name: Development build
+name: Manually triggered build
 
 on:
   workflow_dispatch:

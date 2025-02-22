@@ -1,9 +1,10 @@
 ---
-name: Publish release to PyPI
+name: Publish release
 
 on:
   release:
-    types: [published]
+    types:
+      - published
 
 permissions:
   contents: read
