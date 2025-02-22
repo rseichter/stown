@@ -16,16 +16,14 @@ You should have received a copy of the GNU General Public License along with
 stown. If not, see <https://www.gnu.org/licenses/>.
 """
 
-from logging import DEBUG
 from logging import basicConfig
-from logging import getLevelName
 from logging import getLogger
 from os import getcwd
 from sys import stdout
 
-COMMIT_SHA = "c63554c"
+COMMIT_SHA = "a784160"
 ID = "stown"
-VERSION = "0.14.0"
+VERSION = "0.14.1"
 
 log = getLogger(ID)
 

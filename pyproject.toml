@@ -20,7 +20,7 @@ requires = ["setuptools", "wheel"]
 
 [project]
 name = "stown"
-version = "0.14.0"
+version = "0.14.1"
 authors = [{name = "Ralph Seichter"}, {email = "stown@seichter.de"}]
 description = "Manage file system object mapping via symlinks."
 readme = "README.md"

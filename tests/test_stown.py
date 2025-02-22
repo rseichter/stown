@@ -28,9 +28,7 @@ from os import path
 from typing import List
 
 from stown.__main__ import arg_parser
-from stown.core import Permit
 from stown.core import Status
-from stown.core import fail
 from stown.core import getenv
 from stown.core import linkto
 from stown.core import obtain_permit

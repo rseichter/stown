@@ -66,7 +66,7 @@ stamp:
 build:	stamp fmt mrproper
 	python -m build
 
-all:	build docs
+all:	fla build docs
 
 cov:	fmt
 	$(pyenv) coverage run -m unittest discover -s tests -v
