@@ -37,12 +37,20 @@ https://github.com/rseichter/stown[here].
 [#install]
 == Installing
 
-To install the https://pypi.org/project/stown/[PyPI package], you can use
-this shell command:
+To install the official https://pypi.org/project/stown/[PyPI package], use the
+pip utility.
 
 ```bash
 pip install stown
 ```
+
+Depending on your OS, https://pip.pypa.io/en/stable/[pip] may need to be
+installed first, but it is often available by default. On Debian family
+systems, the matching package is typically called `python3-pip`. If your
+environment is bare-bones and lacks a package manager, there is also Python's
+built-in
+https://docs.python.org/3/library/ensurepip.html#module-ensurepip[ensurepip]
+module you can use.
 
 [#cli]
 == Command line options
