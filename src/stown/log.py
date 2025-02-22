@@ -31,9 +31,10 @@ log = getLogger(ID)
 def init_logging(level: str = "WARNING", filename: str = "-"):
     format = "%(asctime)s %(message)s"
     datefmt = "%H:%M:%S"
+    lu = level.upper()
     if filename == "-":  # pragma: no cover
-        basicConfig(stream=stdout, format=format, datefmt=datefmt, level=level)
+        basicConfig(stream=stdout, format=format, datefmt=datefmt, level=lu)
     else:
-        basicConfig(filename=filename, format=format, datefmt=datefmt, level=level)
+        basicConfig(filename=filename, format=format, datefmt=datefmt, level=lu)
     log.info("-" * 50)
     log.info(f"CWD is {getcwd()}")
