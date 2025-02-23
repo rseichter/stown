@@ -159,8 +159,5 @@ def stown(args: Namespace, target: str, sources: List[str], depth=0, parent_path
         elif not is_suitable_target(target):
             return fail(f"Unsuitable target {target}", Status.UNSUITABLE_TARGET)
         else:  # pragma: no cover
-            return fail(
-                f"Unexpected target {target} and source {source}",
-                Status.UNEXPECTED_PAIR,
-            )
+            return fail(f"Unexpected pair: target {target} and source {source}", Status.UNEXPECTED_PAIR)
     return Status.OK
