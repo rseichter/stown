@@ -20,14 +20,15 @@ requires = ["setuptools", "wheel"]
 
 [project]
 name = "stown"
-version = "0.14.3"
+version = "1.0.0rc1"
 authors = [{name = "Ralph Seichter"}, {email = "stown@seichter.de"}]
-description = "Manage file system object mapping via symlinks."
+description = "Manage file system object mapping via symlinks. Lightweight alternative to GNU Stow."
 readme = "README.md"
 requires-python = ">=3.9"
 # See https://pypi.org/classifiers/
 classifiers = [
-  "Development Status :: 4 - Beta",
+  "Development Status :: 5 - Production/Stable",
+  "Keywords :: symlinks-manager,symlinks,lightweight,dotfiles",
   "Operating System :: OS Independent",
   "Programming Language :: Python :: 3.9",
   "Topic :: Utilities",
