@@ -22,8 +22,6 @@ from os import environ
 from os import listdir
 from os import path
 from os import remove as os_remove
-from os import stat
-from os import stat_result
 from os import symlink
 from typing import List
 
@@ -38,6 +36,7 @@ class Status(Enum):
     FORBIDDEN = 4
     IDENTICAL = 5
     UNEXPECTED_PAIR = 6
+    UNSUITABLE_TARGET = 7
 
     def is_ok(self) -> bool:
         return self.value == Status.OK.value
@@ -95,9 +94,7 @@ def pathto(pathlike, want_abspath: bool, relpath_start=None):
 
 def is_same_file(target, source) -> bool:
     try:
-        s: stat_result = stat(source, follow_symlinks=False)
-        t: stat_result = stat(target, follow_symlinks=False)
-        return s.st_dev == t.st_dev and s.st_ino == t.st_ino
+        return path.samefile(target, source)
     except FileNotFoundError:
         return False
 
@@ -131,6 +128,10 @@ def linkto(args: Namespace, target, source) -> Status:
     return Status.OK
 
 
+def is_suitable_target(target) -> bool:
+    return (not path.exists(target)) or path.islink(target)
+
+
 def stown(args: Namespace, target: str, sources: List[str], depth=0, parent_path=None) -> Status:
     if depth >= args.depth:
         return fail(f"Depth limit ({depth}) reached", Status.CRUSH_DEPTH)
@@ -155,9 +156,11 @@ def stown(args: Namespace, target: str, sources: List[str], depth=0, parent_path
                 rc = stown(args, path.join(target, tchild), [child], depth + 1, source)
                 if not rc.is_ok():  # pragma: no cover
                     return rc
-        else:
+        elif not is_suitable_target(target):
+            return fail(f"Unsuitable target {target}", Status.UNSUITABLE_TARGET)
+        else:  # pragma: no cover
             return fail(
-                f"Target {target} and source {source} have incompatible types",
+                f"Unexpected target {target} and source {source}",
                 Status.UNEXPECTED_PAIR,
             )
     return Status.OK

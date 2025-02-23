@@ -143,7 +143,7 @@ class TestStown(unittest.TestCase):
         c = random_tmp()
         with open(c, "wt") as f:
             print(file=f)
-        self.assertEqual(stown(self.args, b, [c]), Status.UNEXPECTED_PAIR)
+        self.assertEqual(stown(self.args, b, [c]), Status.UNSUITABLE_TARGET)
 
     def test_stown_link(self):
         a = self.args
