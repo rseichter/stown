@@ -84,9 +84,14 @@ shc:
 	shcare scripts/*
 
 dbranch:
-	@if [[ -z "$(b)" ]]; then echo Usage: make $@ b="{git-branch}"; exit 1; fi
+	@if [[ -z "$(b)" ]]; then echo Usage: make $@ b="{branch}"; exit 1; fi
 	git remote | while read -r r; do git push -d "$$r" "$$b"; done
 	git branch -d "$$b"
+
+dtag:
+	@if [[ -z "$(t)" ]]; then echo Usage: make $@ t="{tag}"; exit 1; fi
+	git remote | while read -r r; do git push -d "$$r" "$$t"; done
+	git tag -d "$$t"
 
 tagclean:
 	@if [[ -z "$(repo)" ]]; then echo Usage: make $@ repo="{git-remote-repository}"; exit 1; fi
