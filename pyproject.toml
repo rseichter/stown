@@ -20,7 +20,7 @@ requires = ["setuptools", "wheel"]
 
 [project]
 name = "stown"
-version = "1.0.0rc1"
+version = "1.0.0"
 authors = [{name = "Ralph Seichter"}, {email = "stown@seichter.de"}]
 description = "Manage file system object mapping via symlinks. Lightweight alternative to GNU Stow."
 keywords = ["symlinks-manager", "symlinks", "lightweight", "dotfiles"]
