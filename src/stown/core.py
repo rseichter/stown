@@ -74,27 +74,27 @@ def parsed_filename(fn: str, ignore_dot_prefix=False) -> str:
     return fn
 
 
-def remove(path_, dry_run=True) -> bool:
+def remove(somepath, dry_run=True) -> bool:
     if dry_run:
         suffix = " (dry)"
     else:
-        os_remove(path_)
         suffix = ""
-    log.debug(f"removed {path_}{suffix}")
+        os_remove(somepath)
+    log.debug(f"removed {somepath}{suffix}")
     return not dry_run
 
 
-def pathto(pathlike, want_abspath: bool, relpath_start=None):
+def pathto(somepath, want_abspath: bool, relpath_start=None):
     if want_abspath:
-        p = path.abspath(pathlike)
+        p = path.abspath(somepath)
     else:
-        p = path.relpath(pathlike, start=relpath_start)
+        p = path.relpath(somepath, start=relpath_start)
     return p
 
 
-def is_same_file(target, source) -> bool:
+def is_same_file(somepath, otherpath) -> bool:
     try:
-        return path.samefile(target, source)
+        return path.samefile(somepath, otherpath)
     except FileNotFoundError:
         return False
 
@@ -123,13 +123,13 @@ def linkto(args: Namespace, target, source) -> Status:
             log.info(f"{target} -> {source}")
             symlink(source, target)
         elif args.action != "unlink":
-            # Should only happen during unit tests
+            # Should only happen during unit tests thanks to argparse
             return fail(f"Unsupported action: {args.action}", Status.ACTION_UNKNOWN)
     return Status.OK
 
 
-def is_suitable_target(target) -> bool:
-    return (not path.exists(target)) or path.islink(target)
+def is_suitable_target(somepath) -> bool:
+    return (not path.exists(somepath)) or path.islink(somepath)
 
 
 def stown(args: Namespace, target: str, sources: List[str], depth=0, parent_path=None) -> Status:
