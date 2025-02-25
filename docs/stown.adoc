@@ -42,9 +42,10 @@ https://github.com/rseichter/stown[here].
 To install the https://pypi.org/project/stown/[PyPI package], use the pip
 utility.
 
-```bash
+[source,bash]
+----
 pip install stown
-```
+----
 
 Depending on your OS, https://pip.pypa.io/en/stable/[pip] may need to be
 installed first, but it is often available by default. On Debian family
@@ -73,9 +74,10 @@ The following example simulates linking the contents of a dotfile repository to
 a user's home directory. The `--dry-run` flag causes the necessary steps to be
 printed only; no changes will be made.
 
-```bash
+[source,bash]
+----
 stown --dry-run $HOME /path/to/dotfiles
-```
+----
 
 [#strategy]
 == Strategy
@@ -97,16 +99,18 @@ used to change the limit.
 WARNING: Always create backups before using stown, because here be monsters!
 
 Using the `--force` flag gives stown explicit permission to overwrite existing
-file objects. Sources are processed in the order specified by the user. In case
-of name collisions, later changes may not override earlier ones unless given
-permission via the `--force` or `--override` options. The latter requires a
-regular expression (RE) understood by Python (see
-https://docs.python.org/3/library/re.html#regular-expression-syntax[syntax]):
+file objects. Sources are processed in the order specified by the user. Already
+existing targets may not be overwritten, unless permission is granted via
+either the `--force` or `--override` options. Override, a feature introduced in
+stown 1.1.0, matches target names against a user-defined
+https://docs.python.org/3/library/re.html#regular-expression-syntax[regular
+expression] (RE).
 
-```bash
+[source,bash]
+----
 # Use quotes to protect RE from shell interpolation
-stown --override '\.(json|toml)$' foo bar
-```
+stown --override '\.(json|toml)$' sometarget somesource
+----
 
 RE are powerful, but they can also lead to surprises for those unfamiliar with
 their use: For instance, the regular expression `.c` matches "foo.c" but also
@@ -145,8 +149,9 @@ dotfiles easier, disabling their respective special effects and lifting their
 == Environment variables
 
 * `STOWN_LOGLEVEL` can be used like the `--loglevel` option. Supported values
-  are the predefined Python logging levels CRITICAL, ERROR, WARNING, INFO or
-  DEBUG. Values are case insensitive.
+  are the Python's predefined  logging levels CRITICAL, ERROR, WARNING (the
+  default), INFO or DEBUG. Values are case insensitive. CRITICAL will
+  effectively silence stown.
 
 * `STOWN_LOGPATH` corresponds to the `--logpath` option. As per convention, a
   standalone dash `-` is interpreted as an alias for the standard output
