@@ -46,8 +46,9 @@ def arg_parser() -> ArgumentParser:
     ap.add_argument("-b", "--absolute", default=False, action="store_true", help="create links using absolute paths")
     ap.add_argument("-d", "--dry-run", default=False, action="store_true", help="log operations but do not modify")
     ap.add_argument("-f", "--force", default=False, action="store_true", help="force action (overwrite permission)")
-    d = getenv("STOWN_LOGLEVEL", "WARNING")
-    ap.add_argument("-l", "--loglevel", default=d, metavar="LEVEL", help=f"log level [{d}]")
+    d = "WARNING"
+    lv = getenv("STOWN_LOGLEVEL", d)
+    ap.add_argument("-l", "--loglevel", default=lv, metavar="LEVEL", help=f"log level [{d}]")
     ap.add_argument("-n", "--no-dot", default=False, action="store_true", help="disable dot-prefix treatment")
     ap.add_argument("-o", "--override", metavar="RE", help="override matching targets (regex)")
     d = 10
