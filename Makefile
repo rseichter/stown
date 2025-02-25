@@ -69,12 +69,12 @@ build:	stamp fmt mrproper
 all:	fla build docs
 
 cov:	fmt
-	$(pyenv) coverage run -m unittest discover -s tests -v
+	$(pyenv) coverage run -m unittest discover -s tests
 	coverage html
 	coverage report -m
 
 test:
-	$(pyenv) python >/dev/null -m unittest discover -s tests -v -f
+	$(pyenv) python -m unittest discover -s tests -f
 
 pypi:
 	twine check dist/*

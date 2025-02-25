@@ -23,6 +23,7 @@ from os import listdir
 from os import path
 from os import remove as os_remove
 from os import symlink
+from re import search
 from typing import List
 
 from .log import log
@@ -46,6 +47,7 @@ class Permit(Enum):
     DENIED = 0
     FORCED = 1
     GRANTED = 2
+    OVERRIDE = 3
 
     def is_denied(self) -> bool:
         return self.value == Permit.DENIED.value
@@ -99,11 +101,21 @@ def is_same_file(somepath, otherpath) -> bool:
         return False
 
 
+def matches(regex, candidate: str) -> bool:
+    if regex and search(regex, candidate):
+        log.debug(f"{candidate} matches {regex}")
+        return True
+    log.debug(f"{candidate} does not match {regex}")
+    return False
+
+
 def obtain_permit(args: Namespace, target, source) -> Permit:
     if is_same_file(target, source):
         per = Permit.DENIED
     elif not path.lexists(target):
         per = Permit.GRANTED
+    elif matches(args.override, target):
+        per = Permit.OVERRIDE
     elif args.force or args.action == "unlink":
         per = Permit.FORCED
     else:
@@ -123,7 +135,7 @@ def linkto(args: Namespace, target, source) -> Status:
             log.info(f"{target} -> {source}")
             symlink(source, target)
         elif args.action != "unlink":
-            # Should only happen during unit tests thanks to argparse
+            # Should only happen during unit tests, thanks to argparse.
             return fail(f"Unsupported action: {args.action}", Status.ACTION_UNKNOWN)
     return Status.OK
 

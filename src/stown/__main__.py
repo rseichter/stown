@@ -42,64 +42,18 @@ def arg_parser() -> ArgumentParser:
         epilog=f"{full_version()} Copyright © 2025 Ralph Seichter",
     )
     d = "link"
-    ap.add_argument(
-        "-a",
-        "--action",
-        choices=["link", "unlink"],
-        default=d,
-        help=f"action to take (default: {d})",
-    )
-    ap.add_argument(
-        "-b",
-        "--absolute",
-        default=False,
-        action="store_true",
-        help="create links using absolute paths",
-    )
-    ap.add_argument(
-        "-d",
-        "--dry-run",
-        default=False,
-        action="store_true",
-        help="log operations but do not modify",
-    )
-    ap.add_argument(
-        "-f",
-        "--force",
-        default=False,
-        action="store_true",
-        help="force action (overwrite existing targets)",
-    )
-    ap.add_argument(
-        "-l",
-        "--loglevel",
-        default=getenv("STOWN_LOGLEVEL", "WARNING"),
-        help="log level (default: WARNING)",
-        metavar="LEVEL",
-    )
-    ap.add_argument(
-        "-n",
-        "--no-dot",
-        default=False,
-        action="store_true",
-        help="disable dot-prefix treatment",
-    )
+    ap.add_argument("-a", "--action", choices=[d, "unlink"], default=d, help=f"action to take [{d}]")
+    ap.add_argument("-b", "--absolute", default=False, action="store_true", help="create links using absolute paths")
+    ap.add_argument("-d", "--dry-run", default=False, action="store_true", help="log operations but do not modify")
+    ap.add_argument("-f", "--force", default=False, action="store_true", help="force action (overwrite permission)")
+    d = getenv("STOWN_LOGLEVEL", "WARNING")
+    ap.add_argument("-l", "--loglevel", default=d, metavar="LEVEL", help=f"log level [{d}]")
+    ap.add_argument("-n", "--no-dot", default=False, action="store_true", help="disable dot-prefix treatment")
+    ap.add_argument("-o", "--override", metavar="RE", help="override matching targets (regex)")
     d = 10
-    ap.add_argument(
-        "-D",
-        "--depth",
-        default=d,
-        type=int,
-        help=f"maximum recursion depth (default: {d})",
-    )
-    d = 10
-    ap.add_argument(
-        "-L",
-        "--logpath",
-        default=getenv("STOWN_LOGPATH", "-"),
-        help="log data destination",
-        metavar="PATH",
-    )
+    ap.add_argument("-D", "--depth", default=d, type=int, help=f"maximum recursion depth [{d}]")
+    d = getenv("STOWN_LOGPATH", "-")
+    ap.add_argument("-L", "--logpath", default=d, metavar="PATH", help="log data destination")
     ap.add_argument("target", help="action target (links are created here)")
     ap.add_argument("source", nargs="+", help="action sources (links point here)")
     return ap

@@ -204,6 +204,13 @@ class TestStown(unittest.TestCase):
         st = stown(a, t, [XJSON])
         self.assertTrue(st.is_ok())
 
+    def test_may_override(self):
+        a = self.parse_args(["--override", r"\.(py|tmp)$"])
+        t = random_tmp()
+        os.symlink(XJSON, t)
+        st = stown(a, t, [XJSON])
+        self.assertTrue(st.is_ok())
+
 
 if __name__ == "__main__":  # pragma: no cover
     unittest.main()
