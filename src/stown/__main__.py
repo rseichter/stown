@@ -50,7 +50,7 @@ def arg_parser() -> ArgumentParser:
     lv = getenv("STOWN_LOGLEVEL", d)
     ap.add_argument("-l", "--loglevel", default=lv, metavar="LEVEL", help=f"log level [{d}]")
     ap.add_argument("-n", "--no-dot", default=False, action="store_true", help="disable dot-prefix treatment")
-    ap.add_argument("-o", "--override", metavar="RE", help="override matching targets (regex)")
+    ap.add_argument("-o", "--override", metavar="RE", help="override targets matching regex")
     d = 10
     ap.add_argument("-D", "--depth", default=d, type=int, help=f"maximum recursion depth [{d}]")
     d = getenv("STOWN_LOGPATH", "-")
