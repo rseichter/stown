@@ -67,7 +67,7 @@ include::usage.txt[]
 ----
 
 [#example]
-== Example usage
+== Usage example
 
 The following example simulates linking the contents of a dotfile repository to
 a user's home directory. The `--dry-run` flag causes the necessary steps to be
@@ -84,6 +84,9 @@ Terminology: In stown parlance, _source_ means any existing file object
 (regular file, directory or symlink). _Targets_ are paths in the file system
 where stown is meant to create symlinks pointing to sources.
 
+[#overview]
+=== Overview
+
 When used with default options, stown will routinely abort operations in an
 attempt to protect existing targets. This can however lead to half-finished
 jobs. Using `--dry-run` prior to any live operation is recommended to lower
@@ -95,11 +98,25 @@ WARNING: Always create backups before using stown, because here be monsters!
 
 Using the `--force` flag gives stown explicit permission to overwrite existing
 file objects. Sources are processed in the order specified by the user. In case
-of name collisions, later changes may not override earlier ones unless
-`--force` is specified.
+of name collisions, later changes may not override earlier ones unless given
+permission via the `--force` or `--override` options. The latter requires a
+regular expression (RE) understood by Python (see
+https://docs.python.org/3/library/re.html#regular-expression-syntax[syntax]):
 
-As an example, let us imagine a directory `mike` originally containg the
-following:
+```bash
+# Use quotes to protect RE from shell interpolation
+stown --override '\.(json|toml)$' foo bar
+```
+
+RE are powerful, but they can also lead to surprises for those unfamiliar with
+their use: For instance, the regular expression `.c` matches "foo.c" but also
+".conf", "sketch" and countless other strings.
+
+[#scenario]
+=== Example scenario
+
+As a more in-depth example, let us imagine a directory `mike` originally
+containg the following:
 
 [%unbreakable]
 ----
