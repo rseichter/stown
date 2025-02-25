@@ -7,10 +7,12 @@ Hollywood)_
 Release 1.1.0
 -------------
 
-(TBA): Feature release
+2025-02-25: Feature release
 
 - Introduce the ability to override existing target symlinks with names
 matching a user-defined regular expression.
+
+- Switch to custom logic for the detection of identical files.
 
 Release 1.0.0
 -------------
