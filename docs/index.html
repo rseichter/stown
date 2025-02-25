@@ -443,7 +443,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="details">
 <span id="author" class="author">Ralph Seichter</span><br>
 <span id="email" class="email"><a href="mailto:stown@seichter.de">stown@seichter.de</a></span><br>
-<span id="revnumber"> 1.0.0,</span>
+<span id="revnumber"> 1.1.0-dev1,</span>
 <span id="revdate">2025-02-25</span>
 </div>
 <div id="toc" class="toc2">
@@ -457,8 +457,13 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </ul>
 </li>
 <li><a href="#cli">3. Command line options</a></li>
-<li><a href="#example">4. Example usage</a></li>
-<li><a href="#strategy">5. Strategy</a></li>
+<li><a href="#example">4. Usage example</a></li>
+<li><a href="#strategy">5. Strategy</a>
+<ul class="sectlevel2">
+<li><a href="#overview">5.1. Overview</a></li>
+<li><a href="#scenario">5.2. Example scenario</a></li>
+</ul>
+</li>
 <li><a href="#env">6. Environment variables</a></li>
 <li><a href="#support">7. Support</a></li>
 <li><a href="#legal">8. License</a></li>
@@ -525,8 +530,8 @@ package</a> as a convenient alternative to the PyPI package.</p>
 <div class="sectionbody">
 <div class="listingblock">
 <div class="content">
-<pre>usage: stown [-h] [-a {link,unlink}] [-b] [-d] [-f] [-l LEVEL] [-n] [-D DEPTH]
-             [-L PATH]
+<pre>usage: stown [-h] [-a {link,unlink}] [-b] [-d] [-f] [-l LEVEL] [-n] [-o RE]
+             [-D DEPTH] [-L PATH]
              target source [source ...]
 
 Manage file system object mapping via symlinks
@@ -538,22 +543,23 @@ positional arguments:
 options:
   -h, --help            show this help message and exit
   -a, --action {link,unlink}
-                        action to take (default: link)
+                        action to take [link]
   -b, --absolute        create links using absolute paths
   -d, --dry-run         log operations but do not modify
-  -f, --force           force action (overwrite existing targets)
-  -l, --loglevel LEVEL  log level (default: WARNING)
+  -f, --force           force action (overwrite permission)
+  -l, --loglevel LEVEL  log level [WARNING]
   -n, --no-dot          disable dot-prefix treatment
-  -D, --depth DEPTH     maximum recursion depth (default: 10)
+  -o, --override RE     override targets matching regex
+  -D, --depth DEPTH     maximum recursion depth [10]
   -L, --logpath PATH    log data destination
 
-stown version 1.0.0+15dc14a Copyright © 2025 Ralph Seichter</pre>
+stown version 1.1.0-dev1+289dae4 Copyright © 2025 Ralph Seichter</pre>
 </div>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="example"><a class="anchor" href="#example"></a>4. Example usage</h2>
+<h2 id="example"><a class="anchor" href="#example"></a>4. Usage example</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>The following example simulates linking the contents of a dotfile repository to
@@ -575,6 +581,8 @@ printed only; no changes will be made.</p>
 (regular file, directory or symlink). <em>Targets</em> are paths in the file system
 where stown is meant to create symlinks pointing to sources.</p>
 </div>
+<div class="sect2">
+<h3 id="overview"><a class="anchor" href="#overview"></a>5.1. Overview</h3>
 <div class="paragraph">
 <p>When used with default options, stown will routinely abort operations in an
 attempt to protect existing targets. This can however lead to half-finished
@@ -597,13 +605,30 @@ Always create backups before using stown, because here be monsters!
 </div>
 <div class="paragraph">
 <p>Using the <code>--force</code> flag gives stown explicit permission to overwrite existing
-file objects. Sources are processed in the order specified by the user. In case
-of name collisions, later changes may not override earlier ones unless
-<code>--force</code> is specified.</p>
+file objects. Sources are processed in the order specified by the user. Already
+existing targets may not be overwritten, unless permission is granted via
+either the <code>--force</code> or <code>--override</code> options. Override, a feature introduced in
+stown 1.1.0, matches target names against a user-defined
+<a href="https://docs.python.org/3/library/re.html#regular-expression-syntax">regular
+expression</a> (RE).</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash"># Use quotes to protect RE from shell interpolation
+stown --override '\.(json|toml)$' sometarget somesource</code></pre>
+</div>
 </div>
 <div class="paragraph">
-<p>As an example, let us imagine a directory <code>mike</code> originally containg the
-following:</p>
+<p>RE are powerful, but they can also lead to surprises for those unfamiliar with
+their use: For instance, the regular expression <code>.c</code> matches "foo.c" but also
+".conf", "sketch" and countless other strings.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="scenario"><a class="anchor" href="#scenario"></a>5.2. Example scenario</h3>
+<div class="paragraph">
+<p>As a more in-depth example, let us imagine a directory <code>mike</code> originally
+containg the following:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -653,6 +678,7 @@ dotfiles easier, disabling their respective special effects and lifting their
 </div>
 </div>
 </div>
+</div>
 <div class="sect1">
 <h2 id="env"><a class="anchor" href="#env"></a>6. Environment variables</h2>
 <div class="sectionbody">
@@ -660,8 +686,9 @@ dotfiles easier, disabling their respective special effects and lifting their
 <ul>
 <li>
 <p><code>STOWN_LOGLEVEL</code> can be used like the <code>--loglevel</code> option. Supported values
-are the predefined Python logging levels CRITICAL, ERROR, WARNING, INFO or
-DEBUG. Values are case insensitive.</p>
+are the Python&#8217;s predefined  logging levels CRITICAL, ERROR, WARNING (the
+default), INFO or DEBUG. Values are case insensitive. CRITICAL will
+effectively silence stown.</p>
 </li>
 <li>
 <p><code>STOWN_LOGPATH</code> corresponds to the <code>--logpath</code> option. As per convention, a
@@ -717,7 +744,7 @@ stown. If not, see <a href="https://www.gnu.org/licenses/" class="bare">https://
 </div>
 <div id="footer">
 <div id="footer-text">
- 1.0.0<br>
+ 1.1.0-dev1<br>
 </div>
 </div>
 </body>

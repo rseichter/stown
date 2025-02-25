@@ -1,5 +1,5 @@
-usage: stown [-h] [-a {link,unlink}] [-b] [-d] [-f] [-l LEVEL] [-n] [-D DEPTH]
-             [-L PATH]
+usage: stown [-h] [-a {link,unlink}] [-b] [-d] [-f] [-l LEVEL] [-n] [-o RE]
+             [-D DEPTH] [-L PATH]
              target source [source ...]
 
 Manage file system object mapping via symlinks
@@ -11,13 +11,14 @@ positional arguments:
 options:
   -h, --help            show this help message and exit
   -a, --action {link,unlink}
-                        action to take (default: link)
+                        action to take [link]
   -b, --absolute        create links using absolute paths
   -d, --dry-run         log operations but do not modify
-  -f, --force           force action (overwrite existing targets)
-  -l, --loglevel LEVEL  log level (default: WARNING)
+  -f, --force           force action (overwrite permission)
+  -l, --loglevel LEVEL  log level [WARNING]
   -n, --no-dot          disable dot-prefix treatment
-  -D, --depth DEPTH     maximum recursion depth (default: 10)
+  -o, --override RE     override targets matching regex
+  -D, --depth DEPTH     maximum recursion depth [10]
   -L, --logpath PATH    log data destination
 
-stown version 1.0.0+15dc14a Copyright © 2025 Ralph Seichter
+stown version 1.1.0-dev1+289dae4 Copyright © 2025 Ralph Seichter
