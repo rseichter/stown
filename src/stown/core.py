@@ -22,6 +22,7 @@ from os import environ
 from os import listdir
 from os import path
 from os import remove as os_remove
+from os import stat
 from os import symlink
 from re import search
 from typing import List
@@ -96,7 +97,9 @@ def pathto(somepath, want_abspath: bool, relpath_start=None):
 
 def is_same_file(somepath, otherpath) -> bool:
     try:
-        return path.samefile(somepath, otherpath)
+        sp = stat(otherpath, follow_symlinks=False)
+        op = stat(somepath, follow_symlinks=False)
+        return sp.st_dev == op.st_dev and sp.st_ino == op.st_ino
     except FileNotFoundError:
         return False
 
