@@ -444,13 +444,18 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <span id="author" class="author">Ralph Seichter</span><br>
 <span id="email" class="email"><a href="mailto:stown@seichter.de">stown@seichter.de</a></span><br>
 <span id="revnumber"> 1.0.0,</span>
-<span id="revdate">2025-02-23</span>
+<span id="revdate">2025-02-25</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
 <ul class="sectlevel1">
 <li><a href="#about">1. About</a></li>
-<li><a href="#install">2. Installing</a></li>
+<li><a href="#install">2. Installing</a>
+<ul class="sectlevel2">
+<li><a href="#_all_platforms">2.1. All platforms</a></li>
+<li><a href="#_arch_linux">2.2. Arch Linux</a></li>
+</ul>
+</li>
 <li><a href="#cli">3. Command line options</a></li>
 <li><a href="#example">4. Example usage</a></li>
 <li><a href="#strategy">5. Strategy</a></li>
@@ -485,9 +490,11 @@ farm manager, stown might be for you.</p>
 <div class="sect1">
 <h2 id="install"><a class="anchor" href="#install"></a>2. Installing</h2>
 <div class="sectionbody">
+<div class="sect2">
+<h3 id="_all_platforms"><a class="anchor" href="#_all_platforms"></a>2.1. All platforms</h3>
 <div class="paragraph">
-<p>To install the official <a href="https://pypi.org/project/stown/">PyPI package</a>, use the
-pip utility.</p>
+<p>To install the <a href="https://pypi.org/project/stown/">PyPI package</a>, use the pip
+utility.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -502,6 +509,14 @@ environment is bare-bones and lacks a package manager, there is also Python&#821
 built-in
 <a href="https://docs.python.org/3/library/ensurepip.html#module-ensurepip">ensurepip</a>
 module you can use.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_arch_linux"><a class="anchor" href="#_arch_linux"></a>2.2. Arch Linux</h3>
+<div class="paragraph">
+<p>Arch users can install the <a href="https://aur.archlinux.org/packages/stown">AUR
+package</a> as a convenient alternative to the PyPI package.</p>
+</div>
 </div>
 </div>
 </div>

@@ -37,8 +37,10 @@ https://github.com/rseichter/stown[here].
 [#install]
 == Installing
 
-To install the official https://pypi.org/project/stown/[PyPI package], use the
-pip utility.
+=== All platforms
+
+To install the https://pypi.org/project/stown/[PyPI package], use the pip
+utility.
 
 ```bash
 pip install stown
@@ -51,6 +53,11 @@ environment is bare-bones and lacks a package manager, there is also Python's
 built-in
 https://docs.python.org/3/library/ensurepip.html#module-ensurepip[ensurepip]
 module you can use.
+
+=== Arch Linux
+
+Arch users can install the https://aur.archlinux.org/packages/stown[AUR
+package] as a convenient alternative to the PyPI package.
 
 [#cli]
 == Command line options
