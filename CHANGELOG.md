@@ -4,6 +4,14 @@ Change log
 "For those with an eye for the finer details, we salute you." _(Frankie Goes To
 Hollywood)_
 
+Release 1.2.0-dev1
+-------------
+
+TBA: Feature release
+
+- Introduce the ability to ignore sources with names matching a user-defined
+regular expression.
+
 Release 1.1.0
 -------------
 
