@@ -37,10 +37,14 @@ https://github.com/rseichter/stown[here].
 [#install]
 == Installing
 
+=== Requirements
+
+stown requires Python version 3.9 or newer. That's all.
+
 === All platforms
 
-To install the https://pypi.org/project/stown/[PyPI package], use the pip
-utility.
+The first option is to install the https://pypi.org/project/stown/[PyPI
+package] using Python's pip utility, available for all platforms.
 
 [source,bash]
 ----
