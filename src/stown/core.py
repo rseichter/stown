@@ -112,6 +112,10 @@ def matches(regex, candidate: str) -> bool:
     return False
 
 
+def is_ignored(args: Namespace, candidate: str) -> bool:
+    return matches(args.ignore, candidate)
+
+
 def obtain_permit(args: Namespace, target, source) -> Permit:
     if is_same_file(target, source):
         per = Permit.DENIED
@@ -154,7 +158,10 @@ def stown(args: Namespace, target: str, sources: List[str], depth=0, parent_path
         if parent_path:
             source = path.join(parent_path, source)
         if not path.exists(source):
-            log.warning(f"Source {source} not found")
+            log.warning(f"Skipping {source} (not found)")
+            continue
+        elif is_ignored(args, source):
+            log.warning(f"Ignoring {source}")
             continue
         log.info(f"{'  '*depth}{target} -> {source}")
         if is_same_file(target, source):
