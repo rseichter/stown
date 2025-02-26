@@ -679,6 +679,14 @@ converted to a leading dot character in symlinks, as shown with
 dotfiles easier, disabling their respective special effects and lifting their
 "hidden" status.</p>
 </div>
+<div class="paragraph">
+<p>Like the <code>--override</code> option, <code>--ignore</code> takes a regular expression argument.
+However, while override matches targets, the ignore option matches sources.
+stown uses a small but reasonable default ignore pattern. If the outcome of a
+run is not what you expected, try the INFO loglevel to see if certain sources
+are being ignored, possibly requiring you to specify a custom ignore argument.
+An empty string RE pattern turns the ignore feature off.</p>
+</div>
 </div>
 </div>
 </div>
