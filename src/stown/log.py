@@ -21,7 +21,7 @@ from logging import getLogger
 from os import getcwd
 from sys import stdout
 
-COMMIT_SHA = "96f03bf"
+COMMIT_SHA = "c4942ed"
 ID = "stown"
 VERSION = "1.2.0-dev1"
 

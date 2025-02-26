@@ -22,7 +22,7 @@ exa:
 	find mike/zulu -type l -delete
 	$(tree)
 	catto -r before.txt $(tmp)
-	stown -f -l warn mike/zulu mike/{alpha,bravo}
+	env PYTHONPATH=../src stown -f -i '\.txt$$' -l info mike/zulu mike/{alpha,bravo}
 	$(tree)
 	catto -r after.txt $(tmp)
 

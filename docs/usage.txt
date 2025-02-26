@@ -15,11 +15,11 @@ options:
   -b, --absolute        create links using absolute paths
   -d, --dry-run         log operations but do not modify
   -f, --force           force action (overwrite permission)
-  -i, --ignore RE       ignore sources matching regex [sensible default]
+  -i, --ignore RE       ignore sources matching regex
   -l, --loglevel LEVEL  log level [WARNING]
   -n, --no-dot          disable dot-prefix treatment
   -o, --override RE     override targets matching regex
   -D, --depth DEPTH     maximum recursion depth [10]
   -L, --logpath PATH    log data destination
 
-stown version 1.2.0-dev1+96f03bf Copyright © 2025 Ralph Seichter
+stown version 1.2.0-dev1+c4942ed Copyright © 2025 Ralph Seichter

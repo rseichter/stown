@@ -1,6 +1,7 @@
 mike
 ├── alpha
 │   ├── bar
+│   ├── bar.txt
 │   └── foo
 ├── bravo
 │   ├── dot-editorconfig

@@ -127,7 +127,7 @@ containg the following:
 include::before.txt[]
 ----
 
-This is the resulting content after `stow --force zulu alpha bravo`:
+This is the content after `stow --force --ignore '\.txt$' zulu alpha bravo`:
 
 [%unbreakable]
 ----

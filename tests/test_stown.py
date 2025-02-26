@@ -49,11 +49,11 @@ def load_json(path):
         return json.load(f)
 
 
-def random_name(prefix="stown.", suffix=".tmp") -> str:
+def random_name(prefix="stown.", suffix="") -> str:
     return f"{prefix}{uuid.uuid4()}{suffix}"
 
 
-def random_tmp(tmpdir=TMPDIR, suffix=".tmp") -> str:
+def random_tmp(tmpdir=TMPDIR, suffix=".stown") -> str:
     return path.join(tmpdir, random_name(suffix=suffix))
 
 
@@ -187,7 +187,7 @@ class TestStown(unittest.TestCase):
     def test_stown(self):
         st = stown(self.args, self.args.target, self.args.source)
         self.assertTrue(st.is_ok())
-        tmp = random_tmp(tempfile.gettempdir(), ".json")
+        tmp = random_tmp(tempfile.gettempdir(), suffix=".json")
         subprocess.run(["tree", "-aJ", "-o", tmp, self.args.target])
         self.maxDiff = None
         shutil.move(tmp, LJSON)
@@ -206,7 +206,7 @@ class TestStown(unittest.TestCase):
 
     def test_override_target(self):
         a = self.parse_args(["--override", r"\.(py|tmp)$"])
-        t = random_tmp()
+        t = random_tmp(suffix=".tmp")
         os.symlink(XJSON, t)
         st = stown(a, t, [XJSON])
         self.assertTrue(st.is_ok())

@@ -46,7 +46,7 @@ def arg_parser() -> ArgumentParser:
     ap.add_argument("-b", "--absolute", default=False, action="store_true", help="create links using absolute paths")
     ap.add_argument("-d", "--dry-run", default=False, action="store_true", help="log operations but do not modify")
     ap.add_argument("-f", "--force", default=False, action="store_true", help="force action (overwrite permission)")
-    d = r"[/^]\.(git|svn)$"
+    d = r"\.(git|key|secret|tmp)$"
     ap.add_argument("-i", "--ignore", default=d, metavar="RE", help="ignore sources matching regex")
     d = "WARNING"
     lv = getenv("STOWN_LOGLEVEL", d)

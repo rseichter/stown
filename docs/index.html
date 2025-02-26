@@ -547,14 +547,14 @@ options:
   -b, --absolute        create links using absolute paths
   -d, --dry-run         log operations but do not modify
   -f, --force           force action (overwrite permission)
-  -i, --ignore RE       ignore sources matching regex [sensible default]
+  -i, --ignore RE       ignore sources matching regex
   -l, --loglevel LEVEL  log level [WARNING]
   -n, --no-dot          disable dot-prefix treatment
   -o, --override RE     override targets matching regex
   -D, --depth DEPTH     maximum recursion depth [10]
   -L, --logpath PATH    log data destination
 
-stown version 1.2.0-dev1+96f03bf Copyright © 2025 Ralph Seichter</pre>
+stown version 1.2.0-dev1+c4942ed Copyright © 2025 Ralph Seichter</pre>
 </div>
 </div>
 </div>
@@ -636,6 +636,7 @@ containg the following:</p>
 <pre>mike
 ├── alpha
 │   ├── bar
+│   ├── bar.txt
 │   └── foo
 ├── bravo
 │   ├── dot-editorconfig
@@ -645,13 +646,14 @@ containg the following:</p>
 </div>
 </div>
 <div class="paragraph">
-<p>This is the resulting content after <code>stow --force zulu alpha bravo</code>:</p>
+<p>This is the content after <code>stow --force --ignore '\.txt$' zulu alpha bravo</code>:</p>
 </div>
 <div class="listingblock">
 <div class="content">
 <pre>mike
 ├── alpha
 │   ├── bar
+│   ├── bar.txt
 │   └── foo
 ├── bravo
 │   ├── dot-editorconfig
