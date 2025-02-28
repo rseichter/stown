@@ -43,20 +43,21 @@ def arg_parser() -> ArgumentParser:
     )
     d = "link"
     ap.add_argument("-a", "--action", choices=[d, "unlink"], default=d, help=f"action to take [{d}]")
-    ap.add_argument("-b", "--absolute", default=False, action="store_true", help="create links using absolute paths")
-    ap.add_argument("-d", "--dry-run", default=False, action="store_true", help="log operations but do not modify")
-    ap.add_argument("-f", "--force", default=False, action="store_true", help="force action (overwrite permission)")
+    ap.add_argument("-b", "--absolute", action="store_true", help="create links using absolute paths")
+    ap.add_argument("-d", "--dry-run", action="store_true", help="log operations but do not modify")
+    ap.add_argument("-f", "--force", action="store_true", help="force action (overwrite permission)")
     d = r"\.(git|key|secret|tmp)$"
     ap.add_argument("-i", "--ignore", default=d, metavar="RE", help="ignore sources matching regex")
     d = "WARNING"
     lv = getenv("STOWN_LOGLEVEL", d)
     ap.add_argument("-l", "--loglevel", default=lv, metavar="LEVEL", help=f"log level [{d}]")
-    ap.add_argument("-n", "--no-dot", default=False, action="store_true", help="disable dot-prefix treatment")
+    ap.add_argument("-n", "--no-dot", action="store_true", help="disable dot-prefix treatment")
     ap.add_argument("-o", "--override", metavar="RE", help="override targets matching regex")
     d = 10
     ap.add_argument("-D", "--depth", default=d, type=int, help=f"maximum recursion depth [{d}]")
     d = getenv("STOWN_LOGPATH", "-")
     ap.add_argument("-L", "--logpath", default=d, metavar="PATH", help="log data destination")
+    ap.add_argument("-V", "--version", action="version", version=full_version())
     ap.add_argument("target", help="action target (links are created here)")
     ap.add_argument("source", nargs="+", help="action sources (links point here)")
     return ap
