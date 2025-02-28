@@ -1,6 +1,4 @@
 # vim: et ts=2 sw=2
-#
-# See https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-python
 ---
 name: Build on push
 

@@ -1,6 +1,4 @@
 # vim: et ts=2 sw=2
-#
-# See https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-python
 ---
 name: Manually triggered build
 
@@ -29,6 +27,7 @@ jobs:
 
       - name: Install dependencies
         run: |
+          sudo apt-get update
           sudo apt-get install -y tree
           python -m pip install -U pip
           python -m pip install -r requirements.txt
