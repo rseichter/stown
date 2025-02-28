@@ -58,6 +58,8 @@ jobs:
         run: python -m build
 
       - name: Upload artifacts
+        # upload-artifact@v4 does not work on Gitea v1.23.4
+        # if: gitea.repository == ""
         uses: actions/upload-artifact@v4
         with:
           name: stown-dist-py${{ matrix.python-version }}
