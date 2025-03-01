@@ -1,6 +1,6 @@
 # vim: et ts=2 sw=2
 ---
-name: Build on push
+name: Build on push (GitHub)
 
 on:
   push:
@@ -9,7 +9,7 @@ on:
 
 jobs:
   dev-build:
-    if: gitea.repository == ''
+    if: github.repository != ''
     environment:
       name: dev
     env:
