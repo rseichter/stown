@@ -9,7 +9,7 @@ on:
 
 jobs:
   build:
-    if: ${{ gitea.repository != '' }}
+    if: ${{ github.repository != '' }}
     environment:
       name: dev
     env:
