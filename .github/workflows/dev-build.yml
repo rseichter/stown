@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  dev-build:
+  build:
     environment:
       name: dev
     env:
@@ -39,9 +39,7 @@ jobs:
 
       - name: Lint with flake8
         run: |
-          # Stop the build if there are Python syntax errors or undefined names
           flake8 . --config=.flake8 --select=E9,F63,F7,F82
-          # Treat all other problems as warnings
           flake8 . --config=.flake8 --exit-zero
 
       - name: Run unit tests with coverage analysis
@@ -51,13 +49,3 @@ jobs:
 
       - name: Build
         run: python -m build
-
-      # - name: Upload artifacts
-      #   # upload-artifact@v4 does not work on Gitea v1.23.4
-      #   # upload-artifact@v3 is no longer available on GitHub
-      #   uses: actions/upload-artifact@v4
-      #   with:
-      #     name: stown-dist-py${{ matrix.python-version }}
-      #     path: dist/
-      #     compression-level: 0
-      #     if-no-files-found: error
