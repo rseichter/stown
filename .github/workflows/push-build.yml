@@ -4,16 +4,16 @@ name: Build on push
 
 on:
   push:
-    # branches:
-    #   - master
+    branches:
+      - master
 
 jobs:
   dev-build:
-    if: ${{ gitea.repository == '' }}
+    if: gitea.repository == ''
     environment:
       name: dev
     env:
-      PYTHONPATH: ${{ vars.PYTHONPATH }}
+      PYTHONPATH: '.:src'
     runs-on: ubuntu-latest
     strategy:
       fail-fast: true
@@ -56,12 +56,12 @@ jobs:
       - name: Build
         run: python -m build
 
-      - name: Upload artifacts
-        # upload-artifact@v4 does not work on Gitea v1.23.4
-        # if: gitea.repository == ""
-        uses: actions/upload-artifact@v4
-        with:
-          name: stown-dist-py${{ matrix.python-version }}
-          path: dist/
-          compression-level: 0
-          if-no-files-found: error
+      # - name: Upload artifacts
+      #   # upload-artifact@v4 does not work on Gitea v1.23.4
+      #   # upload-artifact@v3 is no longer available on GitHub
+      #   uses: actions/upload-artifact@v4
+      #   with:
+      #     name: stown-dist-py${{ matrix.python-version }}
+      #     path: dist/
+      #     compression-level: 0
+      #     if-no-files-found: error
