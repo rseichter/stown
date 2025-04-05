@@ -16,7 +16,7 @@ options:
   -d, --dry-run         log operations but do not modify
   -f, --force           force action (overwrite permission)
   -i, --ignore RE       ignore sources matching regex
-  -l, --loglevel LEVEL  log level [INFO]
+  -l, --loglevel LEVEL  log level [WARNING]
   -n, --no-dot          disable dot-prefix treatment
   -o, --override RE     override targets matching regex
   -D, --depth DEPTH     maximum recursion depth [10]

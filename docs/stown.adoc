@@ -64,6 +64,12 @@ module you can use.
 Arch users can install the https://aur.archlinux.org/packages/stown[AUR
 package] as a convenient alternative to the PyPI package.
 
+=== NixOS and macOS
+
+The https://github.com/NixOS/nixpkgs/blob/nixos-unstable/pkgs/by-name/st/stown/package.nix[stown]
+package is suitable for all platforms supported by a Nix package manager
+implementation, e.g. NixOS and macOS.
+
 [#cli]
 == Command line options
 [%unbreakable]

@@ -444,7 +444,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <span id="author" class="author">Ralph Seichter</span><br>
 <span id="email" class="email"><a href="mailto:stown@seichter.de">stown@seichter.de</a></span><br>
 <span id="revnumber"> 1.2.1-dev1,</span>
-<span id="revdate">2025-02-28</span>
+<span id="revdate">2025-04-05</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -455,6 +455,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_requirements">2.1. Requirements</a></li>
 <li><a href="#_all_platforms">2.2. All platforms</a></li>
 <li><a href="#_arch_linux">2.3. Arch Linux</a></li>
+<li><a href="#_nixos_and_macos">2.4. NixOS and macOS</a></li>
 </ul>
 </li>
 <li><a href="#cli">3. Command line options</a></li>
@@ -530,6 +531,14 @@ module you can use.</p>
 package</a> as a convenient alternative to the PyPI package.</p>
 </div>
 </div>
+<div class="sect2">
+<h3 id="_nixos_and_macos"><a class="anchor" href="#_nixos_and_macos"></a>2.4. NixOS and macOS</h3>
+<div class="paragraph">
+<p>The <a href="https://github.com/NixOS/nixpkgs/blob/nixos-unstable/pkgs/by-name/st/stown/package.nix">stown</a>
+package is suitable for all platforms supported by a Nix package manager
+implementation, e.g. NixOS and macOS.</p>
+</div>
+</div>
 </div>
 </div>
 <div class="sect1">
@@ -555,7 +564,7 @@ options:
   -d, --dry-run         log operations but do not modify
   -f, --force           force action (overwrite permission)
   -i, --ignore RE       ignore sources matching regex
-  -l, --loglevel LEVEL  log level [INFO]
+  -l, --loglevel LEVEL  log level [WARNING]
   -n, --no-dot          disable dot-prefix treatment
   -o, --override RE     override targets matching regex
   -D, --depth DEPTH     maximum recursion depth [10]
