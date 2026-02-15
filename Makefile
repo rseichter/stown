@@ -1,5 +1,5 @@
 # vim: ft=make ts=4 sw=4 noet
-# Copyright © 2025 Ralph Seichter
+# Copyright © 2025,2026 Ralph Seichter
 
 define usage
 
@@ -13,6 +13,7 @@ docs ………………… Generate documentation.
 fla …………………… Run flake8 checks.
 fmt …………………… Format source code.
 help ………………… Display this text.
+lint ………………… Lint YAML files.
 mrproper ……… Thoroughly cleanup workspace.
 pdocs ……………… Publish documentation.
 pypi ………………… Upload artifacts to PyPI.
@@ -26,7 +27,7 @@ pyenv	:= PYTHONPATH=.:src
 sedi	:= sed -E -i""
 ver		?=
 
-.PHONY:	all build clean cov dbranch docs fla fmt help mrproper pdocs pypi setver shc stamp tagclean test
+.PHONY:	all build clean cov dbranch docs fla fmt help lint mrproper pdocs pypi setver shc stamp tagclean test
 
 help:
 	$(info $(usage))
@@ -52,6 +53,9 @@ docs:
 pdocs:	docs
 	scripts/publish.sh docs
 
+lint:
+	yamllint .github/workflows/*.yml
+
 fmt:
 	isort src tests
 	# pre-commit run -a
@@ -69,7 +73,7 @@ build:	stamp fmt mrproper
 
 all:	fla build docs
 
-cov:	fmt
+cov:	fmt lint
 	$(pyenv) coverage run -m unittest discover -s tests
 	coverage html
 	coverage report -m
