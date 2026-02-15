@@ -23,7 +23,7 @@ from sys import stdout
 
 COMMIT_SHA = "7084116"
 ID = "stown"
-VERSION = "1.2.1.dev2"
+VERSION = "1.2.1.dev3"
 
 log = getLogger(ID)
 

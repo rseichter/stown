@@ -2,7 +2,7 @@
 Ralph Seichter <stown@seichter.de>
 :doctype: article
 :revdate: {docdate}
-:revnumber: 1.2.1.dev2
+:revnumber: 1.2.1.dev3
 :version-label!:
 :copyright: © 2025,2026 Ralph Seichter
 :encoding: UTF-8
