@@ -1,5 +1,5 @@
 """
-Copyright © 2025 Ralph Seichter
+Copyright © 2025,2026 Ralph Seichter
 
 This file is part of "stown".
 
@@ -39,7 +39,7 @@ def arg_parser() -> ArgumentParser:
     ap = ArgumentParser(
         prog=ID,
         description="Manage file system object mapping via symlinks",
-        epilog=f"{full_version()} Copyright © 2025 Ralph Seichter",
+        epilog=f"{full_version()} Copyright © 2025,2026 Ralph Seichter",
     )
     ap.add_argument("-a", "--action", choices=["link", "unlink"], default="link", help="action to take [%(default)s]")
     ap.add_argument("-b", "--absolute", action="store_true", help="create links using absolute paths")

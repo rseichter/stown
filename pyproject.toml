@@ -1,4 +1,4 @@
-# Copyright © 2025 Ralph Seichter
+# Copyright © 2025,2026 Ralph Seichter
 #
 # This file is part of "stown".
 #
@@ -20,10 +20,12 @@ requires = ["setuptools", "wheel"]
 
 [project]
 name = "stown"
-version = "1.2.1-dev1"
+version = "1.2.1.dev2"
 authors = [{name = "Ralph Seichter"}, {email = "stown@seichter.de"}]
 description = "Manage file system object mapping via symlinks. Lightweight alternative to GNU Stow."
 keywords = ["symlinks-manager", "symlinks", "lightweight", "dotfiles"]
+license = "GPL-3.0-or-later"
+license-files = ["LICENSE"]
 readme = "README.md"
 requires-python = ">=3.9"
 # See https://pypi.org/classifiers/

@@ -1,5 +1,5 @@
 """
-Copyright © 2025 Ralph Seichter
+Copyright © 2025,2026 Ralph Seichter
 
 This file is part of "stown".
 
@@ -23,7 +23,7 @@ from sys import stdout
 
 COMMIT_SHA = "dc9e326"
 ID = "stown"
-VERSION = "1.2.1-dev1"
+VERSION = "1.2.1.dev2"
 
 log = getLogger(ID)
 

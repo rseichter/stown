@@ -40,8 +40,8 @@ mrproper:	clean
 
 setver:
 	@if [[ -z "$(ver)" ]]; then echo Usage: make $@ ver="{semantic-version}"; exit 1; fi
-	sed -i '' -E 's/^(version =).*/\1 "$(ver)"/i' pyproject.toml src/stown/*.py
-	sed -i '' -E 's/^(:revnumber:).*/\1 $(ver)/' docs/stown.adoc
+	sed -i'' -E 's/^(version =).*/\1 "$(ver)"/i' pyproject.toml src/stown/*.py
+	sed -i'' -E 's/^(:revnumber:).*/\1 $(ver)/' docs/stown.adoc
 
 docs:
 	$(pyenv) python >usage.tmp -m stown -h

@@ -1,5 +1,5 @@
 """
-Copyright © 2025 Ralph Seichter
+Copyright © 2025,2026 Ralph Seichter
 
 This file is part of "stown".
 
