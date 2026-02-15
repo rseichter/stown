@@ -23,6 +23,7 @@ test ………………… Run unit tests.
 endef
 
 pyenv	:= PYTHONPATH=.:src
+sedi	:= sed -E -i""
 ver		?=
 
 .PHONY:	all build clean cov dbranch docs fla fmt help mrproper pdocs pypi setver shc stamp tagclean test
@@ -40,8 +41,8 @@ mrproper:	clean
 
 setver:
 	@if [[ -z "$(ver)" ]]; then echo Usage: make $@ ver="{semantic-version}"; exit 1; fi
-	sed -i'' -E 's/^(version =).*/\1 "$(ver)"/i' pyproject.toml src/stown/*.py
-	sed -i'' -E 's/^(:revnumber:).*/\1 $(ver)/' docs/stown.adoc
+	$(sedi) 's/^(version =).*/\1 "$(ver)"/i' pyproject.toml src/stown/*.py
+	$(sedi) 's/^(:revnumber:).*/\1 $(ver)/' docs/stown.adoc
 
 docs:
 	$(pyenv) python >usage.tmp -m stown -h
@@ -61,7 +62,7 @@ fla:	fmt
 
 rev ?= $(shell git rev-parse --short HEAD)
 stamp:
-	sed -E -i '' 's/^(COMMIT_SHA =).+/\1 "$(rev)"/' src/stown/*.py
+	$(sedi) 's/^(COMMIT_SHA =).+/\1 "$(rev)"/' src/stown/*.py
 
 build:	stamp fmt mrproper
 	python -m build

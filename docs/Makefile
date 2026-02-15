@@ -1,6 +1,5 @@
 # vim: ts=4 sw=4 noet
-adoc		?= ~/.local/share/gem/ruby/3.3.0/bin/asciidoctor
-adoc_opts	?= -v -o $@
+ad_opts		?= -v -o $@
 html		?= index.html
 pdf			?= stown.pdf
 sources		?= $(shell echo *.adoc *.txt)
@@ -11,10 +10,10 @@ targets		?= $(html) $(pdf)
 all: $(targets)
 
 $(html): $(sources)
-	$(adoc) -a toc=right $(adoc_opts) $<
+	asciidoctor -a toc=right $(ad_opts) $<
 
 $(pdf): $(sources)
-	$(adoc)-pdf -a toc=auto -a title-page $(adoc_opts) $<
+	asciidoctor-pdf -a toc=auto -a title-page $(ad_opts) $<
 
 tmp		:= exa.tmp
 tree	:= tree -a --noreport mike >$(tmp)
