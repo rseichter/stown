@@ -23,4 +23,4 @@ options:
   -L, --logpath PATH    log data destination
   -V, --version         show program's version number and exit
 
-stown version 1.2.1.dev2+7084116 Copyright © 2025,2026 Ralph Seichter
+stown version 1.2.1+db361ab Copyright © 2025,2026 Ralph Seichter
