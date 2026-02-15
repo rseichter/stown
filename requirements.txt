@@ -1,0 +1,10 @@
+# These are requirements for development and during the build process only.
+# At runtime, "stown" only uses default Python modules.
+black
+build
+coverage
+flake8
+isort
+pre-commit
+twine
+wheel
