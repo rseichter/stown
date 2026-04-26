@@ -17,17 +17,18 @@ lint ………………… Lint YAML files.
 mrproper ……… Thoroughly cleanup workspace.
 pdocs ……………… Publish documentation.
 pypi ………………… Upload artifacts to PyPI.
+setup ……………… Setup Python virtual environment.
 setver …………… Set version number.
-shc …………………… Shell script care.
 test ………………… Run unit tests.
 
 endef
 
+pip		:= .venv/bin/pip
 pyenv	:= PYTHONPATH=.:src
-sedi	:= sed -E -i""
+sedi	:= sed -E -i
 ver		?=
 
-.PHONY:	all build clean cov dbranch docs fla fmt help lint mrproper pdocs pypi setver shc stamp tagclean test
+.PHONY:	all build clean cov dbranch docs fla fmt help lint mrproper pdocs pypi setup setver stamp tagclean test
 
 help:
 	$(info $(usage))
@@ -85,8 +86,11 @@ pypi:
 	twine check dist/*
 	twine upload dist/*
 
-shc:
-	shcare scripts/*
+setup:
+	@if [[ -e .venv ]]; then echo >&2 .venv already exists; exit 1; fi
+	python -m venv .venv
+	$(pip) install -U pip wheel
+	$(pip) install -r requirements.txt
 
 dbranch:
 	@if [[ -z "$(b)" ]]; then echo Usage: make $@ b="{branch}"; exit 1; fi
