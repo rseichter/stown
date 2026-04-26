@@ -44,6 +44,9 @@ Homepage = "https://www.seichter.de/stown/"
 Issues = "https://github.com/rseichter/stown/issues"
 Source = "https://github.com/rseichter/stown"
 
+[tool.black]
+line-length = 120
+
 [tool.coverage.html]
 title = "stown coverage report"
 

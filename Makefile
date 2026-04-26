@@ -24,7 +24,7 @@ test ………………… Run unit tests.
 endef
 
 pip		:= .venv/bin/pip
-pyenv	:= PYTHONPATH=.:src
+pyenv	:= PYTHONPATH=src
 sedi	:= sed -E -i
 ver		?=
 
@@ -59,8 +59,7 @@ lint:
 
 fmt:
 	isort src tests
-	# pre-commit run -a
-	black -l 120 src tests
+	black src tests
 
 fla:	fmt
 	flake8 . --config=.flake8
