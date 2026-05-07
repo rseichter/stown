@@ -5,6 +5,5 @@ build
 coverage
 flake8
 isort
-# pre-commit
 twine
 wheel
