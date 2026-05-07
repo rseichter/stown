@@ -13,12 +13,12 @@ jobs:
     environment:
       name: dev
     env:
-      PYTHONPATH: '.:src'
+      PYTHONPATH: src
     runs-on: ubuntu-latest
     strategy:
       fail-fast: true
       matrix:
-        python-version: ['3.13', '3.14']
+        python-version: ['3.14']
 
     steps:
       - uses: actions/checkout@v6
